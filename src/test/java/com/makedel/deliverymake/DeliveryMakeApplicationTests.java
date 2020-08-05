@@ -1,4 +1,4 @@
-package me.naming.deliverymake;
+package com.makedel.deliverymake;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
