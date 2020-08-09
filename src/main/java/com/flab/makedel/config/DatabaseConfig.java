@@ -11,8 +11,8 @@ import org.springframework.context.annotation.Configuration;
 
 import javax.sql.DataSource;
 
-@Configuration
-@MapperScan(basePackages = "com.flab.makedel.mapper")
+@Configuration //@Configuration을 통해 이 클래스는 Spring의 어노테이션 기반 환경 구성을 돕는다.
+@MapperScan(basePackages = "com.flab.makedel.mapper") //@MapperScan을 통해 Mapper Interface를 스프링 빈으로 주입받아 DB에 접근한다.
 public class DatabaseConfig {
 
     @Autowired
