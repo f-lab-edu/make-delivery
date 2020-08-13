@@ -13,21 +13,27 @@ Component Scan을 통하여 @Service 어노테이션이 붙은 클래스를 스�
 @Service
 public class UserService {
 
-    private UserMapper userMapper;
+  private UserMapper userMapper;
 
-    @Autowired
-    public UserService(UserMapper userMapper) {
-        this.userMapper=userMapper;
-    }
+  public UserService(UserMapper userMapper) {
+    this.userMapper = userMapper;
+  }
 
-    public void signUp(UserDTO user) {
-        user.setPassword(PasswordEncrypter.encrypt(user.getPassword()));
-        userMapper.insertUser(user);
-    }
+  public void signUp(UserDTO user) {
+    String encryptedPassword = PasswordEncrypter.encrypt(user.getPassword());
+    UserDTO encryptedUser =
+        UserDTO.builder()
+            .id(user.getId())
+            .password(encryptedPassword)
+            .email(user.getEmail())
+            .name(user.getName())
+            .phone(user.getPhone())
+            .address(user.getAddress())
+            .build();
+    userMapper.insertUser(encryptedUser);
+  }
 
-    public boolean checkUniqueId(String id) {
-        return userMapper.checkUniqueId(id) == 0;
-    }
-
+  public boolean isExistsId(String id) {
+    return userMapper.isExistsId(id);
+  }
 }
-

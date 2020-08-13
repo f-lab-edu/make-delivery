@@ -6,9 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface UserMapper {
 
-    int checkUniqueId(String id);
+  boolean isExistsId(String id);
 
-    void insertUser(UserDTO user);
-
+  void insertUser(UserDTO user);
 }
-
