@@ -19,7 +19,7 @@ public class UserService {
     }
 
     public void signUp(UserDTO user) {
-        UserDTO encryptedUser = copy(user);
+        UserDTO encryptedUser = encryptUser(user);
         userMapper.insertUser(encryptedUser);
     }
 
@@ -27,7 +27,7 @@ public class UserService {
         return userMapper.isExistsId(id);
     }
 
-    public UserDTO copy(UserDTO user) {
+    public UserDTO encryptUser(UserDTO user) {
         String encryptedPassword = PasswordEncrypter.encrypt(user.getPassword());
         UserDTO encryptedUser = UserDTO.builder()
             .id(user.getId())

@@ -28,9 +28,8 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> signUp(UserDTO user) {
+    public void signUp(UserDTO user) {
         userService.signUp(user);
-        return new ResponseEntity(HttpStatus.OK);
     }
 
     @GetMapping("/{id}/exists")

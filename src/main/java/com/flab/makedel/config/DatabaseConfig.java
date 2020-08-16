@@ -31,7 +31,6 @@ public class DatabaseConfig {
 
     @Autowired
     private ApplicationContext applicationContext;
-    private DataSource dataSource;
 
     @Bean
     public SqlSessionFactory sqlSessionFactory(DataSource dataSource) throws Exception {
