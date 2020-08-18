@@ -6,12 +6,25 @@
 
   <select id="isExistsId" resultType="boolean">
         SELECT EXISTS
-        (SELECT ID FROM USER WHERE ID=#{id})
+        (SELECT id FROM USER WHERE id=#{id})
     </select>
 
   <insert id="insertUser" parameterType="com.flab.makedel.dto.UserDTO">
-        INSERT INTO USER(id,password,email,name,phone,address)
+        INSERT INTO USER(id, password, email, name, phone, address)
         VALUES(#{id}, #{password}, #{email}, #{name}, #{phone}, #{address})
     </insert>
+
+  <select id="selectId" resultType="String">
+        SELECT id FROM USER WHERE id=#{id}
+  </select>
+
+  <select id="selectPassword" resultType="String">
+        SELECT password FROM USER WHERE id=#{id}
+  </select>
+
+  <select id="selectUser" parameterType="String" resultType="com.flab.makedel.dto.UserDTO">
+        SELECT id, password, email, name, phone, address, created_at, updated_at FROM USER
+        WHERE id=#{id} AND password=#{password}
+  </select>
 
 </mapper>

@@ -9,4 +9,10 @@ public interface UserMapper {
     boolean isExistsId(String id);
 
     void insertUser(UserDTO user);
+
+    String selectPassword(String id);
+
+    String selectId(String id);
+
+    UserDTO selectUser(String id, String password);
 }

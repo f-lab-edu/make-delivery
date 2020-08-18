@@ -2,6 +2,7 @@ package com.flab.makedel.controller;
 
 import com.flab.makedel.dto.UserDTO;
 import com.flab.makedel.service.UserService;
+import javax.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +21,8 @@ public class UserController {
     private static final ResponseEntity<Void> RESPONSE_OK = new ResponseEntity(HttpStatus.OK);
     private static final ResponseEntity<Void> RESPONSE_CONFLICT = new ResponseEntity(
         HttpStatus.CONFLICT);
+    private static final ResponseEntity<Void> RESPONSE_UNAUTHORIZED = new ResponseEntity(
+        HttpStatus.UNAUTHORIZED);
 
     private final UserService userService;
 
@@ -40,6 +43,24 @@ public class UserController {
         } else {
             return RESPONSE_CONFLICT;
         }
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<Void> login(String id, String password,
+        HttpSession session) {
+        UserDTO user = userService.login(id, password);
+        if (user != null) {
+            session.setAttribute("user", user);
+            return RESPONSE_OK;
+        } else {
+            return RESPONSE_UNAUTHORIZED;
+        }
+    }
+
+    @GetMapping("/logout")
+    public ResponseEntity<Void> logout(HttpSession session) {
+        session.invalidate();
+        return RESPONSE_OK;
     }
 }
 
