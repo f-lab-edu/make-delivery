@@ -10,9 +10,6 @@ public interface UserMapper {
 
     void insertUser(UserDTO user);
 
-    String selectPassword(String id);
+    UserDTO selectUserById(String id);
 
-    String selectId(String id);
-
-    UserDTO selectUser(String id, String password);
 }

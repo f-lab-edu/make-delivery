@@ -14,17 +14,9 @@
         VALUES(#{id}, #{password}, #{email}, #{name}, #{phone}, #{address})
     </insert>
 
-  <select id="selectId" resultType="String">
-        SELECT id FROM USER WHERE id=#{id}
-  </select>
-
-  <select id="selectPassword" resultType="String">
-        SELECT password FROM USER WHERE id=#{id}
-  </select>
-
-  <select id="selectUser" parameterType="String" resultType="com.flab.makedel.dto.UserDTO">
-        SELECT id, password, email, name, phone, address, created_at, updated_at FROM USER
-        WHERE id=#{id} AND password=#{password}
+  <select id="selectUserById" resultType="com.flab.makedel.dto.UserDTO">
+        SELECT id, password, email, name, phone, address, created_at, updated_at
+        FROM USER WHERE id=#{id}
   </select>
 
 </mapper>

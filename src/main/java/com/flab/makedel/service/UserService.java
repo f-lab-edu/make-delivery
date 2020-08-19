@@ -39,22 +39,6 @@ public class UserService {
             .build();
         return encryptedUser;
     }
-
-    public UserDTO login(String id, String password) {
-        String storedId = userMapper.selectId(id);
-
-        if (storedId == null) {
-            return null;
-        }
-
-        String storedPassword = userMapper.selectPassword(id);
-        boolean isSamePassword = PasswordEncrypter.isMatch(password, storedPassword);
-
-        if (!isSamePassword) {
-            return null;
-        }
-
-        UserDTO user = userMapper.selectUser(id, storedPassword);
-        return user;
-    }
+    
 }
+

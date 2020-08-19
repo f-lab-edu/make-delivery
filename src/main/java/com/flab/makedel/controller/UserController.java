@@ -1,17 +1,22 @@
 package com.flab.makedel.controller;
 
 import com.flab.makedel.dto.UserDTO;
+import com.flab.makedel.service.LoginService;
 import com.flab.makedel.service.UserService;
+import com.flab.makedel.utils.SessionUtil;
 import javax.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 /*
-@RestController @Controller에 @ResponseBody까지 합쳐진것입니다.
-주로 Http response로 view가 아닌 문자열과 JSON등을 보낼때 사용합니다.
-@RequestMapping 어노테이션은 URL을 컨트롤러의 클래스나 메서드와 매핑할 때 사용하는 스프링 프레임워크의 어노테이션입니다.
-@RequestBody는 HTTP 요청 body를 자바 객체로 변환합니다.
+    @RestController @Controller에 @ResponseBody까지 합쳐진것입니다.
+    주로 Http response로 view가 아닌 문자열과 JSON등을 보낼때 사용합니다.
+    @RequestMapping 어노테이션은 URL을 컨트롤러의 클래스나 메서드와 매핑할 때 사용하는 스프링 프레임워크의 어노테이션입니다.
+    @RequestBody는 HTTP 요청 body를 자바 객체로 변환합니다.
+
+    request.getRequest은 해당 클라이언트의 세션이 없다면 생성해주고 있으면 반환해줍니다.
+    메소드의 파라미터로 HttpSession을 받아온다면 위 과정을 스프링이 해줍니다.
 */
 
 @RestController
@@ -21,13 +26,15 @@ public class UserController {
     private static final ResponseEntity<Void> RESPONSE_OK = new ResponseEntity(HttpStatus.OK);
     private static final ResponseEntity<Void> RESPONSE_CONFLICT = new ResponseEntity(
         HttpStatus.CONFLICT);
-    private static final ResponseEntity<Void> RESPONSE_UNAUTHORIZED = new ResponseEntity(
-        HttpStatus.UNAUTHORIZED);
+    private static final ResponseEntity<Void> RESPONSE_NOT_FOUND = new ResponseEntity(
+        HttpStatus.NOT_FOUND);
 
     private final UserService userService;
+    private final LoginService loginService;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, LoginService loginService) {
         this.userService = userService;
+        this.loginService = loginService;
     }
 
     @PostMapping
@@ -48,18 +55,21 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<Void> login(String id, String password,
         HttpSession session) {
-        UserDTO user = userService.login(id, password);
+
+        UserDTO user = loginService.findUserByIdAndPassword(id, password);
+
         if (user != null) {
-            session.setAttribute("user", user);
+            SessionUtil.setUserId(session, user.getId());
             return RESPONSE_OK;
         } else {
-            return RESPONSE_UNAUTHORIZED;
+            return RESPONSE_NOT_FOUND;
         }
+
     }
 
     @GetMapping("/logout")
     public ResponseEntity<Void> logout(HttpSession session) {
-        session.invalidate();
+        SessionUtil.deleteUserId(session);
         return RESPONSE_OK;
     }
 }
