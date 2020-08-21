@@ -1,10 +1,9 @@
 package com.flab.makedel.controller;
 
 import com.flab.makedel.dto.UserDTO;
-import com.flab.makedel.service.LoginService;
+import com.flab.makedel.service.SessionLoginService;
 import com.flab.makedel.service.UserService;
-import com.flab.makedel.utils.SessionUtil;
-import javax.servlet.http.HttpSession;
+import java.util.Optional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,11 +29,11 @@ public class UserController {
         HttpStatus.NOT_FOUND);
 
     private final UserService userService;
-    private final LoginService loginService;
+    private final SessionLoginService sessionLoginService;
 
-    public UserController(UserService userService, LoginService loginService) {
+    public UserController(UserService userService, SessionLoginService sessionLoginService) {
         this.userService = userService;
-        this.loginService = loginService;
+        this.sessionLoginService = sessionLoginService;
     }
 
     @PostMapping
@@ -53,13 +52,12 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Void> login(String id, String password,
-        HttpSession session) {
+    public ResponseEntity<Void> login(String id, String password) {
 
-        UserDTO user = loginService.findUserByIdAndPassword(id, password);
+        Optional<UserDTO> user = userService.findUserByIdAndPassword(id, password);
 
-        if (user != null) {
-            SessionUtil.setUserId(session, user.getId());
+        if (user.isPresent()) {
+            sessionLoginService.setUserId(user.get().getId());
             return RESPONSE_OK;
         } else {
             return RESPONSE_NOT_FOUND;
@@ -68,9 +66,10 @@ public class UserController {
     }
 
     @GetMapping("/logout")
-    public ResponseEntity<Void> logout(HttpSession session) {
-        SessionUtil.deleteUserId(session);
+    public ResponseEntity<Void> logout() {
+        sessionLoginService.deleteUserId();
         return RESPONSE_OK;
+
     }
 }
 
