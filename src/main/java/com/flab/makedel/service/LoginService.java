@@ -9,8 +9,8 @@ package com.flab.makedel.service;
 
 public interface LoginService {
 
-    void setUserId(String id);
+    void loginUser(String id);
 
-    void deleteUserId();
+    void logoutUser();
 
 }

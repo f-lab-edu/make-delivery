@@ -22,11 +22,11 @@ public class SessionLoginService implements LoginService {
         this.session = session;
     }
 
-    public void setUserId(String id) {
+    public void loginUser(String id) {
         session.setAttribute(USER_ID, id);
     }
 
-    public void deleteUserId() {
+    public void logoutUser() {
         session.removeAttribute(USER_ID);
     }
 }

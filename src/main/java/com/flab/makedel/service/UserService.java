@@ -42,6 +42,7 @@ public class UserService {
     }
 
     public Optional<UserDTO> findUserByIdAndPassword(String id, String password) {
+
         Optional<UserDTO> user = Optional.ofNullable(userMapper.selectUserById(id));
 
         if (!user.isPresent()) {

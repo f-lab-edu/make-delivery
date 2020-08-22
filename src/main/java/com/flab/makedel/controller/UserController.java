@@ -1,7 +1,7 @@
 package com.flab.makedel.controller;
 
 import com.flab.makedel.dto.UserDTO;
-import com.flab.makedel.service.SessionLoginService;
+import com.flab.makedel.service.LoginService;
 import com.flab.makedel.service.UserService;
 import java.util.Optional;
 import org.springframework.http.HttpStatus;
@@ -29,11 +29,11 @@ public class UserController {
         HttpStatus.NOT_FOUND);
 
     private final UserService userService;
-    private final SessionLoginService sessionLoginService;
+    private final LoginService loginService;
 
-    public UserController(UserService userService, SessionLoginService sessionLoginService) {
+    public UserController(UserService userService, LoginService loginService) {
         this.userService = userService;
-        this.sessionLoginService = sessionLoginService;
+        this.loginService = loginService;
     }
 
     @PostMapping
@@ -57,7 +57,7 @@ public class UserController {
         Optional<UserDTO> user = userService.findUserByIdAndPassword(id, password);
 
         if (user.isPresent()) {
-            sessionLoginService.setUserId(user.get().getId());
+            loginService.loginUser(user.get().getId());
             return RESPONSE_OK;
         } else {
             return RESPONSE_NOT_FOUND;
@@ -67,7 +67,7 @@ public class UserController {
 
     @GetMapping("/logout")
     public ResponseEntity<Void> logout() {
-        sessionLoginService.deleteUserId();
+        loginService.logoutUser();
         return RESPONSE_OK;
 
     }
