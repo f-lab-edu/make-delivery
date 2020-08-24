@@ -3,6 +3,7 @@ package com.flab.makedel.service;
 import com.flab.makedel.dto.UserDTO;
 import com.flab.makedel.mapper.UserMapper;
 import com.flab.makedel.utils.PasswordEncrypter;
+import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 /*
@@ -39,4 +40,23 @@ public class UserService {
             .build();
         return encryptedUser;
     }
+
+    public Optional<UserDTO> findUserByIdAndPassword(String id, String password) {
+
+        Optional<UserDTO> user = Optional.ofNullable(userMapper.selectUserById(id));
+
+        if (!user.isPresent()) {
+            return Optional.empty();
+        }
+
+        boolean isSamePassword = PasswordEncrypter.isMatch(password, user.get().getPassword());
+
+        if (!isSamePassword) {
+            return Optional.empty();
+        }
+
+        return user;
+    }
+
 }
+
