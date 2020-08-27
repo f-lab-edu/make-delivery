@@ -1,9 +1,5 @@
 package com.flab.makedel.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,6 +17,8 @@ import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactor
 
     Redis Connection Factory를 리턴해주는 라이브러리로 Lettuce를 선택하였습니다.
     비동기로 요청하기 때문에 높은성능을 가지기 때문입니다.
+    Lettuce는 Netty기반이며 Netty는 비동기 네트워크 프레임워크입니다.
+    Netty는 Channel에서 발생하는 이벤트들을 EventLoop로 비동기 처리하는 구조입니다.
  */
 
 @Configuration
@@ -47,11 +45,3 @@ public class RedisConfig {
     }
 
 }
-
-
-/*
-    레디스의 키값으로 저장되는 타입입니다.
-    spring:session:sessions:expires (string) 해당 세션의 만료키로 사용합니다.
-    spring:session:expirations (set) expire time에 삭제될 세션 정보를 담고 있습니다.
-    spring:session:sessions (hash) session은 map을 저장소로 사용하기 때문에 이곳에 세션 데이터가 있습니다.
- */
