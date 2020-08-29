@@ -29,6 +29,10 @@ public class SessionLoginService implements LoginService {
     public void logoutUser() {
         session.removeAttribute(USER_ID);
     }
+    
+    public String getUser() {
+        return (String) session.getAttribute(USER_ID);
+    }
 }
 
 /*

@@ -1,5 +1,6 @@
 package com.flab.makedel.controller;
 
+import com.flab.makedel.aop.LoginCheck;
 import com.flab.makedel.dto.UserDTO;
 import com.flab.makedel.service.LoginService;
 import com.flab.makedel.service.UserService;
@@ -27,6 +28,8 @@ public class UserController {
         HttpStatus.CONFLICT);
     private static final ResponseEntity<Void> RESPONSE_NOT_FOUND = new ResponseEntity(
         HttpStatus.NOT_FOUND);
+    private static final ResponseEntity<Void> RESPONSE_UNAUTHORIZED = new ResponseEntity(
+        HttpStatus.UNAUTHORIZED);
 
     private final UserService userService;
     private final LoginService loginService;
@@ -66,11 +69,30 @@ public class UserController {
     }
 
     @GetMapping("/logout")
+    @LoginCheck
     public ResponseEntity<Void> logout() {
         loginService.logoutUser();
         return RESPONSE_OK;
 
     }
+
+    @DeleteMapping("/information")
+    @LoginCheck
+    public ResponseEntity<Void> deleteUser() {
+        String userId = loginService.getUser();
+        userService.deleteUser(userId);
+        loginService.logoutUser();
+        return RESPONSE_OK;
+    }
+
+    @PatchMapping("/information/password")
+    @LoginCheck
+    public ResponseEntity<Void> changeUserPassword(String password) {
+        String userId = loginService.getUser();
+        userService.changeUserPassword(userId, password);
+        return RESPONSE_OK;
+    }
+
 }
 
 /*
