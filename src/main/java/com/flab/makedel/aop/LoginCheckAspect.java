@@ -26,7 +26,7 @@ public class LoginCheckAspect {
 
     @Before("@annotation(LoginCheck)")
     public void loginCheck() throws HttpClientErrorException {
-        String userId = loginService.getUser();
+        String userId = loginService.getCurrentUser();
         if (userId == null) {
             throw new HttpClientErrorException(HttpStatus.UNAUTHORIZED);
         }

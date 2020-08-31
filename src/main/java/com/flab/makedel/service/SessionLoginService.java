@@ -30,7 +30,7 @@ public class SessionLoginService implements LoginService {
         session.removeAttribute(USER_ID);
     }
     
-    public String getUser() {
+    public String getCurrentUser() {
         return (String) session.getAttribute(USER_ID);
     }
 }

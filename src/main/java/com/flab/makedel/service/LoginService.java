@@ -13,6 +13,6 @@ public interface LoginService {
 
     void logoutUser();
 
-    String getUser();
+    String getCurrentUser();
 
 }
