@@ -4,6 +4,7 @@ import com.flab.makedel.dto.UserDTO;
 import com.flab.makedel.mapper.UserMapper;
 import com.flab.makedel.utils.PasswordEncrypter;
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 /*
@@ -12,13 +13,10 @@ import org.springframework.stereotype.Service;
 */
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
 
     private final UserMapper userMapper;
-
-    public UserService(UserMapper userMapper) {
-        this.userMapper = userMapper;
-    }
 
     public void signUp(UserDTO user) {
         UserDTO encryptedUser = encryptUser(user);
