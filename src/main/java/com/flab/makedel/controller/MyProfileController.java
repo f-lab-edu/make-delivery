@@ -2,13 +2,11 @@ package com.flab.makedel.controller;
 
 import static com.flab.makedel.utils.ResponseEntityConstants.RESPONSE_OK;
 
-import com.flab.makedel.aop.LoginCheck;
-import com.flab.makedel.aop.SessionId;
-import com.flab.makedel.dto.CurrentUserDTO;
+import com.flab.makedel.annotation.CurrentUserId;
+import com.flab.makedel.annotation.LoginCheck;
 import com.flab.makedel.service.LoginService;
 import com.flab.makedel.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -25,17 +23,17 @@ public class MyProfileController {
 
     @DeleteMapping
     @LoginCheck
-    public ResponseEntity<Void> deleteUser(@SessionId CurrentUserDTO currentUser) {
-        userService.deleteUser(currentUser.getId());
+    public ResponseEntity<Void> deleteUser(@CurrentUserId String userId) {
+        userService.deleteUser(userId);
         loginService.logoutUser();
         return RESPONSE_OK;
     }
 
     @PatchMapping("/password")
     @LoginCheck
-    public ResponseEntity<Void> changeUserPassword(@SessionId CurrentUserDTO currentUser,
+    public ResponseEntity<Void> changeUserPassword(@CurrentUserId String userId,
         String password) {
-        userService.changeUserPassword(currentUser.getId(), password);
+        userService.changeUserPassword(userId, password);
         return RESPONSE_OK;
     }
 

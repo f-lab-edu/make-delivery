@@ -4,13 +4,12 @@ import static com.flab.makedel.utils.ResponseEntityConstants.RESPONSE_CONFLICT;
 import static com.flab.makedel.utils.ResponseEntityConstants.RESPONSE_NOT_FOUND;
 import static com.flab.makedel.utils.ResponseEntityConstants.RESPONSE_OK;
 
-import com.flab.makedel.aop.LoginCheck;
+import com.flab.makedel.annotation.LoginCheck;
 import com.flab.makedel.dto.UserDTO;
 import com.flab.makedel.service.LoginService;
 import com.flab.makedel.service.UserService;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

@@ -24,7 +24,7 @@ public class LoginCheckAspect {
         this.loginService = loginService;
     }
 
-    @Before("@annotation(LoginCheck)")
+    @Before("@annotation(com.flab.makedel.annotation.LoginCheck)")
     public void loginCheck() throws HttpClientErrorException {
         String userId = loginService.getCurrentUser();
         if (userId == null) {
