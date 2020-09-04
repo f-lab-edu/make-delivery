@@ -10,12 +10,12 @@
     </select>
 
     <insert id="insertUser" parameterType="com.flab.makedel.dto.UserDTO">
-        INSERT INTO USER(id, password, email, name, phone, address)
-        VALUES(#{id}, #{password}, #{email}, #{name}, #{phone}, #{address})
+        INSERT INTO USER(id, password, email, name, phone, address, level)
+        VALUES(#{id}, #{password}, #{email}, #{name}, #{phone}, #{address}, #{level})
     </insert>
 
     <select id="selectUserById" resultType="com.flab.makedel.dto.UserDTO">
-        SELECT id, password, email, name, phone, address, created_at, updated_at
+        SELECT id, password, email, name, phone, address, level, created_at, updated_at
         FROM USER WHERE id = #{id}
     </select>
 

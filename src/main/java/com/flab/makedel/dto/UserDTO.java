@@ -29,6 +29,8 @@ public class UserDTO {
 
     private final String address;
 
+    private final String level;
+
     private final LocalDateTime createdAt;
 
     private final LocalDateTime updatedAt;

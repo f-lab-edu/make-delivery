@@ -36,6 +36,7 @@ public class UserService {
             .name(user.getName())
             .phone(user.getPhone())
             .address(user.getAddress())
+            .level(user.getLevel())
             .build();
         return encryptedUser;
     }
@@ -57,7 +58,6 @@ public class UserService {
         }
 
         boolean isSamePassword = PasswordEncrypter.isMatch(password, user.get().getPassword());
-
 
         if (!isSamePassword) {
             return Optional.empty();
