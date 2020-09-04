@@ -1,6 +1,7 @@
 package com.flab.makedel.service;
 
 import javax.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 /*
@@ -13,14 +14,11 @@ import org.springframework.stereotype.Service;
  * */
 
 @Service
+@RequiredArgsConstructor
 public class SessionLoginService implements LoginService {
 
     private static final String USER_ID = "USER_ID";
     private final HttpSession session;
-
-    public SessionLoginService(HttpSession session) {
-        this.session = session;
-    }
 
     public void loginUser(String id) {
         session.setAttribute(USER_ID, id);
@@ -28,6 +26,10 @@ public class SessionLoginService implements LoginService {
 
     public void logoutUser() {
         session.removeAttribute(USER_ID);
+    }
+
+    public String getCurrentUser() {
+        return (String) session.getAttribute(USER_ID);
     }
 }
 

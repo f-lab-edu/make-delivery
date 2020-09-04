@@ -12,4 +12,8 @@ public interface UserMapper {
 
     UserDTO selectUserById(String id);
 
+    void deleteUser(String id);
+
+    void updateUserPassword(String id, String newPassword);
+
 }

@@ -1,10 +1,15 @@
 package com.flab.makedel.controller;
 
+import static com.flab.makedel.utils.ResponseEntityConstants.RESPONSE_CONFLICT;
+import static com.flab.makedel.utils.ResponseEntityConstants.RESPONSE_NOT_FOUND;
+import static com.flab.makedel.utils.ResponseEntityConstants.RESPONSE_OK;
+
+import com.flab.makedel.annotation.LoginCheck;
 import com.flab.makedel.dto.UserDTO;
 import com.flab.makedel.service.LoginService;
 import com.flab.makedel.service.UserService;
 import java.util.Optional;
-import org.springframework.http.HttpStatus;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,21 +25,12 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/users")
+@RequiredArgsConstructor
 public class UserController {
-
-    private static final ResponseEntity<Void> RESPONSE_OK = new ResponseEntity(HttpStatus.OK);
-    private static final ResponseEntity<Void> RESPONSE_CONFLICT = new ResponseEntity(
-        HttpStatus.CONFLICT);
-    private static final ResponseEntity<Void> RESPONSE_NOT_FOUND = new ResponseEntity(
-        HttpStatus.NOT_FOUND);
 
     private final UserService userService;
     private final LoginService loginService;
 
-    public UserController(UserService userService, LoginService loginService) {
-        this.userService = userService;
-        this.loginService = loginService;
-    }
 
     @PostMapping
     public void signUp(UserDTO user) {
@@ -66,11 +62,12 @@ public class UserController {
     }
 
     @GetMapping("/logout")
+    @LoginCheck
     public ResponseEntity<Void> logout() {
         loginService.logoutUser();
         return RESPONSE_OK;
-
     }
+
 }
 
 /*
