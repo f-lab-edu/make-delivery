@@ -16,4 +16,6 @@ public interface UserMapper {
 
     void updateUserPassword(String id, String newPassword);
 
+    boolean isUserLevel(String id);
+
 }

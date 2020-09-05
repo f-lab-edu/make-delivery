@@ -4,6 +4,7 @@ import static com.flab.makedel.utils.ResponseEntityConstants.RESPONSE_OK;
 
 import com.flab.makedel.annotation.CurrentUserId;
 import com.flab.makedel.annotation.LoginCheck;
+import com.flab.makedel.annotation.LoginCheck.UserLevel;
 import com.flab.makedel.service.LoginService;
 import com.flab.makedel.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +23,7 @@ public class MyProfileController {
     private final UserService userService;
 
     @DeleteMapping
-    @LoginCheck
+    @LoginCheck(userLevel = UserLevel.USER)
     public ResponseEntity<Void> deleteUser(@CurrentUserId String userId) {
         userService.deleteUser(userId);
         loginService.logoutUser();
@@ -30,7 +31,7 @@ public class MyProfileController {
     }
 
     @PatchMapping("/password")
-    @LoginCheck
+    @LoginCheck(userLevel = UserLevel.USER)
     public ResponseEntity<Void> changeUserPassword(@CurrentUserId String userId,
         String password) {
         userService.changeUserPassword(userId, password);

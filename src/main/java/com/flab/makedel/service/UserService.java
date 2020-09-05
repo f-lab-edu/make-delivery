@@ -27,6 +27,10 @@ public class UserService {
         return userMapper.isExistsId(id);
     }
 
+    public boolean isUserLevel(String id) {
+        return userMapper.isUserLevel(id);
+    }
+
     public UserDTO encryptUser(UserDTO user) {
         String encryptedPassword = PasswordEncrypter.encrypt(user.getPassword());
         UserDTO encryptedUser = UserDTO.builder()

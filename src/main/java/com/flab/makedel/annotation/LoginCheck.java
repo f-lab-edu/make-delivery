@@ -18,4 +18,10 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 public @interface LoginCheck {
 
+    UserLevel userLevel();
+
+    enum UserLevel {
+        USER, OWNER
+    }
+    
 }

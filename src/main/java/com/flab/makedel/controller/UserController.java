@@ -5,6 +5,7 @@ import static com.flab.makedel.utils.ResponseEntityConstants.RESPONSE_NOT_FOUND;
 import static com.flab.makedel.utils.ResponseEntityConstants.RESPONSE_OK;
 
 import com.flab.makedel.annotation.LoginCheck;
+import com.flab.makedel.annotation.LoginCheck.UserLevel;
 import com.flab.makedel.dto.UserDTO;
 import com.flab.makedel.service.LoginService;
 import com.flab.makedel.service.UserService;
@@ -62,7 +63,7 @@ public class UserController {
     }
 
     @GetMapping("/logout")
-    @LoginCheck
+    @LoginCheck(userLevel = UserLevel.USER)
     public ResponseEntity<Void> logout() {
         loginService.logoutUser();
         return RESPONSE_OK;
