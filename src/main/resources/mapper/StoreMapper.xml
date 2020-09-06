@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.flab.makedel.mapper.StoreMapper">
+
+
+    <insert id="insertStore" parameterType="com.flab.makedel.dto.StoreDTO">
+        INSERT INTO STORE(name, phone, address, owner_id, introduction)
+        VALUES(#{name}, #{phone}, #{address}, #{ownerId}, #{introduction})
+    </insert>
+
+    <select id="selectStoreList" parameterType="String" resultType="com.flab.makedel.dto.StoreDTO">
+        SELECT id, name, phone, address, owner_id , open_status, introduction, created_at, updated_at
+        FROM STORE WHERE owner_id = #{ownerId}
+    </select>
+
+    <select id="isMyStore" resultType="boolean">
+        SELECT EXISTS
+        (SELECT name FROM STORE WHERE id = #{storeId} AND owner_id = #{ownerId} )
+    </select>
+
+    <select id="selectStore" resultType="com.flab.makedel.dto.StoreDTO">
+        SELECT id, name, phone, address, owner_id , open_status, introduction, created_at, updated_at
+        FROM STORE WHERE id = #{storeId} AND owner_id = #{ownerId}
+    </select>
+
+    <update id="closeMyStore">
+        UPDATE STORE SET open_status = 'closed'
+        where id = #{storeId}
+    </update>
+
+    <update id="openMyStore">
+        UPDATE STORE SET open_status = 'opened'
+        where id = #{storeId}
+    </update>
+
+</mapper>
