@@ -27,8 +27,8 @@ public class UserService {
         return userMapper.isExistsId(id);
     }
 
-    public boolean isUserLevel(String id) {
-        return userMapper.isUserLevel(id);
+    public String getUserLevel(String id) {
+        return userMapper.selectUserLevel(id);
     }
 
     public UserDTO encryptUser(UserDTO user) {

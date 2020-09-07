@@ -9,9 +9,9 @@
         (SELECT id FROM USER WHERE id = #{id})
     </select>
 
-    <select id="isUserLevel" resultType="boolean">
-        SELECT EXISTS
-        (SELECT id FROM USER WHERE id = #{id} AND level='user')
+    <select id="selectUserLevel" resultType="String">
+        SELECT level FROM USER
+        WHERE id = #{id}
     </select>
 
     <insert id="insertUser" parameterType="com.flab.makedel.dto.UserDTO">

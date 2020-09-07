@@ -52,8 +52,8 @@ public class LoginCheckAspect {
 
         String userId = getCurrentUser();
 
-        boolean isUser = userService.isUserLevel(userId);
-        if (!isUser) {
+        String level = userService.getUserLevel(userId);
+        if (!level.equals(UserLevel.USER.name())) {
             throw new HttpClientErrorException(HttpStatus.UNAUTHORIZED);
         }
 
@@ -63,8 +63,8 @@ public class LoginCheckAspect {
 
         String userId = getCurrentUser();
 
-        boolean isOwner = !userService.isUserLevel(userId);
-        if (!isOwner) {
+        String level = userService.getUserLevel(userId);
+        if (!level.equals(UserLevel.OWNER.name())) {
             throw new HttpClientErrorException(HttpStatus.UNAUTHORIZED);
         }
 
