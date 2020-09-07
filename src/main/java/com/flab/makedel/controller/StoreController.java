@@ -48,7 +48,7 @@ public class StoreController {
     @GetMapping("/{storeId}")
     @LoginCheck(userLevel = UserLevel.OWNER)
     @CheckMyStore
-    public ResponseEntity<StoreDTO> getMyStore(@PathVariable int storeId,
+    public ResponseEntity<StoreDTO> getMyStore(@PathVariable Long storeId,
         @CurrentUserId String ownerId) {
 
         StoreDTO store = storeService.getMyStore(storeId, ownerId);
@@ -59,7 +59,7 @@ public class StoreController {
     @PatchMapping("/{storeId}/closed")
     @LoginCheck(userLevel = UserLevel.OWNER)
     @CheckMyStore
-    public ResponseEntity<Void> closeMyStore(@PathVariable int storeId,
+    public ResponseEntity<Void> closeMyStore(@PathVariable Long storeId,
         @CurrentUserId String ownerId) {
 
         storeService.closeMyStore(storeId);
@@ -70,7 +70,8 @@ public class StoreController {
     @PatchMapping("/{storeId}/opened")
     @LoginCheck(userLevel = UserLevel.OWNER)
     @CheckMyStore
-    public ResponseEntity<Void> openMyStore(@PathVariable int storeId,
+    public ResponseEntity<Void> openMyStore(@PathVariable Long
+        storeId,
         @CurrentUserId String ownerId) {
 
         storeService.openMyStore(storeId);

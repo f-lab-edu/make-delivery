@@ -8,21 +8,21 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 @Builder
-public class StoreDTO {
+public class MenuDTO {
 
     private final Long id;
 
     private final String name;
 
-    private final String phone;
+    private final Long price;
 
-    private final String address;
+    private final String photo;
 
-    private final String ownerId;
+    private final String description;
 
-    private final String openStatus;
+    private final Long menuGroupId;
 
-    private final String introduction;
+    private final Long storeId;
 
     private final LocalDateTime createdAt;
 

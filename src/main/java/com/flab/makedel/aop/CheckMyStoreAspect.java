@@ -29,12 +29,12 @@ public class CheckMyStoreAspect {
         MethodSignature methodSignature = (MethodSignature) jp.getSignature();
         Method method = methodSignature.getMethod();
 
-        int storeId = 0;
+        Long storeId = null;
         String ownerId = "";
 
         for (int i = 0; i < method.getParameters().length; i++) {
             if (method.getParameters()[i].getName().equals("storeId")) {
-                storeId = (int) args[i];
+                storeId = (Long) args[i];
             } else if (method.getParameters()[i].getName().equals("ownerId")) {
                 ownerId = (String) args[i];
             }

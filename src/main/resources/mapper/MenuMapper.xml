@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.flab.makedel.mapper.MenuMapper">
+
+    <insert id="insertMenu" parameterType="com.flab.makedel.dto.MenuDTO">
+        INSERT INTO
+        MENU
+        (
+        name,
+        price,
+        photo,
+        description,
+        menu_group_id,
+        store_id
+        )
+        VALUES
+        (
+        #{name},
+        #{price},
+        #{photo},
+        #{description},
+        #{menuGroupId},
+        #{storeId}
+        )
+    </insert>
+
+    <delete id="deleteMenu" parameterType="Long">
+        DELETE FROM MENU WHERE id = #{menuId}
+    </delete>
+
+    <select id="selectStoreMenu" resultType="com.flab.makedel.dto.MenuDTO">
+        SELECT id, name, price, photo, description , menu_group_id, store_id, created_at, updated_at
+        FROM MENU WHERE store_id = #{storeId}
+    </select>
+
+</mapper>
