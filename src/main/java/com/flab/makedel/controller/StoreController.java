@@ -2,7 +2,6 @@ package com.flab.makedel.controller;
 
 import static com.flab.makedel.utils.ResponseEntityConstants.RESPONSE_OK;
 
-import com.flab.makedel.annotation.CheckMyStore;
 import com.flab.makedel.annotation.CurrentUserId;
 import com.flab.makedel.annotation.LoginCheck;
 import com.flab.makedel.annotation.LoginCheck.UserLevel;
@@ -10,6 +9,7 @@ import com.flab.makedel.dto.StoreDTO;
 import com.flab.makedel.service.StoreService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.HttpClientErrorException;
 
 @RestController
 @RequestMapping("/stores")
@@ -47,9 +48,13 @@ public class StoreController {
 
     @GetMapping("/{storeId}")
     @LoginCheck(userLevel = UserLevel.OWNER)
-    @CheckMyStore
     public ResponseEntity<StoreDTO> getMyStore(@PathVariable int storeId,
         @CurrentUserId String ownerId) {
+
+        boolean isMyStore = storeService.checkMyStore(storeId, ownerId);
+        if (!isMyStore) {
+            throw new HttpClientErrorException(HttpStatus.UNAUTHORIZED);
+        }
 
         StoreDTO store = storeService.getMyStore(storeId, ownerId);
         return ResponseEntity.ok().body(store);
@@ -58,9 +63,13 @@ public class StoreController {
 
     @PatchMapping("/{storeId}/closed")
     @LoginCheck(userLevel = UserLevel.OWNER)
-    @CheckMyStore
     public ResponseEntity<Void> closeMyStore(@PathVariable int storeId,
         @CurrentUserId String ownerId) {
+
+        boolean isMyStore = storeService.checkMyStore(storeId, ownerId);
+        if (!isMyStore) {
+            throw new HttpClientErrorException(HttpStatus.UNAUTHORIZED);
+        }
 
         storeService.closeMyStore(storeId);
         return RESPONSE_OK;
@@ -69,9 +78,13 @@ public class StoreController {
 
     @PatchMapping("/{storeId}/opened")
     @LoginCheck(userLevel = UserLevel.OWNER)
-    @CheckMyStore
     public ResponseEntity<Void> openMyStore(@PathVariable int storeId,
         @CurrentUserId String ownerId) {
+
+        boolean isMyStore = storeService.checkMyStore(storeId, ownerId);
+        if (!isMyStore) {
+            throw new HttpClientErrorException(HttpStatus.UNAUTHORIZED);
+        }
 
         storeService.openMyStore(storeId);
         return RESPONSE_OK;
