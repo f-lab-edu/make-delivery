@@ -1,5 +1,6 @@
 package com.flab.makedel.dto;
 
+import com.flab.makedel.annotation.LoginCheck.UserLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -29,7 +30,7 @@ public class UserDTO {
 
     private final String address;
 
-    private final String level;
+    private final UserLevel level;
 
     private final LocalDateTime createdAt;
 

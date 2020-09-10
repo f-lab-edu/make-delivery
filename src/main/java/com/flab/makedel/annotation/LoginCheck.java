@@ -21,7 +21,13 @@ public @interface LoginCheck {
     UserLevel userLevel();
 
     enum UserLevel {
-        USER, OWNER
+        
+        USER, OWNER;
+
+        public static UserLevel getEnumLevel(String level) {
+            UserLevel userLevel = Enum.valueOf(UserLevel.class, level);
+            return userLevel;
+        }
     }
-    
+
 }
