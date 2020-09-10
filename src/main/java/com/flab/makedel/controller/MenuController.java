@@ -1,6 +1,5 @@
 package com.flab.makedel.controller;
 
-import com.flab.makedel.annotation.CheckMyStore;
 import com.flab.makedel.annotation.CurrentUserId;
 import com.flab.makedel.annotation.LoginCheck;
 import com.flab.makedel.annotation.LoginCheck.UserLevel;
@@ -25,7 +24,7 @@ public class MenuController {
 
     @PostMapping
     @LoginCheck(userLevel = UserLevel.OWNER)
-    public void insertMenu(MenuDTO menu, @PathVariable Long storeId,
+    public void insertMenu(MenuDTO menu, @PathVariable long storeId,
         @CurrentUserId String ownerId) {
 
         MenuDTO newMenu = menuService.setStoreId(menu, storeId);
@@ -35,13 +34,13 @@ public class MenuController {
 
     @DeleteMapping("/{menuId}")
     @LoginCheck(userLevel = UserLevel.OWNER)
-    public void deleteMenu(@PathVariable Long menuId, @PathVariable Long storeId,
+    public void deleteMenu(@PathVariable Long menuId, @PathVariable long storeId,
         @CurrentUserId String ownerId) {
         menuService.deleteMenu(menuId);
     }
 
     @GetMapping
-    public ResponseEntity<List<MenuDTO>> loadStoreMenu(@PathVariable Long storeId) {
+    public ResponseEntity<List<MenuDTO>> loadStoreMenu(@PathVariable long storeId) {
         List<MenuDTO> menuList = menuService.loadStoreMenu(storeId);
         return ResponseEntity.ok().body(menuList);
     }

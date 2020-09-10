@@ -7,8 +7,8 @@ public interface MenuMapper {
 
     void insertMenu(MenuDTO menu);
 
-    void deleteMenu(Long menuId);
+    void deleteMenu(long menuId);
 
-    List<MenuDTO> selectStoreMenu(Long storeId);
+    List<MenuDTO> selectStoreMenu(long storeId);
 
 }

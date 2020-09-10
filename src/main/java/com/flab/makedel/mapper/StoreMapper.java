@@ -9,12 +9,12 @@ public interface StoreMapper {
 
     List<StoreDTO> selectStoreList(String ownerId);
 
-    boolean isMyStore(Long storeId, String ownerId);
+    boolean isMyStore(long storeId, String ownerId);
 
-    StoreDTO selectStore(Long storeId, String ownerId);
+    StoreDTO selectStore(long storeId, String ownerId);
 
-    void closeMyStore(Long storeId);
+    void closeMyStore(long storeId);
 
-    void openMyStore(Long storeId);
+    void openMyStore(long storeId);
 
 }

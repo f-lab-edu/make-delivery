@@ -16,7 +16,7 @@ public class MenuService {
         menuMapper.insertMenu(menu);
     }
 
-    public MenuDTO setStoreId(MenuDTO menu, Long storeId) {
+    public MenuDTO setStoreId(MenuDTO menu, long storeId) {
         MenuDTO newMenu = MenuDTO.builder()
             .name(menu.getName())
             .price(menu.getPrice())
@@ -28,11 +28,11 @@ public class MenuService {
         return newMenu;
     }
 
-    public void deleteMenu(Long menuId) {
+    public void deleteMenu(long menuId) {
         menuMapper.deleteMenu(menuId);
     }
 
-    public List<MenuDTO> loadStoreMenu(Long storeId) {
+    public List<MenuDTO> loadStoreMenu(long storeId) {
         return menuMapper.selectStoreMenu(storeId);
     }
 

@@ -26,7 +26,7 @@
         )
     </insert>
 
-    <delete id="deleteMenu" parameterType="Long">
+    <delete id="deleteMenu">
         DELETE FROM MENU WHERE id = #{menuId}
     </delete>
 
