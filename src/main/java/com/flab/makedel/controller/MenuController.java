@@ -25,7 +25,6 @@ public class MenuController {
 
     @PostMapping
     @LoginCheck(userLevel = UserLevel.OWNER)
-    @CheckMyStore
     public void insertMenu(MenuDTO menu, @PathVariable Long storeId,
         @CurrentUserId String ownerId) {
 
@@ -36,7 +35,6 @@ public class MenuController {
 
     @DeleteMapping("/{menuId}")
     @LoginCheck(userLevel = UserLevel.OWNER)
-    @CheckMyStore
     public void deleteMenu(@PathVariable Long menuId, @PathVariable Long storeId,
         @CurrentUserId String ownerId) {
         menuService.deleteMenu(menuId);
