@@ -9,11 +9,6 @@
         (SELECT id FROM USER WHERE id = #{id})
     </select>
 
-    <select id="selectUserLevel" resultType="String">
-        SELECT level FROM USER
-        WHERE id = #{id}
-    </select>
-
     <insert id="insertUser" parameterType="com.flab.makedel.dto.UserDTO">
         INSERT INTO USER(id, password, email, name, phone, address, level)
         VALUES(#{id}, #{password}, #{email}, #{name}, #{phone}, #{address}, #{level})

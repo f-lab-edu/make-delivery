@@ -28,8 +28,8 @@ public class UserService {
         return userMapper.isExistsId(id);
     }
 
-    public String getUserLevel(String id) {
-        return userMapper.selectUserLevel(id);
+    public UserDTO findUserById(String id) {
+        return userMapper.selectUserById(id);
     }
 
     public UserDTO encryptUser(UserDTO user) {
