@@ -35,7 +35,7 @@ public class StoreService {
         return storeMapper.selectStore(storeId, ownerId);
     }
 
-    public boolean checkMyStore(long storeId, String ownerId) {
+    public boolean isMyStore(long storeId, String ownerId) {
         return storeMapper.isMyStore(storeId, ownerId);
     }
 
