@@ -1,6 +1,10 @@
 package com.flab.makedel.aop;
 
+import com.flab.makedel.annotation.LoginCheck;
+import com.flab.makedel.annotation.LoginCheck.UserLevel;
 import com.flab.makedel.service.LoginService;
+import com.flab.makedel.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.springframework.http.HttpStatus;
@@ -16,20 +20,56 @@ import org.springframework.web.client.HttpClientErrorException;
 
 @Aspect
 @Component
+@RequiredArgsConstructor
 public class LoginCheckAspect {
 
     private final LoginService loginService;
+    private final UserService userService;
 
-    public LoginCheckAspect(LoginService loginService) {
-        this.loginService = loginService;
+    @Before("@annotation(com.flab.makedel.annotation.LoginCheck) && @annotation(target)")
+    public void loginCheck(LoginCheck target) throws HttpClientErrorException {
+
+        if (target.userLevel() == UserLevel.USER) {
+            userLoginCheck();
+        } else if (target.userLevel() == UserLevel.OWNER) {
+            ownerLoginCheck();
+        }
+
     }
 
-    @Before("@annotation(com.flab.makedel.annotation.LoginCheck)")
-    public void loginCheck() throws HttpClientErrorException {
+    public String getCurrentUser() throws HttpClientErrorException {
+
         String userId = loginService.getCurrentUser();
         if (userId == null) {
             throw new HttpClientErrorException(HttpStatus.UNAUTHORIZED);
         }
+
+        return userId;
+
+    }
+
+    public void userLoginCheck() {
+
+        String userId = getCurrentUser();
+
+        UserLevel level = userService.findUserById(userId).getLevel();
+
+        if (!(level == UserLevel.USER)) {
+            throw new HttpClientErrorException(HttpStatus.UNAUTHORIZED);
+        }
+
+    }
+
+    public void ownerLoginCheck() {
+
+        String userId = getCurrentUser();
+
+        UserLevel level = userService.findUserById(userId).getLevel();
+
+        if (!(level == UserLevel.OWNER)) {
+            throw new HttpClientErrorException(HttpStatus.UNAUTHORIZED);
+        }
+
     }
 
 }

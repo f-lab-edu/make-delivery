@@ -18,4 +18,16 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 public @interface LoginCheck {
 
+    UserLevel userLevel();
+
+    enum UserLevel {
+        
+        USER, OWNER;
+
+        public static UserLevel getEnumLevel(String level) {
+            UserLevel userLevel = Enum.valueOf(UserLevel.class, level);
+            return userLevel;
+        }
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.flab.makedel.service;
 
+import com.flab.makedel.annotation.LoginCheck.UserLevel;
 import com.flab.makedel.dto.UserDTO;
 import com.flab.makedel.mapper.UserMapper;
 import com.flab.makedel.utils.PasswordEncrypter;
@@ -27,6 +28,10 @@ public class UserService {
         return userMapper.isExistsId(id);
     }
 
+    public UserDTO findUserById(String id) {
+        return userMapper.selectUserById(id);
+    }
+
     public UserDTO encryptUser(UserDTO user) {
         String encryptedPassword = PasswordEncrypter.encrypt(user.getPassword());
         UserDTO encryptedUser = UserDTO.builder()
@@ -36,6 +41,7 @@ public class UserService {
             .name(user.getName())
             .phone(user.getPhone())
             .address(user.getAddress())
+            .level(user.getLevel())
             .build();
         return encryptedUser;
     }
@@ -57,7 +63,6 @@ public class UserService {
         }
 
         boolean isSamePassword = PasswordEncrypter.isMatch(password, user.get().getPassword());
-
 
         if (!isSamePassword) {
             return Optional.empty();
