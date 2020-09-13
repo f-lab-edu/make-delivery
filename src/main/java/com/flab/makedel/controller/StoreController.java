@@ -48,7 +48,7 @@ public class StoreController {
 
     @GetMapping("/{storeId}")
     @LoginCheck(userLevel = UserLevel.OWNER)
-    public ResponseEntity<StoreDTO> getMyStore(@PathVariable int storeId,
+    public ResponseEntity<StoreDTO> getMyStore(@PathVariable long storeId,
         @CurrentUserId String ownerId) {
 
         validateMyStore(storeId, ownerId);
@@ -60,7 +60,7 @@ public class StoreController {
 
     @PatchMapping("/{storeId}/closed")
     @LoginCheck(userLevel = UserLevel.OWNER)
-    public ResponseEntity<Void> closeMyStore(@PathVariable int storeId,
+    public ResponseEntity<Void> closeMyStore(@PathVariable long storeId,
         @CurrentUserId String ownerId) {
 
         validateMyStore(storeId, ownerId);
@@ -72,7 +72,7 @@ public class StoreController {
 
     @PatchMapping("/{storeId}/opened")
     @LoginCheck(userLevel = UserLevel.OWNER)
-    public ResponseEntity<Void> openMyStore(@PathVariable int storeId,
+    public ResponseEntity<Void> openMyStore(@PathVariable long storeId,
         @CurrentUserId String ownerId) {
 
         validateMyStore(storeId, ownerId);

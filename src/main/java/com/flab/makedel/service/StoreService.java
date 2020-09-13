@@ -31,19 +31,19 @@ public class StoreService {
         return storeMapper.selectStoreList(ownerId);
     }
 
-    public StoreDTO getMyStore(int storeId, String ownerId) {
+    public StoreDTO getMyStore(long storeId, String ownerId) {
         return storeMapper.selectStore(storeId, ownerId);
     }
 
-    public boolean isMyStore(int storeId, String ownerId) {
+    public boolean isMyStore(long storeId, String ownerId) {
         return storeMapper.isMyStore(storeId, ownerId);
     }
 
-    public void closeMyStore(int storeId) {
+    public void closeMyStore(long storeId) {
         storeMapper.closeMyStore(storeId);
     }
 
-    public void openMyStore(int storeId) {
+    public void openMyStore(long storeId) {
         storeMapper.openMyStore(storeId);
     }
 
