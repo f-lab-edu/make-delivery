@@ -31,7 +31,7 @@ public class MenuController {
     public void insertMenu(MenuDTO menu, @PathVariable long storeId,
         @CurrentUserId String ownerId) {
 
-        boolean isMyStore = storeService.checkMyStore(storeId, ownerId);
+        boolean isMyStore = storeService.isMyStore(storeId, ownerId);
         if (!isMyStore) {
             throw new HttpClientErrorException(HttpStatus.UNAUTHORIZED);
         }
@@ -46,7 +46,7 @@ public class MenuController {
     public void deleteMenu(@PathVariable Long menuId, @PathVariable long storeId,
         @CurrentUserId String ownerId) {
 
-        boolean isMyStore = storeService.checkMyStore(storeId, ownerId);
+        boolean isMyStore = storeService.isMyStore(storeId, ownerId);
         if (!isMyStore) {
             throw new HttpClientErrorException(HttpStatus.UNAUTHORIZED);
         }

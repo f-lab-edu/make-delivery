@@ -82,7 +82,7 @@ public class StoreController {
 
     }
 
-    private void validateMyStore(int storeId, String ownerId) throws HttpClientErrorException {
+    private void validateMyStore(long storeId, String ownerId) throws HttpClientErrorException {
         boolean isMyStore = storeService.isMyStore(storeId, ownerId);
         if (!isMyStore) {
             throw new HttpClientErrorException(HttpStatus.UNAUTHORIZED);

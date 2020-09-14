@@ -6,12 +6,12 @@
 
 
     <insert id="insertStore" parameterType="com.flab.makedel.dto.StoreDTO">
-        INSERT INTO STORE(name, phone, address, owner_id, introduction)
-        VALUES(#{name}, #{phone}, #{address}, #{ownerId}, #{introduction})
+        INSERT INTO STORE(name, phone, address, owner_id, category_id, introduction)
+        VALUES(#{name}, #{phone}, #{address}, #{ownerId}, #{categoryId}, #{introduction})
     </insert>
 
     <select id="selectStoreList" parameterType="String" resultType="com.flab.makedel.dto.StoreDTO">
-        SELECT id, name, phone, address, owner_id , open_status, introduction, created_at, updated_at
+        SELECT id, name, phone, address, owner_id , open_status, introduction, categoryId, created_at, updated_at
         FROM STORE WHERE owner_id = #{ownerId}
     </select>
 
@@ -21,7 +21,7 @@
     </select>
 
     <select id="selectStore" resultType="com.flab.makedel.dto.StoreDTO">
-        SELECT id, name, phone, address, owner_id , open_status, introduction, created_at, updated_at
+        SELECT id, name, phone, address, owner_id , open_status, introduction, categoryId, created_at, updated_at
         FROM STORE WHERE id = #{storeId} AND owner_id = #{ownerId}
     </select>
 

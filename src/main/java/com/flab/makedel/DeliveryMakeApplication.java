@@ -2,6 +2,7 @@ package com.flab.makedel;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 
 /*
@@ -17,10 +18,16 @@ import org.springframework.session.data.redis.config.annotation.web.http.EnableR
     이 어노테이션은 스프링부트가 클래스패스에서 찾은 빈들을 설정하게 해줍니다.
     따라서 스프링이 @Aspect를 보고 프록시방식으로 사용하게 해주기 때문에
     @EnableAspectJAutoProxy가 생략가능합니다.
+
+    @EnableCaching: 스프링에 AOP로 구현되어있는 캐시 로직을 사용하게 해줍니다.
+    스프링에서 제공해주는 AOP가 없다면 캐시를 사용할 때 직접 부가기능을 AOP로 구현해야합니다.
+    스프링이 CacheManager 인터페이스를 추상화하였기 때문에 RedisCacheManager,EhCacheManager등
+    필요한 CacheManage로 갈아끼워 사용할 수 있습니다.
  */
 
 @SpringBootApplication
 @EnableRedisHttpSession
+@EnableCaching
 public class DeliveryMakeApplication {
 
     public static void main(String[] args) {

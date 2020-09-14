@@ -24,6 +24,8 @@ public class StoreDTO {
 
     private final String introduction;
 
+    private final String categoryId;
+
     private final LocalDateTime createdAt;
 
     private final LocalDateTime updatedAt;
