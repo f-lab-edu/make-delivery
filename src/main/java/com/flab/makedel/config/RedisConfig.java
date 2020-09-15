@@ -36,8 +36,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
     Value에는 GenericJackson2JsonRedisSerializer를 사용했는데 이 Serializer는
     별도로 Class Type을 지정해줄 필요없이 자동으로 Object를 Json으로 직렬화 해줍니다.
     단점으로는 Object의 Class Type을 레디스에 함꼐 넣기 때문에
-    데이터를 꺼내올 때 그 클래스타입으로만 가져올 수 있습니다. 따라서 DTO에 종속적이기 때문에
-    MSA 프로젝트에서는 적합하지 않습니다.
+    데이터를 꺼내올 때 그 클래스타입으로만 가져올 수 있습니다.
  */
 
 @Configuration

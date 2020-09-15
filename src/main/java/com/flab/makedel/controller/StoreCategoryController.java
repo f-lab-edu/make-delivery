@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/stores/categories")
+@RequestMapping("/categories")
 @RequiredArgsConstructor
 public class StoreCategoryController {
 
