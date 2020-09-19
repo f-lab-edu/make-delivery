@@ -19,10 +19,11 @@
 
     <delete id="deleteOptionList">
         DELETE FROM MENU_OPTION
-        WHERE
-            <foreach collection="optionList" item="option" separator="OR">
-                (id = #{option.id})
+        WHERE id IN (
+            <foreach collection="optionList" item="option" separator=",">
+                #{option.id}
             </foreach>
+            )
     </delete>
 
 </mapper>

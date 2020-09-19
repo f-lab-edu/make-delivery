@@ -8,7 +8,6 @@ import com.flab.makedel.service.OptionService;
 import com.flab.makedel.service.StoreService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.HttpClientErrorException;
 
 @RestController
 @RequestMapping("/stores/{storeId}/menus/{menuId}/options")
@@ -32,11 +30,7 @@ public class OptionController {
     public void registerOptionList(@RequestBody List<OptionDTO> optionList,
         @PathVariable long storeId, @CurrentUserId String ownerId) {
 
-        boolean isMyStore = storeService.isMyStore(storeId, ownerId);
-        if (!isMyStore) {
-            throw new HttpClientErrorException(HttpStatus.UNAUTHORIZED);
-        }
-
+        storeService.validateMyStore(storeId, ownerId);
         optionService.registerOptionList(optionList);
 
     }
@@ -52,11 +46,7 @@ public class OptionController {
     public void deleteOptionList(@RequestBody List<OptionDTO> optionList,
         @PathVariable long storeId, @CurrentUserId String ownerId) {
 
-        boolean isMyStore = storeService.isMyStore(storeId, ownerId);
-        if (!isMyStore) {
-            throw new HttpClientErrorException(HttpStatus.UNAUTHORIZED);
-        }
-
+        storeService.validateMyStore(storeId, ownerId);
         optionService.deleteOptionList(optionList);
 
     }

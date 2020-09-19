@@ -51,8 +51,7 @@ public class StoreController {
     public ResponseEntity<StoreDTO> getMyStore(@PathVariable long storeId,
         @CurrentUserId String ownerId) {
 
-        validateMyStore(storeId, ownerId);
-
+        storeService.validateMyStore(storeId, ownerId);
         StoreDTO store = storeService.getMyStore(storeId, ownerId);
         return ResponseEntity.ok().body(store);
 
@@ -63,8 +62,7 @@ public class StoreController {
     public ResponseEntity<Void> closeMyStore(@PathVariable long storeId,
         @CurrentUserId String ownerId) {
 
-        validateMyStore(storeId, ownerId);
-
+        storeService.validateMyStore(storeId, ownerId);
         storeService.closeMyStore(storeId);
         return RESPONSE_OK;
 
@@ -75,18 +73,10 @@ public class StoreController {
     public ResponseEntity<Void> openMyStore(@PathVariable long storeId,
         @CurrentUserId String ownerId) {
 
-        validateMyStore(storeId, ownerId);
-
+        storeService.validateMyStore(storeId, ownerId);
         storeService.openMyStore(storeId);
         return RESPONSE_OK;
 
-    }
-
-    private void validateMyStore(long storeId, String ownerId) throws HttpClientErrorException {
-        boolean isMyStore = storeService.isMyStore(storeId, ownerId);
-        if (!isMyStore) {
-            throw new HttpClientErrorException(HttpStatus.UNAUTHORIZED);
-        }
     }
 
 }
