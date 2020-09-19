@@ -53,7 +53,6 @@ public class StoreService {
     public void validateMyStore(long storeId, String ownerId) throws HttpClientErrorException {
         boolean isMyStore = isMyStore(storeId, ownerId);
         if (!isMyStore) {
-            System.out.println("erroer @@@@");
             throw new HttpClientErrorException(HttpStatus.UNAUTHORIZED);
         }
     }
