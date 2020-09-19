@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.flab.makedel.mapper.OptionMapper">
+
+    <insert id="insertOptionList">
+        INSERT INTO MENU_OPTION (name, price, menu_id)
+        VALUES
+        <foreach collection="optionList" item="option" separator=",">
+            (#{option.name}, #{option.price}, #{option.menuId})
+        </foreach>
+    </insert>
+
+    <select id="selectOptionList" resultType="com.flab.makedel.dto.OptionDTO">
+        SELECT id, name, price, menu_id
+        FROM MENU_OPTION WHERE menu_id = #{menuId}
+    </select>
+
+    <delete id="deleteOptionList">
+        DELETE FROM MENU_OPTION
+        WHERE
+            <foreach collection="optionList" item="option" separator="OR">
+                (id = #{option.id})
+            </foreach>
+    </delete>
+
+</mapper>
