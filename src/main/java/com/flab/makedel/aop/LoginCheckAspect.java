@@ -25,7 +25,6 @@ import org.springframework.web.client.HttpClientErrorException;
 @Aspect
 @Component
 @RequiredArgsConstructor
-@Order(-1)
 public class LoginCheckAspect {
 
     private final LoginService loginService;

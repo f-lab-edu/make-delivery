@@ -4,7 +4,9 @@ import com.flab.makedel.dto.StoreDTO;
 import com.flab.makedel.mapper.StoreMapper;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 
 @Service
 @RequiredArgsConstructor
@@ -46,6 +48,13 @@ public class StoreService {
 
     public void openMyStore(long storeId) {
         storeMapper.openMyStore(storeId);
+    }
+
+    public void validateMyStore(long storeId, String ownerId) throws HttpClientErrorException {
+        boolean isMyStore = isMyStore(storeId, ownerId);
+        if (!isMyStore) {
+            throw new HttpClientErrorException(HttpStatus.UNAUTHORIZED);
+        }
     }
 
 }
