@@ -2,6 +2,7 @@ package com.flab.makedel.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import java.time.Duration;
 import org.springframework.beans.factory.annotation.Value;
@@ -63,7 +64,7 @@ public class RedisConfig {
 
         return lettuceConnectionFactory;
     }
-
+    
     @Bean
     public RedisTemplate<String, Object> redisTemplate() {
 

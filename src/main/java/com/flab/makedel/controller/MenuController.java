@@ -44,7 +44,7 @@ public class MenuController {
 
         storeService.validateMyStore(storeId, ownerId);
         menuService.deleteMenu(menuId);
-        
+
     }
 
     @GetMapping
