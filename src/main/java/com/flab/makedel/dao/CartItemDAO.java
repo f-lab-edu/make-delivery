@@ -1,10 +1,7 @@
 package com.flab.makedel.dao;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.flab.makedel.dto.CartItemDTO;
-import com.flab.makedel.utils.RedisUtil;
 import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
@@ -24,42 +21,32 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor
 public class CartItemDAO {
 
-    private final RedisTemplate<String, Object> redisTemplate;
-    private final ObjectMapper objectMapper;
+    private final RedisTemplate<String, CartItemDTO> redisTemplate;
+    private static final String cartKey = ":CART";
+
+    public static String generateCartKey(String id) {
+        return id + cartKey;
+    }
 
     public List<CartItemDTO> selectCartList(String userId) {
 
-        final String key = RedisUtil.generateCartKey(userId);
+        final String key = generateCartKey(userId);
 
         List<CartItemDTO> cartList = redisTemplate
             .opsForList()
-            .range(key, 0, -1)
-            .stream()
-            .map(cart -> objectMapper.convertValue(cart, CartItemDTO.class))
-            .collect(Collectors.toList());
+            .range(key, 0, -1);
 
         return cartList;
 
     }
 
     public void insertMenu(String userId, CartItemDTO cart) {
-
-        final String key = RedisUtil.generateCartKey(userId);
-
-        try {
-            redisTemplate.watch(key);
-            redisTemplate.multi();
-            redisTemplate.opsForList().rightPush(key, cart);
-            redisTemplate.exec();
-        } catch (Exception e) {
-            redisTemplate.discard();
-            throw e;
-        }
-
+        final String key = generateCartKey(userId);
+        redisTemplate.opsForList().rightPush(key, cart);
     }
 
     public void deleteMenuList(String userId) {
-        final String key = RedisUtil.generateCartKey(userId);
+        final String key = generateCartKey(userId);
         redisTemplate.delete(key);
     }
 
