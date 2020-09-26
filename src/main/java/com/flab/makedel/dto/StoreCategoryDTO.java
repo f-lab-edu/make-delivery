@@ -6,7 +6,9 @@ import lombok.Getter;
 /*
     Jackson의 메세지 컨버터가 objectMapper를 사용하여 deserialize합니다.
     자바 객체로 deserialize하는 과정에서 자바 객체의 기본 생성자를 이용하기 때문에
-    @NoArgsConstructor가 필요합니다.
+    @NoArgsConstructor가 필요합니다. 기본생성자로 객체를 만들고
+    필드가 public이면 직접 assignment하고 private이라면 setter를 사용합니다.
+    하지만 객체가 immutable하기를 원한다면 setter가 없어야한다.
 
     다른 방법으로는
     Jackson의 @JsonCreator를 이용하면 인자가 없는 기본생성자와 setter 없이도

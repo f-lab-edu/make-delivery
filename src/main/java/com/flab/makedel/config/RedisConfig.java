@@ -1,9 +1,7 @@
 package com.flab.makedel.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import java.time.Duration;
+
+import com.flab.makedel.dto.CartItemDTO;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -63,7 +61,7 @@ public class RedisConfig {
 
         return lettuceConnectionFactory;
     }
-
+    
     @Bean
     public RedisTemplate<String, Object> redisTemplate() {
 
@@ -71,6 +69,20 @@ public class RedisConfig {
             new GenericJackson2JsonRedisSerializer();
 
         RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
+
+        redisTemplate.setConnectionFactory(redisConnectionFactory());
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
+        redisTemplate.setValueSerializer(genericJackson2JsonRedisSerializer);
+
+        return redisTemplate;
+    }
+
+    @Bean
+    public RedisTemplate<String, CartItemDTO> cartItemDTORedisTemplate() {
+        GenericJackson2JsonRedisSerializer genericJackson2JsonRedisSerializer =
+            new GenericJackson2JsonRedisSerializer();
+
+        RedisTemplate<String, CartItemDTO> redisTemplate = new RedisTemplate<>();
 
         redisTemplate.setConnectionFactory(redisConnectionFactory());
         redisTemplate.setKeySerializer(new StringRedisSerializer());
