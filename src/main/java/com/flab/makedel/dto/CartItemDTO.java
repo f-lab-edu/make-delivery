@@ -10,21 +10,29 @@ public class CartItemDTO {
 
     private String name;
 
-    private String price;
+    private Long price;
 
-    private String storeId;
+    private Long menuId;
+
+    private Long storeId;
+
+    private Long count;
 
     private List<CartOptionDTO> optionList;
 
     @JsonCreator
     public CartItemDTO(@JsonProperty(value = "name") String name,
-        @JsonProperty(value = "price") String price,
-        @JsonProperty(value = "storeId") String storeId,
-        @JsonProperty(value = "optionList") List<CartOptionDTO>optionList
+        @JsonProperty(value = "price") Long price,
+        @JsonProperty(value = "menuId") Long menuId,
+        @JsonProperty(value = "storeId") Long storeId,
+        @JsonProperty(value = "count") Long count,
+        @JsonProperty(value = "optionList") List<CartOptionDTO> optionList
     ) {
         this.name = name;
         this.price = price;
+        this.menuId = menuId;
         this.storeId = storeId;
+        this.count = count;
         this.optionList = optionList;
     }
 

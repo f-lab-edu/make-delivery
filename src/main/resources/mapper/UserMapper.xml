@@ -14,6 +14,11 @@
         VALUES(#{id}, #{password}, #{email}, #{name}, #{phone}, #{address}, #{level})
     </insert>
 
+    <select id="selectUserInfo" resultType="com.flab.makedel.dto.UserInfoDTO">
+        SELECT id, name, phone, address
+        FROM USER WHERE id = #{id}
+    </select>
+
     <select id="selectUserById" resultType="com.flab.makedel.dto.UserDTO">
         SELECT id, password, email, name, phone, address, level, created_at, updated_at
         FROM USER WHERE id = #{id}

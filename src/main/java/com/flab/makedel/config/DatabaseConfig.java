@@ -1,5 +1,6 @@
 package com.flab.makedel.config;
 
+import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -27,10 +28,10 @@ import javax.sql.DataSource;
 
 @Configuration
 @MapperScan(basePackages = "com.flab.makedel.mapper")
+@RequiredArgsConstructor
 public class DatabaseConfig {
 
-    @Autowired
-    private ApplicationContext applicationContext;
+    private final ApplicationContext applicationContext;
 
     @Bean
     public SqlSessionFactory sqlSessionFactory(DataSource dataSource) throws Exception {

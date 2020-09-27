@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.flab.makedel.mapper.OrderMapper">
+
+    <insert id="insertOrder" parameterType="com.flab.makedel.dto.OrderDTO" useGeneratedKeys="true"
+        keyProperty="id">
+        INSERT INTO `ORDER`(address, user_id, store_id)
+        VALUES(#{address}, #{userId}, #{storeId})
+    </insert>
+
+    <update id="updateTotalPrice">
+        UPDATE `ORDER` SET total_price = #{totalPrice}
+        where id = #{orderId}
+    </update>
+
+</mapper>

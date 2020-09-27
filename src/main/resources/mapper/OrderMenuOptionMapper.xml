@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.flab.makedel.mapper.OrderMenuOptionMapper">
+
+    <insert id="insertOrderMenuOption" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO ORDER_MENU_OPTION (option_id, order_menu_id)
+        VALUES
+        <foreach collection="orderMenuOptionList" item="orderMenuOption" separator=",">
+            (#{orderMenuOption.optionId}, #{orderMenuOption.orderMenuId})
+        </foreach>
+    </insert>
+
+</mapper>
