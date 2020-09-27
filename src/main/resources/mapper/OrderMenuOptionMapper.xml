@@ -4,11 +4,11 @@
 
 <mapper namespace="com.flab.makedel.mapper.OrderMenuOptionMapper">
 
-    <insert id="insertOrderMenuOption" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO ORDER_MENU_OPTION (option_id, menu_id, order_id)
+    <insert id="insertOrderMenuOption">
+        INSERT INTO ORDER_MENU_OPTION (order_id, menu_id, option_id)
         VALUES
         <foreach collection="orderMenuOptionList" item="orderMenuOption" separator=",">
-            (#{orderMenuOption.optionId}, #{orderMenuOption.menuId}, #{orderMenuOption.orderId})
+            (#{orderMenuOption.orderId}, #{orderMenuOption.menuId}, #{orderMenuOption.optionId})
         </foreach>
     </insert>
 

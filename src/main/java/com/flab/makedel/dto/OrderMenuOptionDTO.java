@@ -9,12 +9,10 @@ import lombok.Getter;
 @Builder
 public class OrderMenuOptionDTO {
 
-    private final Long id;
-
-    private final Long optionId;
-
     private final Long menuId;
 
     private final Long orderId;
+
+    private final Long optionId;
 
 }
