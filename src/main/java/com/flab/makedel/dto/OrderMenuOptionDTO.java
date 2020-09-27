@@ -13,6 +13,8 @@ public class OrderMenuOptionDTO {
 
     private final Long optionId;
 
-    private final Long orderMenuId;
+    private final Long menuId;
+
+    private final Long orderId;
 
 }

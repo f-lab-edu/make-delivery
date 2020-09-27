@@ -57,7 +57,8 @@ public class OrderService {
 
                 OrderMenuOptionDTO orderMenuOptionDTO = OrderMenuOptionDTO.builder()
                     .optionId(option.getOptionId())
-                    .orderMenuId(cart.getMenuId())
+                    .menuId(cart.getMenuId())
+                    .orderId(orderId)
                     .build();
                 orderMenuOptionList.add(orderMenuOptionDTO);
             }
