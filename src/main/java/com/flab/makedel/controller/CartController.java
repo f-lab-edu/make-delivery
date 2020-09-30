@@ -5,6 +5,7 @@ import com.flab.makedel.annotation.LoginCheck.UserLevel;
 import com.flab.makedel.dto.CartItemDTO;
 import com.flab.makedel.service.CartService;
 import java.util.List;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,7 +25,7 @@ public class CartController {
     @PostMapping
     @LoginCheck(userLevel = UserLevel.USER)
     public void registerMenuInCart(@PathVariable String userId,
-        @RequestBody CartItemDTO cart) {
+        @Valid @RequestBody CartItemDTO cart) {
         cartService.registerMenuInCart(userId, cart);
     }
 

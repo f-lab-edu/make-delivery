@@ -3,22 +3,29 @@ package com.flab.makedel.dto;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
+import javax.validation.constraints.NotNull;
 import lombok.Getter;
 
 @Getter
 public class CartItemDTO {
 
-    private String name;
+    @NotNull
+    private final String name;
 
-    private Long price;
+    @NotNull
+    private final Long price;
 
-    private Long menuId;
+    @NotNull
+    private final Long menuId;
 
-    private Long storeId;
+    @NotNull
+    private final Long storeId;
 
-    private Long count;
+    @NotNull
+    private final Long count;
 
-    private List<CartOptionDTO> optionList;
+    @NotNull
+    private final List<CartOptionDTO> optionList;
 
     @JsonCreator
     public CartItemDTO(@JsonProperty(value = "name") String name,

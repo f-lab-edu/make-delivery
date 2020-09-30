@@ -1,5 +1,6 @@
 package com.flab.makedel.service;
 
+import com.flab.makedel.dao.CartItemDAO;
 import com.flab.makedel.dto.CartItemDTO;
 import com.flab.makedel.dto.CartOptionDTO;
 import com.flab.makedel.dto.OrderDTO;
@@ -23,13 +24,14 @@ public class OrderService {
     private final OrderMapper orderMapper;
     private final OrderMenuMapper orderMenuMapper;
     private final OrderMenuOptionMapper orderMenuOptionMapper;
+    private final CartItemDAO cartItemDAO;
 
-    public void registerOrder(String userId, long storeId, List<CartItemDTO> cartList) {
+    public void registerOrder(String userId, long storeId) {
 
         UserInfoDTO user = userMapper.selectUserInfo(userId);
         OrderDTO orderDTO = addUserInfo(user, storeId);
         orderMapper.insertOrder(orderDTO);
-
+        List<CartItemDTO> cartList = cartItemDAO.selectCartList(userId);
         registerOrderMenu(cartList, orderDTO.getId());
 
     }
@@ -38,11 +40,12 @@ public class OrderService {
 
         List<OrderMenuDTO> orderMenuList = new ArrayList<>();
         List<OrderMenuOptionDTO> orderMenuOptionList = new ArrayList<>();
+
         long totalPrice = 0;
 
         for (int i = 0; i < cartList.size(); i++) {
             CartItemDTO cart = cartList.get(i);
-            totalPrice += cart.getPrice();
+            totalPrice += cart.getPrice() * cart.getCount();
 
             OrderMenuDTO orderMenuDTO = OrderMenuDTO.builder()
                 .orderId(orderId)
