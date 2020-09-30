@@ -6,6 +6,6 @@ public interface OrderMapper {
 
     void insertOrder(OrderDTO orderDTO);
 
-    void updateTotalPrice(long totalPrice, long orderId);
+    void completeOrder(long totalPrice, long orderId, String orderStatus);
 
 }

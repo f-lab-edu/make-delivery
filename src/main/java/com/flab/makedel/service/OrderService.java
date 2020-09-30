@@ -6,6 +6,7 @@ import com.flab.makedel.dto.CartOptionDTO;
 import com.flab.makedel.dto.OrderDTO;
 import com.flab.makedel.dto.OrderMenuDTO;
 import com.flab.makedel.dto.OrderMenuOptionDTO;
+import com.flab.makedel.dto.PayDTO;
 import com.flab.makedel.dto.UserInfoDTO;
 import com.flab.makedel.mapper.OrderMapper;
 import com.flab.makedel.mapper.OrderMenuMapper;
@@ -20,11 +21,14 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class OrderService {
 
+    private static final String COMPLETE_ORDER = "주문완료";
+
     private final UserMapper userMapper;
     private final OrderMapper orderMapper;
     private final OrderMenuMapper orderMenuMapper;
     private final OrderMenuOptionMapper orderMenuOptionMapper;
     private final CartItemDAO cartItemDAO;
+    private final PayService payService;
 
     public void registerOrder(String userId, long storeId) {
 
@@ -32,11 +36,13 @@ public class OrderService {
         OrderDTO orderDTO = addUserInfo(user, storeId);
         orderMapper.insertOrder(orderDTO);
         List<CartItemDTO> cartList = cartItemDAO.selectCartList(userId);
-        registerOrderMenu(cartList, orderDTO.getId());
+        long totalPrice = registerOrderMenu(cartList, orderDTO.getId());
+        payService.registerPay(totalPrice, orderDTO.getId());
+        orderMapper.completeOrder(totalPrice, orderDTO.getId(), COMPLETE_ORDER);
 
     }
 
-    private void registerOrderMenu(List<CartItemDTO> cartList, Long orderId) {
+    private long registerOrderMenu(List<CartItemDTO> cartList, Long orderId) {
 
         List<OrderMenuDTO> orderMenuList = new ArrayList<>();
         List<OrderMenuOptionDTO> orderMenuOptionList = new ArrayList<>();
@@ -69,7 +75,9 @@ public class OrderService {
 
         orderMenuMapper.insertOrderMenu(orderMenuList);
         orderMenuOptionMapper.insertOrderMenuOption(orderMenuOptionList);
-        orderMapper.updateTotalPrice(totalPrice, orderId);
+        //orderMapper.updateTotalPrice(totalPrice, orderId);
+
+        return totalPrice;
 
     }
 

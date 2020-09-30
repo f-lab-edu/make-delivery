@@ -10,8 +10,9 @@
         VALUES(#{address}, #{userId}, #{storeId})
     </insert>
 
-    <update id="updateTotalPrice">
-        UPDATE `ORDER` SET total_price = #{totalPrice}
+    <update id="completeOrder">
+        UPDATE `ORDER` SET total_price = #{totalPrice},
+        order_status = #{orderStatus}
         where id = #{orderId}
     </update>
 
