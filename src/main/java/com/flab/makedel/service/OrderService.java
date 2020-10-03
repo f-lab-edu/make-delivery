@@ -4,14 +4,16 @@ import com.flab.makedel.dao.CartItemDAO;
 import com.flab.makedel.dto.CartItemDTO;
 import com.flab.makedel.dto.CartOptionDTO;
 import com.flab.makedel.dto.OrderDTO;
+import com.flab.makedel.dto.OrderDTO.OrderStatus;
 import com.flab.makedel.dto.OrderMenuDTO;
 import com.flab.makedel.dto.OrderMenuOptionDTO;
-import com.flab.makedel.dto.PayDTO;
+import com.flab.makedel.dto.PayDTO.PayType;
 import com.flab.makedel.dto.UserInfoDTO;
 import com.flab.makedel.mapper.OrderMapper;
 import com.flab.makedel.mapper.OrderMenuMapper;
 import com.flab.makedel.mapper.OrderMenuOptionMapper;
 import com.flab.makedel.mapper.UserMapper;
+import com.flab.makedel.utils.PayServiceFactory;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -21,24 +23,28 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class OrderService {
 
-    private static final String COMPLETE_ORDER = "주문완료";
-
     private final UserMapper userMapper;
     private final OrderMapper orderMapper;
     private final OrderMenuMapper orderMenuMapper;
     private final OrderMenuOptionMapper orderMenuOptionMapper;
     private final CartItemDAO cartItemDAO;
-    private final PayService payService;
+    private final PayServiceFactory payServiceFactory;
 
-    public void registerOrder(String userId, long storeId) {
+    public void registerOrder(String userId, long storeId, PayType payType) {
 
         UserInfoDTO user = userMapper.selectUserInfo(userId);
+
         OrderDTO orderDTO = addUserInfo(user, storeId);
         orderMapper.insertOrder(orderDTO);
+
         List<CartItemDTO> cartList = cartItemDAO.selectCartList(userId);
+
         long totalPrice = registerOrderMenu(cartList, orderDTO.getId());
-        payService.registerPay(totalPrice, orderDTO.getId());
-        orderMapper.completeOrder(totalPrice, orderDTO.getId(), COMPLETE_ORDER);
+
+        final PayService payService = payServiceFactory.getPayService(payType);
+        payService.pay(totalPrice, orderDTO.getId());
+
+        orderMapper.completeOrder(totalPrice, orderDTO.getId(), OrderStatus.주문완료);
 
     }
 
@@ -75,7 +81,6 @@ public class OrderService {
 
         orderMenuMapper.insertOrderMenu(orderMenuList);
         orderMenuOptionMapper.insertOrderMenuOption(orderMenuOptionList);
-        //orderMapper.updateTotalPrice(totalPrice, orderId);
 
         return totalPrice;
 

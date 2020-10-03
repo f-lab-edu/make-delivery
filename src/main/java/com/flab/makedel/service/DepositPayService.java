@@ -9,19 +9,18 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class CardPayService implements PayService {
+public class DepositPayService implements PayService {
 
     private final PayMapper payMapper;
 
     @Override
     public void pay(long price, long orderId) {
         PayDTO payDTO = PayDTO.builder()
-            .payType(PayType.CARD)
+            .payType(PayType.DEPOSIT)
             .price(price)
             .orderId(orderId)
-            .status(PayStatus.결제완료)
+            .status(PayStatus.무통장입금대기)
             .build();
         payMapper.insertPay(payDTO);
     }
 }
-

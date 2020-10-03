@@ -9,14 +9,14 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class CardPayService implements PayService {
+public class NaverPayService implements PayService {
 
     private final PayMapper payMapper;
 
     @Override
     public void pay(long price, long orderId) {
         PayDTO payDTO = PayDTO.builder()
-            .payType(PayType.CARD)
+            .payType(PayType.NAVER_PAY)
             .price(price)
             .orderId(orderId)
             .status(PayStatus.결제완료)
@@ -24,4 +24,3 @@ public class CardPayService implements PayService {
         payMapper.insertPay(payDTO);
     }
 }
-

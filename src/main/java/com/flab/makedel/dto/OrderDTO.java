@@ -1,5 +1,6 @@
 package com.flab.makedel.dto;
 
+import com.flab.makedel.dto.PayDTO.PayType;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,8 +15,8 @@ public class OrderDTO {
 
     private final LocalDateTime createdAt;
 
-    private final String orderStatus;
-
+    private final OrderStatus orderStatus;
+    
     private final String address;
 
     private final String userId;
@@ -23,5 +24,9 @@ public class OrderDTO {
     private final Long storeId;
 
     private final Long totalPrice;
+
+    public enum OrderStatus {
+        주문요청중, 주문완료
+    }
 
 }

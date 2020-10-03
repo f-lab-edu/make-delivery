@@ -3,6 +3,7 @@ package com.flab.makedel.controller;
 import com.flab.makedel.annotation.CurrentUserId;
 import com.flab.makedel.annotation.LoginCheck;
 import com.flab.makedel.annotation.LoginCheck.UserLevel;
+import com.flab.makedel.dto.PayDTO.PayType;
 import com.flab.makedel.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,7 +20,8 @@ public class OrderController {
 
     @PostMapping
     @LoginCheck(userLevel = UserLevel.USER)
-    public void registerOrder(@CurrentUserId String userId, @PathVariable long storeId) {
-        orderService.registerOrder(userId, storeId);
+    public void registerOrder(@CurrentUserId String userId, @PathVariable long storeId,
+        PayType payType) {
+        orderService.registerOrder(userId, storeId, payType);
     }
 }

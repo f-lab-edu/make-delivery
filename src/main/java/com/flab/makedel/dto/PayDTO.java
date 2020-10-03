@@ -14,7 +14,7 @@ public class PayDTO {
     private final Long id;
 
     @NotNull
-    private final String payType;
+    private final PayType payType;
 
     @NotNull
     private final Long price;
@@ -26,6 +26,14 @@ public class PayDTO {
     private final Long orderId;
 
     @NotNull
-    private final String status;
+    private final PayStatus status;
+
+    public enum PayType {
+        CARD, NAVER_PAY, DEPOSIT
+    }
+
+    public enum PayStatus {
+        결제전, 무통장입금대기, 결제완료
+    }
 
 }
