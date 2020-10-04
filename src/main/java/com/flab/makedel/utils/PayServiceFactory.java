@@ -20,14 +20,18 @@ public class PayServiceFactory {
 
         PayService payService = null;
 
-        if (payType == PayType.CARD) {
-            payService = cardPayService;
-        } else if (payType == PayType.NAVER_PAY) {
-            payService = naverPayService;
-        } else if (payType == PayType.DEPOSIT) {
-            payService = depositPayService;
-        } else {
-            throw new IllegalArgumentException();
+        switch (payType) {
+            case CARD:
+                payService = cardPayService;
+                break;
+            case NAVER_PAY:
+                payService = naverPayService;
+                break;
+            case DEPOSIT:
+                payService = depositPayService;
+                break;
+            default:
+                throw new IllegalArgumentException();
         }
 
         return payService;

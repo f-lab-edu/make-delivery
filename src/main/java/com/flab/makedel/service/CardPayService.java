@@ -19,7 +19,7 @@ public class CardPayService implements PayService {
             .payType(PayType.CARD)
             .price(price)
             .orderId(orderId)
-            .status(PayStatus.결제완료)
+            .status(PayStatus.COMPLETE_PAY)
             .build();
         payMapper.insertPay(payDTO);
     }

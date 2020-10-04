@@ -41,10 +41,10 @@ public class OrderService {
 
         long totalPrice = registerOrderMenu(cartList, orderDTO.getId());
 
-        final PayService payService = payServiceFactory.getPayService(payType);
+        PayService payService = payServiceFactory.getPayService(payType);
         payService.pay(totalPrice, orderDTO.getId());
 
-        orderMapper.completeOrder(totalPrice, orderDTO.getId(), OrderStatus.주문완료);
+        orderMapper.completeOrder(totalPrice, orderDTO.getId(), OrderStatus.COMPLETE_ORDER);
 
     }
 

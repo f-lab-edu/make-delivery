@@ -33,7 +33,7 @@ public class PayDTO {
     }
 
     public enum PayStatus {
-        결제전, 무통장입금대기, 결제완료
+        BEFORE_PAY, BEFORE_DEPOSIT, COMPLETE_PAY
     }
 
 }

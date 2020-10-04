@@ -16,7 +16,7 @@ public class OrderDTO {
     private final LocalDateTime createdAt;
 
     private final OrderStatus orderStatus;
-    
+
     private final String address;
 
     private final String userId;
@@ -26,7 +26,7 @@ public class OrderDTO {
     private final Long totalPrice;
 
     public enum OrderStatus {
-        주문요청중, 주문완료
+        BEFORE_ORDER, COMPLETE_ORDER
     }
 
 }

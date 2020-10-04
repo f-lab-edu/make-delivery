@@ -19,7 +19,7 @@ public class DepositPayService implements PayService {
             .payType(PayType.DEPOSIT)
             .price(price)
             .orderId(orderId)
-            .status(PayStatus.무통장입금대기)
+            .status(PayStatus.BEFORE_DEPOSIT)
             .build();
         payMapper.insertPay(payDTO);
     }

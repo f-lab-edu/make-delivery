@@ -19,7 +19,7 @@ public class NaverPayService implements PayService {
             .payType(PayType.NAVER_PAY)
             .price(price)
             .orderId(orderId)
-            .status(PayStatus.결제완료)
+            .status(PayStatus.COMPLETE_PAY)
             .build();
         payMapper.insertPay(payDTO);
     }
