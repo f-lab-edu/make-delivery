@@ -3,7 +3,9 @@ package com.flab.makedel.dao;
 import com.flab.makedel.dto.CartItemDTO;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.stereotype.Repository;
 
 /*
@@ -37,6 +39,22 @@ public class CartItemDAO {
             .range(key, 0, -1);
 
         return cartList;
+
+    }
+
+    public void insertMenuList(String userId, List<CartItemDTO> cartList) {
+        final String key = generateCartKey(userId);
+
+        RedisSerializer keySerializer = redisTemplate.getStringSerializer();
+        RedisSerializer valueSerializer = redisTemplate.getValueSerializer();
+
+        redisTemplate.executePipelined((RedisCallback<Object>) RedisConnection -> {
+            cartList.forEach(cart -> {
+                RedisConnection.rPush(keySerializer.serialize(key),
+                    valueSerializer.serialize(cart));
+            });
+            return null;
+        });
 
     }
 

@@ -29,6 +29,13 @@ public class CartController {
         cartService.registerMenuInCart(userId, cart);
     }
 
+    @PostMapping("/temp")
+    public void dfdf(@PathVariable String userId,
+        @RequestBody List<CartItemDTO> cartList) {
+        cartService.insertMenuList(userId, cartList);
+    }
+
+
     @GetMapping
     @LoginCheck(userLevel = UserLevel.USER)
     public List<CartItemDTO> loadCart(@PathVariable String userId) {

@@ -20,6 +20,10 @@ public class CartService {
         cartItemDAO.insertMenu(userId, cart);
     }
 
+    public void insertMenuList(String userId, List<CartItemDTO> cartList) {
+        cartItemDAO.insertMenuList(userId, cartList);
+    }
+
     public void deleteAllMenuInCart(String userId) {
         cartItemDAO.deleteMenuList(userId);
     }
