@@ -6,8 +6,8 @@
 
     <insert id="insertOrder" parameterType="com.flab.makedel.dto.OrderDTO" useGeneratedKeys="true"
         keyProperty="id">
-        INSERT INTO `ORDER`(address, user_id, store_id)
-        VALUES(#{address}, #{userId}, #{storeId})
+        INSERT INTO `ORDER`(order_status, address, user_id, store_id)
+        VALUES(#{orderStatus}, #{address}, #{userId}, #{storeId})
     </insert>
 
     <update id="completeOrder">

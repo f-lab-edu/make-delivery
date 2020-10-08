@@ -41,10 +41,12 @@ public class OrderTransactionService {
     private final PayServiceFactory payServiceFactory;
 
     @Transactional
-    public long order(OrderDTO orderDTO, List<CartItemDTO> cartList) {
+    public long order(OrderDTO orderDTO, List<CartItemDTO> cartList,
+        List<OrderMenuDTO> orderMenuList, List<OrderMenuOptionDTO> orderMenuOptionList) {
 
         orderMapper.insertOrder(orderDTO);
-        long totalPrice = registerOrderMenu(cartList, orderDTO.getId());
+        long totalPrice = registerOrderMenu(cartList, orderDTO.getId(), orderMenuList,
+            orderMenuOptionList);
 
         return totalPrice;
     }
@@ -57,10 +59,9 @@ public class OrderTransactionService {
 
     }
 
-    public long registerOrderMenu(List<CartItemDTO> cartList, Long orderId) {
+    public long registerOrderMenu(List<CartItemDTO> cartList, Long orderId,
+        List<OrderMenuDTO> orderMenuList, List<OrderMenuOptionDTO> orderMenuOptionList) {
 
-        List<OrderMenuDTO> orderMenuList = new ArrayList<>();
-        List<OrderMenuOptionDTO> orderMenuOptionList = new ArrayList<>();
         long totalPrice = 0;
 
         for (int i = 0; i < cartList.size(); i++) {
