@@ -1,5 +1,6 @@
 package com.flab.makedel.mapper;
 
+import com.flab.makedel.dto.StoreInfoDTO;
 import com.flab.makedel.dto.StoreDTO;
 import java.util.List;
 
@@ -16,5 +17,7 @@ public interface StoreMapper {
     void closeMyStore(long storeId);
 
     void openMyStore(long storeId);
+
+    StoreInfoDTO selectStoreInfo(long storeId);
 
 }

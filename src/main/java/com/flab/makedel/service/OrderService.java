@@ -6,9 +6,12 @@ import com.flab.makedel.dto.OrderDTO;
 import com.flab.makedel.dto.OrderDTO.OrderStatus;
 import com.flab.makedel.dto.OrderMenuDTO;
 import com.flab.makedel.dto.OrderMenuOptionDTO;
+import com.flab.makedel.dto.OrderReceiptDTO;
+import com.flab.makedel.dto.StoreInfoDTO;
 import com.flab.makedel.dto.PayDTO.PayType;
 import com.flab.makedel.dto.UserInfoDTO;
 import com.flab.makedel.mapper.OrderMapper;
+import com.flab.makedel.mapper.StoreMapper;
 import com.flab.makedel.mapper.UserMapper;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,15 +27,17 @@ public class OrderService {
     private final UserMapper userMapper;
     private final OrderTransactionService orderTransactionService;
     private final CartItemDAO cartItemDAO;
+    private final StoreMapper storeMapper;
 
     @Transactional
-    public void registerOrder(String userId, long storeId, PayType payType) {
+    public OrderReceiptDTO registerOrder(String userId, long storeId, PayType payType) {
 
         UserInfoDTO user = userMapper.selectUserInfo(userId);
-        OrderDTO orderDTO = makeOrderDTO(user, storeId);
+        OrderDTO orderDTO = getOrderDTO(user, storeId);
         List<CartItemDTO> cartList = null;
         List<OrderMenuDTO> orderMenuList = new ArrayList<>();
         List<OrderMenuOptionDTO> orderMenuOptionList = new ArrayList<>();
+        OrderReceiptDTO orderReceipt;
 
         try {
             cartList = cartItemDAO.selectCartList(userId);
@@ -42,14 +47,17 @@ public class OrderService {
                 .order(orderDTO, cartList, orderMenuList, orderMenuOptionList);
             orderTransactionService.pay(payType, totalPrice, orderDTO.getId());
             orderMapper.completeOrder(totalPrice, orderDTO.getId(), OrderStatus.COMPLETE_ORDER);
+            orderReceipt = getOrderReceipt(orderDTO, cartList, totalPrice, storeId,
+                user);
 
         } catch (RuntimeException runtimeException) {
             cartItemDAO.insertMenuList(userId, cartList);
             throw runtimeException; // catch로 잡아서 throw 하지 않으면 롤백이 되지 않음.
         }
+        return orderReceipt;
     }
 
-    private OrderDTO makeOrderDTO(UserInfoDTO userInfo, long storeId) {
+    private OrderDTO getOrderDTO(UserInfoDTO userInfo, long storeId) {
         OrderDTO orderDTO = OrderDTO.builder()
             .address(userInfo.getAddress())
             .userId(userInfo.getId())
@@ -57,6 +65,20 @@ public class OrderService {
             .storeId(storeId)
             .build();
         return orderDTO;
+    }
+
+    public OrderReceiptDTO getOrderReceipt(OrderDTO orderDTO, List<CartItemDTO> cartList,
+        long totalPrice, long storeId, UserInfoDTO userInfo) {
+
+        StoreInfoDTO storeInfo = storeMapper.selectStoreInfo(storeId);
+        return OrderReceiptDTO.builder()
+            .orderId(orderDTO.getId())
+            .userInfo(userInfo)
+            .totalPrice(totalPrice)
+            .storeInfo(storeInfo)
+            .cartList(cartList)
+            .build();
+
     }
 
 }
