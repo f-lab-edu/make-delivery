@@ -40,8 +40,7 @@ public class OrderService {
         OrderReceiptDTO orderReceipt;
 
         try {
-            cartList = cartItemDAO.selectCartList(userId);
-            cartItemDAO.deleteMenuList(userId);
+            cartList = cartItemDAO.getCartAndDelete(userId);
 
             long totalPrice = orderTransactionService
                 .order(orderDTO, cartList, orderMenuList, orderMenuOptionList);
