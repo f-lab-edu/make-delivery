@@ -60,11 +60,17 @@ public class CartItemDAO {
                 @Override
                 public List<Object> execute(RedisOperations redisOperations)
                     throws DataAccessException {
-                    redisOperations.watch(key);
-                    redisOperations.multi();
-                    redisOperations.opsForList().range(key, 0, -1);
-                    redisOperations.delete(key);
-                    return redisOperations.exec();
+                    try {
+                        redisOperations.watch(key);
+                        redisOperations.multi();
+                        redisOperations.opsForList().range(key, 0, -1);
+                        redisOperations.delete(key);
+                        return redisOperations.exec();
+                    } catch(Exception exception) {
+                        redisOperations.discard();
+                        throw exception;
+                    }
+
                 }
             }
         );
