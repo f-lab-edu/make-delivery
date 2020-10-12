@@ -13,3 +13,5 @@ https://github.com/f-lab-edu/make-delivery/wiki/Use-Case
 https://github.com/f-lab-edu/make-delivery/wiki/%ED%99%94%EB%A9%B4-%EC%84%A4%EA%B3%84
 
 
+## DB ERD
+![스크린샷 2020-10-12 22 05 51](https://user-images.githubusercontent.com/34911552/95750006-74ae1600-0cd7-11eb-8e10-2f16de2bbec4.png)
