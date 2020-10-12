@@ -10,12 +10,14 @@ import com.flab.makedel.dto.OrderReceiptDTO;
 import com.flab.makedel.dto.StoreInfoDTO;
 import com.flab.makedel.dto.PayDTO.PayType;
 import com.flab.makedel.dto.UserInfoDTO;
+import com.flab.makedel.event.RollbackEvent;
 import com.flab.makedel.mapper.OrderMapper;
 import com.flab.makedel.mapper.StoreMapper;
 import com.flab.makedel.mapper.UserMapper;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,33 +30,31 @@ public class OrderService {
     private final OrderTransactionService orderTransactionService;
     private final CartItemDAO cartItemDAO;
     private final StoreMapper storeMapper;
+    private final ApplicationEventPublisher publisher;
 
     @Transactional
     public OrderReceiptDTO registerOrder(String userId, long storeId, PayType payType) {
 
         UserInfoDTO user = userMapper.selectUserInfo(userId);
         OrderDTO orderDTO = getOrderDTO(user, storeId);
-        List<CartItemDTO> cartList = null;
+        List<CartItemDTO> cartList;
         List<OrderMenuDTO> orderMenuList = new ArrayList<>();
         List<OrderMenuOptionDTO> orderMenuOptionList = new ArrayList<>();
         OrderReceiptDTO orderReceipt;
 
-        try {
-            cartList = cartItemDAO.getCartAndDelete(userId);
+        cartList = cartItemDAO.getCartAndDelete(userId);
 
-            long totalPrice = orderTransactionService
-                .order(orderDTO, cartList, orderMenuList, orderMenuOptionList);
-            orderTransactionService.pay(payType, totalPrice, orderDTO.getId());
-            orderMapper.completeOrder(totalPrice, orderDTO.getId(), OrderStatus.COMPLETE_ORDER);
-            orderReceipt = getOrderReceipt(orderDTO, cartList, totalPrice, storeId,
-                user);
+        long totalPrice = orderTransactionService
+            .order(orderDTO, cartList, orderMenuList, orderMenuOptionList);
+        orderTransactionService.pay(payType, totalPrice, orderDTO.getId());
+        orderMapper.completeOrder(totalPrice, orderDTO.getId(), OrderStatus.COMPLETE_ORDER);
+        orderReceipt = getOrderReceipt(orderDTO, cartList, totalPrice, storeId,
+            user);
 
-        } catch (RuntimeException runtimeException) {
-            cartItemDAO.insertMenuList(userId, cartList);
-            throw runtimeException; // catch로 잡아서 throw 하지 않으면 롤백이 되지 않음.
-        }
+        publisher.publishEvent(new RollbackEvent(userId, cartList));
         return orderReceipt;
     }
+
 
     private OrderDTO getOrderDTO(UserInfoDTO userInfo, long storeId) {
         OrderDTO orderDTO = OrderDTO.builder()
