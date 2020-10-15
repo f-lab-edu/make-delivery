@@ -4,6 +4,7 @@ import com.flab.makedel.dao.CartItemDAO;
 import com.flab.makedel.dto.CartItemDTO;
 import com.flab.makedel.dto.OrderDTO;
 import com.flab.makedel.dto.OrderDTO.OrderStatus;
+import com.flab.makedel.dto.OrderDetailDTO;
 import com.flab.makedel.dto.OrderMenuDTO;
 import com.flab.makedel.dto.OrderMenuOptionDTO;
 import com.flab.makedel.dto.OrderReceiptDTO;
@@ -69,12 +70,18 @@ public class OrderService {
         StoreInfoDTO storeInfo = storeMapper.selectStoreInfo(storeId);
         return OrderReceiptDTO.builder()
             .orderId(orderDTO.getId())
+            .orderStatus(orderDTO.getOrderStatus())
             .userInfo(userInfo)
             .totalPrice(totalPrice)
             .storeInfo(storeInfo)
             .cartList(cartList)
             .build();
 
+    }
+
+    public OrderDetailDTO getOrderInfoByOrderId(long orderId) {
+        OrderDetailDTO temp = orderMapper.selectDetailOrder(orderId);
+        return temp;
     }
 
 }
