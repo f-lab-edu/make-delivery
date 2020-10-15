@@ -57,7 +57,7 @@
         </collection>
     </resultMap>
 
-    <select id="selectDetailOrder" resultMap="orderList">
+    <select id="selectDetailOrder" resultMap="orderDetail">
         select
         ord.id as orderId,
         ord.order_status as orderStatus,
