@@ -1,5 +1,6 @@
 package com.flab.makedel.service;
 
+import com.flab.makedel.dao.CartItemDAO;
 import com.flab.makedel.dto.CartItemDTO;
 import com.flab.makedel.dto.CartOptionDTO;
 import com.flab.makedel.dto.OrderDTO;
@@ -14,6 +15,8 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronizationAdapter;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 /*
     굳이 OrderTransactionService를 새로 만들은 이유 :
@@ -38,6 +41,8 @@ public class OrderTransactionService {
     private final OrderMenuMapper orderMenuMapper;
     private final OrderMenuOptionMapper orderMenuOptionMapper;
     private final PayServiceFactory payServiceFactory;
+    private final CartItemDAO cartItemDAO;
+    private final static int ROLLBACK_STATUS = 1;
 
     @Transactional
     public long order(OrderDTO orderDTO, List<CartItemDTO> cartList,
@@ -58,7 +63,7 @@ public class OrderTransactionService {
 
     }
 
-    public long registerOrderMenu(List<CartItemDTO> cartList, Long orderId,
+    private long registerOrderMenu(List<CartItemDTO> cartList, Long orderId,
         List<OrderMenuDTO> orderMenuList, List<OrderMenuOptionDTO> orderMenuOptionList) {
 
         long totalPrice = 0;
@@ -92,6 +97,18 @@ public class OrderTransactionService {
 
         return totalPrice;
 
+    }
+
+    public void insertCartListIfRollback(String userId, List<CartItemDTO> cartList) {
+        TransactionSynchronizationManager.registerSynchronization(
+            new TransactionSynchronizationAdapter() {
+                @Override
+                public void afterCompletion(int status) {
+                    if (status == ROLLBACK_STATUS) {
+                        cartItemDAO.insertMenuList(userId, cartList);
+                    }
+                }
+            });
     }
 
 }

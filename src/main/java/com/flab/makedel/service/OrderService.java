@@ -10,14 +10,12 @@ import com.flab.makedel.dto.OrderReceiptDTO;
 import com.flab.makedel.dto.StoreInfoDTO;
 import com.flab.makedel.dto.PayDTO.PayType;
 import com.flab.makedel.dto.UserInfoDTO;
-import com.flab.makedel.event.RollbackEvent;
 import com.flab.makedel.mapper.OrderMapper;
 import com.flab.makedel.mapper.StoreMapper;
 import com.flab.makedel.mapper.UserMapper;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,7 +28,6 @@ public class OrderService {
     private final OrderTransactionService orderTransactionService;
     private final CartItemDAO cartItemDAO;
     private final StoreMapper storeMapper;
-    private final ApplicationEventPublisher publisher;
 
     @Transactional
     public OrderReceiptDTO registerOrder(String userId, long storeId, PayType payType) {
@@ -44,6 +41,8 @@ public class OrderService {
 
         cartList = cartItemDAO.getCartAndDelete(userId);
 
+        orderTransactionService.insertCartListIfRollback(userId, cartList);
+
         long totalPrice = orderTransactionService
             .order(orderDTO, cartList, orderMenuList, orderMenuOptionList);
         orderTransactionService.pay(payType, totalPrice, orderDTO.getId());
@@ -51,10 +50,8 @@ public class OrderService {
         orderReceipt = getOrderReceipt(orderDTO, cartList, totalPrice, storeId,
             user);
 
-        publisher.publishEvent(new RollbackEvent(userId, cartList));
         return orderReceipt;
     }
-
 
     private OrderDTO getOrderDTO(UserInfoDTO userInfo, long storeId) {
         OrderDTO orderDTO = OrderDTO.builder()
@@ -66,7 +63,7 @@ public class OrderService {
         return orderDTO;
     }
 
-    public OrderReceiptDTO getOrderReceipt(OrderDTO orderDTO, List<CartItemDTO> cartList,
+    private OrderReceiptDTO getOrderReceipt(OrderDTO orderDTO, List<CartItemDTO> cartList,
         long totalPrice, long storeId, UserInfoDTO userInfo) {
 
         StoreInfoDTO storeInfo = storeMapper.selectStoreInfo(storeId);
