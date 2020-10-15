@@ -8,6 +8,7 @@ import com.flab.makedel.dto.OrderDetailDTO;
 import com.flab.makedel.dto.OrderMenuDTO;
 import com.flab.makedel.dto.OrderMenuOptionDTO;
 import com.flab.makedel.dto.OrderReceiptDTO;
+import com.flab.makedel.dto.OrderStoreDetailDTO;
 import com.flab.makedel.dto.StoreInfoDTO;
 import com.flab.makedel.dto.PayDTO.PayType;
 import com.flab.makedel.dto.UserInfoDTO;
@@ -80,8 +81,14 @@ public class OrderService {
     }
 
     public OrderDetailDTO getOrderInfoByOrderId(long orderId) {
-        OrderDetailDTO temp = orderMapper.selectDetailOrder(orderId);
-        return temp;
+        OrderDetailDTO orderDetail = orderMapper.selectDetailOrder(orderId);
+        return orderDetail;
+    }
+
+    public List<OrderStoreDetailDTO> getStoreOrderInfoByStoreId(long storeId) {
+        List<OrderStoreDetailDTO> storeOrderDetailList = orderMapper
+            .selectDetailStoreOrder(storeId);
+        return storeOrderDetailList;
     }
 
 }
