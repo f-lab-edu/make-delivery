@@ -42,7 +42,6 @@ public class OrderTransactionService {
     private final OrderMenuOptionMapper orderMenuOptionMapper;
     private final PayServiceFactory payServiceFactory;
     private final CartItemDAO cartItemDAO;
-    private final static int ROLLBACK_STATUS = 1;
 
     @Transactional
     public long order(OrderDTO orderDTO, List<CartItemDTO> cartList,
@@ -99,12 +98,12 @@ public class OrderTransactionService {
 
     }
 
-    public void insertCartListIfRollback(String userId, List<CartItemDTO> cartList) {
+    public void onRollback(String userId, List<CartItemDTO> cartList) {
         TransactionSynchronizationManager.registerSynchronization(
             new TransactionSynchronizationAdapter() {
                 @Override
                 public void afterCompletion(int status) {
-                    if (status == ROLLBACK_STATUS) {
+                    if (status == STATUS_ROLLED_BACK) {
                         cartItemDAO.insertMenuList(userId, cartList);
                     }
                 }

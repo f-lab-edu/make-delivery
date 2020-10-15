@@ -41,7 +41,7 @@ public class OrderService {
 
         cartList = cartItemDAO.getCartAndDelete(userId);
 
-        orderTransactionService.insertCartListIfRollback(userId, cartList);
+        orderTransactionService.onRollback(userId, cartList);
 
         long totalPrice = orderTransactionService
             .order(orderDTO, cartList, orderMenuList, orderMenuOptionList);
