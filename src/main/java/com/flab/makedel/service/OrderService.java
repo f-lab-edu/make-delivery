@@ -18,6 +18,8 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronizationAdapter;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 @Service
 @RequiredArgsConstructor
@@ -41,7 +43,7 @@ public class OrderService {
 
         cartList = cartItemDAO.getCartAndDelete(userId);
 
-        orderTransactionService.onRollback(userId, cartList);
+        onRollback(userId, cartList);
 
         long totalPrice = orderTransactionService
             .order(orderDTO, cartList, orderMenuList, orderMenuOptionList);
@@ -51,6 +53,18 @@ public class OrderService {
             user);
 
         return orderReceipt;
+    }
+
+    private void onRollback(String userId, List<CartItemDTO> cartList) {
+        TransactionSynchronizationManager.registerSynchronization(
+            new TransactionSynchronizationAdapter() {
+                @Override
+                public void afterCompletion(int status) {
+                    if (status == STATUS_ROLLED_BACK) {
+                        cartItemDAO.insertMenuList(userId, cartList);
+                    }
+                }
+            });
     }
 
     private OrderDTO getOrderDTO(UserInfoDTO userInfo, long storeId) {

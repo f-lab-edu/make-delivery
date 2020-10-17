@@ -41,7 +41,6 @@ public class OrderTransactionService {
     private final OrderMenuMapper orderMenuMapper;
     private final OrderMenuOptionMapper orderMenuOptionMapper;
     private final PayServiceFactory payServiceFactory;
-    private final CartItemDAO cartItemDAO;
 
     @Transactional
     public long order(OrderDTO orderDTO, List<CartItemDTO> cartList,
@@ -96,18 +95,6 @@ public class OrderTransactionService {
 
         return totalPrice;
 
-    }
-
-    public void onRollback(String userId, List<CartItemDTO> cartList) {
-        TransactionSynchronizationManager.registerSynchronization(
-            new TransactionSynchronizationAdapter() {
-                @Override
-                public void afterCompletion(int status) {
-                    if (status == STATUS_ROLLED_BACK) {
-                        cartItemDAO.insertMenuList(userId, cartList);
-                    }
-                }
-            });
     }
 
 }
