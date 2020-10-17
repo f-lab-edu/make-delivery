@@ -2,9 +2,12 @@ package com.flab.makedel.config;
 
 
 import com.flab.makedel.dto.CartItemDTO;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -14,7 +17,8 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
-
+import org.springframework.session.data.redis.config.annotation.SpringSessionRedisConnectionFactory;
+import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 /*
     @Value : Spring이 지원하는 의존성 주입 방법중 하나입니다.
     SpEL을 지원하며 application.properties의 속성값을 프로퍼티에 넣어줍니다.
@@ -55,9 +59,10 @@ public class RedisConfig {
     @Value("${spring.redis.password}")
     private String redisPassword;
 
-    @Bean
-    public RedisConnectionFactory redisSessionConnectionFactory() {
 
+    @Bean
+    @Primary
+    public RedisConnectionFactory redisSessionConnectionFactory() {
         RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
         redisStandaloneConfiguration.setHostName(redisHost);
         redisStandaloneConfiguration.setPort(redisSessionPort);
