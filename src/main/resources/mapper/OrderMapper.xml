@@ -59,29 +59,28 @@
 
     <select id="selectDetailOrder" resultMap="orderDetail">
         select
-        ord.id as orderId,
-        ord.order_status as orderStatus,
-        ord.user_id as userId,
-        ord.total_price as totalPrice,
-        ord.store_id as storeId,
-        store.name as storeName,
-        store.address as storeAddress,
-        store.phone as storePhone,
-        m.id as menuId,
-        m.name as menuName,
-        m.price as menuPrice,
-        ord_m.count as menuCount,
-        ord_m_o.option_id as optionId,
-        m_o.name as optionName,
-        m_o.price as optionPrice
+            ord.id as orderId,
+            ord.order_status as orderStatus,
+            ord.user_id as userId,
+            ord.total_price as totalPrice,
+            ord.store_id as storeId,
+            store.name as storeName,
+            store.address as storeAddress,
+            store.phone as storePhone,
+            m.id as menuId,
+            m.name as menuName,
+            m.price as menuPrice,
+            ord_m.count as menuCount,
+            ord_m_o.option_id as optionId,
+            m_o.name as optionName,
+            m_o.price as optionPrice
 
         from `order` ord
-        join order_menu ord_m on ord.id = ord_m.order_id
-        join menu m on ord_m.menu_id = m.id
-        join order_menu_option ord_m_o on ord_m.order_id = ord_m_o.order_id
-        join menu_option m_o on m_o.id = ord_m_o.option_id
-        join pay on ord.id =pay.order_id
-        join store on ord.store_id = store.id
+            join order_menu ord_m on ord.id = ord_m.order_id
+            join menu m on ord_m.menu_id = m.id
+            join order_menu_option ord_m_o on ord_m.order_id = ord_m_o.order_id
+            join menu_option m_o on m_o.id = ord_m_o.option_id
+            join store on ord.store_id = store.id
         where ord.id = #{orderId};
     </select>
 
@@ -128,27 +127,27 @@
 
     <select id="selectDetailStoreOrder" resultMap="orderList">
         select
-        o.id as orderId,
-        o.created_at as orderCreatedAt,
-        o.order_status as orderStatus,
-        o.total_price as totalPrice,
-        user.id as userId,
-        user.name as userName,
-        user.address as userAddress,
-        user.phone as userPhone,
-        o_m.menu_id as menuId,
-        menu.name as menuName,
-        menu.price as menuPrice,
-        o_m.count as menuCount,
-        o_m_o.option_id as optionId,
-        m_o.name as optionName,
-        m_o.price as optionPrice
+            o.id as orderId,
+            o.created_at as orderCreatedAt,
+            o.order_status as orderStatus,
+            o.total_price as totalPrice,
+            user.id as userId,
+            user.name as userName,
+            user.address as userAddress,
+            user.phone as userPhone,
+            o_m.menu_id as menuId,
+            menu.name as menuName,
+            menu.price as menuPrice,
+            o_m.count as menuCount,
+            o_m_o.option_id as optionId,
+            m_o.name as optionName,
+            m_o.price as optionPrice
         from `order` o
-        join order_menu o_m on o.id=o_m.order_id
-        join order_menu_option o_m_o on o_m.order_id= o_m_o.order_id and o_m.menu_id = o_m_o.menu_id
-        join menu on menu.id = o_m.menu_id
-        join menu_option m_o on m_o.id = o_m_o.option_id
-        join user on user.id = o.user_id
+            join order_menu o_m on o.id=o_m.order_id
+            join order_menu_option o_m_o on o_m.order_id= o_m_o.order_id and o_m.menu_id = o_m_o.menu_id
+            join menu on menu.id = o_m.menu_id
+            join menu_option m_o on m_o.id = o_m_o.option_id
+            join user on user.id = o.user_id
         where o.store_id = #{storeId};
     </select>
 
