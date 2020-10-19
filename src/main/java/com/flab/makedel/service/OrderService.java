@@ -43,7 +43,7 @@ public class OrderService {
 
         cartList = cartItemDAO.getCartAndDelete(userId);
 
-        addHookOnOrderRollback(userId, cartList);
+        restoreCartListOnOrderRollback(userId, cartList);
 
         long totalPrice = orderTransactionService
             .order(orderDTO, cartList, orderMenuList, orderMenuOptionList);
@@ -55,7 +55,7 @@ public class OrderService {
         return orderReceipt;
     }
 
-    private void addHookOnOrderRollback(String userId, List<CartItemDTO> cartList) {
+    private void restoreCartListOnOrderRollback(String userId, List<CartItemDTO> cartList) {
         TransactionSynchronizationManager.registerSynchronization(
             new TransactionSynchronizationAdapter() {
                 @Override
