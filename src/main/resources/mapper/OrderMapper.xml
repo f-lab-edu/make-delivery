@@ -16,4 +16,139 @@
         where id = #{orderId}
     </update>
 
+    <resultMap type="com.flab.makedel.dto.OrderDetailDTO" id="orderDetail">
+        <constructor>
+            <idArg column="orderId" javaType="Long"/>
+            <arg column="orderStatus" javaType="String"/>
+            <arg column="userId" javaType="String"/>
+            <arg column="totalPrice" javaType="Long"/>
+        </constructor>
+        <id property="orderId" column="orderId"/>
+        <result property="orderStatus" column="orderStatus"/>
+        <result property="userId" column="userId"/>
+        <result property="totalPrice" column="totalPrice"/>
+        <collection property="storeInfo" ofType="com.flab.makedel.dto.StoreInfoDTO">
+            <id property="storeId" column="storeId"/>
+            <result property="name" column="storeName"/>
+            <result property="phone" column="storePhone"/>
+            <result property="address" column="storeAddress"/>
+        </collection>
+        <collection property="menuList" ofType="com.flab.makedel.dto.OrderDetailMenuDTO">
+            <constructor>
+                <idArg column="menuId" javaType="Long"/>
+                <arg column="menuName" javaType="String"/>
+                <arg column="menuPrice" javaType="Long"/>
+                <arg column="menuCount" javaType="Long"/>
+            </constructor>
+            <id property="menuId" column="menuId"/>
+            <result property="menuName" column="menuName"/>
+            <result property="menuPrice" column="menuPrice"/>
+            <result property="menuCount" column="menuCount"/>
+            <collection property="optionList" ofType="com.flab.makedel.dto.OrderDetailOptionDTO">
+                <constructor>
+                    <idArg column="optionId" javaType="Long"/>
+                    <arg column="optionName" javaType="String"/>
+                    <arg column="optionPrice" javaType="Long"/>
+                </constructor>
+                <id property="optionId" column="optionId"/>
+                <result property="optionName" column="optionName"/>
+                <result property="optionPrice" column="optionPrice"/>
+            </collection>
+        </collection>
+    </resultMap>
+
+    <select id="selectDetailOrder" resultMap="orderDetail">
+        select
+            ord.id as orderId,
+            ord.order_status as orderStatus,
+            ord.user_id as userId,
+            ord.total_price as totalPrice,
+            ord.store_id as storeId,
+            store.name as storeName,
+            store.address as storeAddress,
+            store.phone as storePhone,
+            m.id as menuId,
+            m.name as menuName,
+            m.price as menuPrice,
+            ord_m.count as menuCount,
+            ord_m_o.option_id as optionId,
+            m_o.name as optionName,
+            m_o.price as optionPrice
+
+        from `order` ord
+            join order_menu ord_m on ord.id = ord_m.order_id
+            join menu m on ord_m.menu_id = m.id
+            join order_menu_option ord_m_o on ord_m.order_id = ord_m_o.order_id
+            join menu_option m_o on m_o.id = ord_m_o.option_id
+            join store on ord.store_id = store.id
+        where ord.id = #{orderId};
+    </select>
+
+    <resultMap id="orderList" type="com.flab.makedel.dto.OrderStoreDetailDTO">
+        <constructor>
+            <idArg column="orderId" javaType="Long"/>
+            <arg column="orderCreatedAt" javaType="java.time.LocalDateTime"/>
+            <arg column="orderStatus" javaType="String"/>
+            <arg column="totalPrice" javaType="Long"/>
+        </constructor>
+        <id column="orderId" javaType="Long"/>
+        <result property="orderCreatedAt" column="orderCreatedAt"/>
+        <result property="orderStatus" column="orderStatus"/>
+        <result property="totalPrice" column="totalPrice"/>
+        <collection property="userInfo" ofType="com.flab.makedel.dto.UserInfoDTO">
+            <id property="id" column="userId"/>
+            <result property="name" column="userName"/>
+            <result property="phone" column="userphone"/>
+            <result property="address" column="userAddress"/>
+        </collection>
+        <collection property="menuList" ofType="com.flab.makedel.dto.OrderDetailMenuDTO">
+            <constructor>
+                <idArg column="menuId" javaType="Long"/>
+                <arg column="menuName" javaType="String"/>
+                <arg column="menuPrice" javaType="Long"/>
+                <arg column="menuCount" javaType="Long"/>
+            </constructor>
+            <id property="menuId" column="menuId"/>
+            <result property="menuName" column="menuName"/>
+            <result property="menuPrice" column="menuPrice"/>
+            <result property="menuCount" column="menuCount"/>
+            <collection property="optionList" ofType="com.flab.makedel.dto.OrderDetailOptionDTO">
+                <constructor>
+                    <idArg column="optionId" javaType="Long"/>
+                    <arg column="optionName" javaType="String"/>
+                    <arg column="optionPrice" javaType="Long"/>
+                </constructor>
+                <id property="optionId" column="optionId"/>
+                <result property="optionName" column="optionName"/>
+                <result property="optionPrice" column="optionPrice"/>
+            </collection>
+        </collection>
+    </resultMap>
+
+    <select id="selectDetailStoreOrder" resultMap="orderList">
+        select
+            o.id as orderId,
+            o.created_at as orderCreatedAt,
+            o.order_status as orderStatus,
+            o.total_price as totalPrice,
+            user.id as userId,
+            user.name as userName,
+            user.address as userAddress,
+            user.phone as userPhone,
+            o_m.menu_id as menuId,
+            menu.name as menuName,
+            menu.price as menuPrice,
+            o_m.count as menuCount,
+            o_m_o.option_id as optionId,
+            m_o.name as optionName,
+            m_o.price as optionPrice
+        from `order` o
+            join order_menu o_m on o.id=o_m.order_id
+            join order_menu_option o_m_o on o_m.order_id= o_m_o.order_id and o_m.menu_id = o_m_o.menu_id
+            join menu on menu.id = o_m.menu_id
+            join menu_option m_o on m_o.id = o_m_o.option_id
+            join user on user.id = o.user_id
+        where o.store_id = #{storeId};
+    </select>
+
 </mapper>
