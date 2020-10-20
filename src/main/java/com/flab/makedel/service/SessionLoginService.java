@@ -20,14 +20,17 @@ public class SessionLoginService implements LoginService {
     private static final String USER_ID = "USER_ID";
     private final HttpSession session;
 
+    @Override
     public void loginUser(String id) {
         session.setAttribute(USER_ID, id);
     }
 
+    @Override
     public void logoutUser() {
         session.removeAttribute(USER_ID);
     }
 
+    @Override
     public String getCurrentUser() {
         return (String) session.getAttribute(USER_ID);
     }

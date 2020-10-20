@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.flab.makedel.mapper.PayMapper">
+
+    <insert id="insertPay" parameterType="com.flab.makedel.dto.PayDTO" useGeneratedKeys="true"
+        keyProperty="id">
+        INSERT INTO PAY (pay_type, price, order_id, status)
+        VALUES
+            (#{payType}, #{price}, #{orderId}, #{status})
+    </insert>
+
+</mapper>

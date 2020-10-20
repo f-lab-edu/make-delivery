@@ -4,7 +4,6 @@
 
 <mapper namespace="com.flab.makedel.mapper.StoreMapper">
 
-
     <insert id="insertStore" parameterType="com.flab.makedel.dto.StoreDTO">
         INSERT INTO STORE(name, phone, address, owner_id, category_id, introduction)
         VALUES(#{name}, #{phone}, #{address}, #{ownerId}, #{categoryId}, #{introduction})
@@ -34,5 +33,10 @@
         UPDATE STORE SET open_status = 'opened'
         where id = #{storeId}
     </update>
+
+    <select id="selectStoreInfo" resultType="com.flab.makedel.dto.StoreInfoDTO">
+        SELECT id as storeId, name, phone, address
+        FROM STORE WHERE id = #{storeId}
+    </select>
 
 </mapper>
