@@ -2,9 +2,12 @@ package com.flab.makedel.config;
 
 
 import com.flab.makedel.dto.CartItemDTO;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -14,7 +17,8 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
-
+import org.springframework.session.data.redis.config.annotation.SpringSessionRedisConnectionFactory;
+import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 /*
     @Value : Spring이 지원하는 의존성 주입 방법중 하나입니다.
     SpEL을 지원하며 application.properties의 속성값을 프로퍼티에 넣어줍니다.
@@ -43,18 +47,24 @@ public class RedisConfig {
     @Value("${spring.redis.host}")
     private String redisHost;
 
-    @Value("${spring.redis.port}")
-    private int redisPort;
+    @Value("${spring.redis.session.port}")
+    private int redisSessionPort;
+
+    @Value("${spring.redis.cache.port}")
+    private int redisCachePort;
+
+    @Value("${spring.redis.cart.port}")
+    private int redisCartPort;
 
     @Value("${spring.redis.password}")
     private String redisPassword;
 
-    @Bean
-    public RedisConnectionFactory redisConnectionFactory() {
 
+    @Bean({"redisConnectionFactory", "redisSessionConnectionFactory"})
+    public RedisConnectionFactory redisSessionConnectionFactory() {
         RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
         redisStandaloneConfiguration.setHostName(redisHost);
-        redisStandaloneConfiguration.setPort(redisPort);
+        redisStandaloneConfiguration.setPort(redisSessionPort);
         redisStandaloneConfiguration.setPassword(redisPassword);
         LettuceConnectionFactory lettuceConnectionFactory = new LettuceConnectionFactory(
             redisStandaloneConfiguration);
@@ -63,18 +73,29 @@ public class RedisConfig {
     }
 
     @Bean
-    public RedisTemplate<String, Object> redisTemplate() {
+    public RedisConnectionFactory redisCacheConnectionFactory() {
 
-        GenericJackson2JsonRedisSerializer genericJackson2JsonRedisSerializer =
-            new GenericJackson2JsonRedisSerializer();
+        RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
+        redisStandaloneConfiguration.setHostName(redisHost);
+        redisStandaloneConfiguration.setPort(redisCachePort);
+        redisStandaloneConfiguration.setPassword(redisPassword);
+        LettuceConnectionFactory lettuceConnectionFactory = new LettuceConnectionFactory(
+            redisStandaloneConfiguration);
 
-        RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
+        return lettuceConnectionFactory;
+    }
 
-        redisTemplate.setConnectionFactory(redisConnectionFactory());
-        redisTemplate.setKeySerializer(new StringRedisSerializer());
-        redisTemplate.setValueSerializer(genericJackson2JsonRedisSerializer);
+    @Bean
+    public RedisConnectionFactory redisCartConnectionFactory() {
 
-        return redisTemplate;
+        RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
+        redisStandaloneConfiguration.setHostName(redisHost);
+        redisStandaloneConfiguration.setPort(redisCartPort);
+        redisStandaloneConfiguration.setPassword(redisPassword);
+        LettuceConnectionFactory lettuceConnectionFactory = new LettuceConnectionFactory(
+            redisStandaloneConfiguration);
+
+        return lettuceConnectionFactory;
     }
 
     @Bean
@@ -84,7 +105,7 @@ public class RedisConfig {
 
         RedisTemplate<String, CartItemDTO> redisTemplate = new RedisTemplate<>();
 
-        redisTemplate.setConnectionFactory(redisConnectionFactory());
+        redisTemplate.setConnectionFactory(redisCartConnectionFactory());
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.setValueSerializer(genericJackson2JsonRedisSerializer);
 
@@ -106,7 +127,7 @@ public class RedisConfig {
             );
 
         return RedisCacheManager.RedisCacheManagerBuilder
-            .fromConnectionFactory(redisConnectionFactory())
+            .fromConnectionFactory(redisCacheConnectionFactory())
             .cacheDefaults(redisCacheConfiguration).build();
     }
 }
