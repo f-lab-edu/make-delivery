@@ -60,7 +60,7 @@ public class RedisConfig {
     private String redisPassword;
 
 
-    @Bean("redisConnectionFactory")
+    @Bean({"redisConnectionFactory", "redisSessionConnectionFactory"})
     public RedisConnectionFactory redisSessionConnectionFactory() {
         RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
         redisStandaloneConfiguration.setHostName(redisHost);
