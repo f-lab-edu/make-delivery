@@ -10,4 +10,7 @@ public class DeliveryService {
 
     private final DeliveryDAO deliveryDAO;
 
+    public void registerStandbyOrder() {
+    }
+
 }

@@ -30,4 +30,8 @@ public class DeliveryDAO {
     public Set<Object> selectStandbyRiderList() {
         return redisTemplate.opsForHash().keys(riderKey);
     }
+
+    public void insertStandbyOrder(long orderId) {
+        //redisTemplate.opsForHash().put(deliveryOrderKey,orderId,);
+    }
 }

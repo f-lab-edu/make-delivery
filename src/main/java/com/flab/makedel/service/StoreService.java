@@ -57,4 +57,7 @@ public class StoreService {
         }
     }
 
+    public void approveOrder(long orderId) {
+    }
+
 }

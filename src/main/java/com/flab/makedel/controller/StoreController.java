@@ -79,4 +79,10 @@ public class StoreController {
 
     }
 
+    @PostMapping("/{storeId}/orders/{orderId}/approve")
+    @LoginCheck(userLevel = UserLevel.OWNER)
+    public void approveOrder(@PathVariable long orderId) {
+        storeService.approveOrder(orderId);
+    }
+
 }

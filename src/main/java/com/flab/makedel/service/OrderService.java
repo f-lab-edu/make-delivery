@@ -85,7 +85,7 @@ public class OrderService {
         StoreInfoDTO storeInfo = storeMapper.selectStoreInfo(storeId);
         return OrderReceiptDTO.builder()
             .orderId(orderDTO.getId())
-            .orderStatus(orderDTO.getOrderStatus())
+            .orderStatus(OrderStatus.COMPLETE_ORDER)
             .userInfo(userInfo)
             .totalPrice(totalPrice)
             .storeInfo(storeInfo)
