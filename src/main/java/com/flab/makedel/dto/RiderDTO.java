@@ -1,12 +1,11 @@
 package com.flab.makedel.dto;
 
-import java.time.LocalDateTime;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
-@AllArgsConstructor
 public class RiderDTO {
 
     @NotNull
@@ -22,6 +21,19 @@ public class RiderDTO {
     private final String address;
 
     @NotNull
-    private final LocalDateTime updatedAt = LocalDateTime.now();
+    private final String updatedAt;
+
+    @JsonCreator
+    public RiderDTO(@JsonProperty(value = "id") String id,
+        @JsonProperty(value = "name") String name,
+        @JsonProperty(value = "phone") String phone,
+        @JsonProperty(value = "address") String address,
+        @JsonProperty(value = "updatedAt") String updatedAt) {
+        this.id = id;
+        this.name = name;
+        this.phone = phone;
+        this.address = address;
+        this.updatedAt = updatedAt;
+    }
 
 }
