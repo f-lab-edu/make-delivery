@@ -2,6 +2,7 @@ package com.flab.makedel.config;
 
 
 import com.flab.makedel.dto.CartItemDTO;
+import com.flab.makedel.dto.RiderDTO;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -56,6 +57,9 @@ public class RedisConfig {
     @Value("${spring.redis.cart.port}")
     private int redisCartPort;
 
+    @Value("${spring.redis.rider.port}")
+    private int redisDeliveryPort;
+
     @Value("${spring.redis.password}")
     private String redisPassword;
 
@@ -99,6 +103,19 @@ public class RedisConfig {
     }
 
     @Bean
+    public RedisConnectionFactory redisDeliveryConnectionFactory() {
+
+        RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
+        redisStandaloneConfiguration.setHostName(redisHost);
+        redisStandaloneConfiguration.setPort(redisDeliveryPort);
+        redisStandaloneConfiguration.setPassword(redisPassword);
+        LettuceConnectionFactory lettuceConnectionFactory = new LettuceConnectionFactory(
+            redisStandaloneConfiguration);
+
+        return lettuceConnectionFactory;
+    }
+
+    @Bean
     public RedisTemplate<String, CartItemDTO> cartItemDTORedisTemplate() {
         GenericJackson2JsonRedisSerializer genericJackson2JsonRedisSerializer =
             new GenericJackson2JsonRedisSerializer();
@@ -108,6 +125,22 @@ public class RedisConfig {
         redisTemplate.setConnectionFactory(redisCartConnectionFactory());
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.setValueSerializer(genericJackson2JsonRedisSerializer);
+
+        return redisTemplate;
+    }
+
+    @Bean
+    public RedisTemplate<String, RiderDTO> riderDTORedisTemplate() {
+        GenericJackson2JsonRedisSerializer genericJackson2JsonRedisSerializer =
+            new GenericJackson2JsonRedisSerializer();
+
+        RedisTemplate<String, RiderDTO> redisTemplate = new RedisTemplate<>();
+
+        redisTemplate.setConnectionFactory(redisDeliveryConnectionFactory());
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
+        redisTemplate.setHashKeySerializer(new StringRedisSerializer());
+        redisTemplate.setValueSerializer(genericJackson2JsonRedisSerializer);
+        redisTemplate.setHashValueSerializer(genericJackson2JsonRedisSerializer);
 
         return redisTemplate;
     }

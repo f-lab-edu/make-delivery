@@ -26,7 +26,7 @@ public class OrderDTO {
     private final Long totalPrice;
 
     public enum OrderStatus {
-        BEFORE_ORDER, COMPLETE_ORDER
+        BEFORE_ORDER, COMPLETE_ORDER, APPROVED_ORDER, DELIVERING, COMPLETE_DELIVERY
     }
 
 }
