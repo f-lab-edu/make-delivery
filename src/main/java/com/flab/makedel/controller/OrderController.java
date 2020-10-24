@@ -33,7 +33,7 @@ public class OrderController {
 
     @GetMapping("/{orderId}")
     @LoginCheck(userLevel = UserLevel.USER)
-    public OrderDetailDTO loadOrder(@PathVariable long orderId) {
+    public OrderReceiptDTO loadOrder(@PathVariable long orderId) {
         return orderService.getOrderInfoByOrderId(orderId);
     }
 

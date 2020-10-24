@@ -16,7 +16,12 @@
         where id = #{orderId}
     </update>
 
-    <resultMap type="com.flab.makedel.dto.OrderDetailDTO" id="orderDetail">
+    <update id="approveOrder">
+        UPDATE `ORDER` SET order_status = #{orderStatus}
+        where id = #{orderId}
+    </update>
+
+    <resultMap type="com.flab.makedel.dto.OrderReceiptDTO" id="orderReceipt">
         <constructor>
             <idArg column="orderId" javaType="Long"/>
             <arg column="orderStatus" javaType="String"/>
@@ -37,7 +42,7 @@
             <result property="phone" column="storePhone"/>
             <result property="address" column="storeAddress"/>
         </collection>
-        <collection property="menuList" ofType="com.flab.makedel.dto.OrderDetailMenuDTO">
+        <collection property="cartList" ofType="com.flab.makedel.dto.CartItemDTO">
             <constructor>
                 <idArg column="menuId" javaType="Long"/>
                 <arg column="menuName" javaType="String"/>
@@ -45,23 +50,23 @@
                 <arg column="menuCount" javaType="Long"/>
             </constructor>
             <id property="menuId" column="menuId"/>
-            <result property="menuName" column="menuName"/>
-            <result property="menuPrice" column="menuPrice"/>
-            <result property="menuCount" column="menuCount"/>
-            <collection property="optionList" ofType="com.flab.makedel.dto.OrderDetailOptionDTO">
+            <result property="name" column="menuName"/>
+            <result property="price" column="menuPrice"/>
+            <result property="count" column="menuCount"/>
+            <collection property="optionList" ofType="com.flab.makedel.dto.CartOptionDTO">
                 <constructor>
                     <idArg column="optionId" javaType="Long"/>
                     <arg column="optionName" javaType="String"/>
                     <arg column="optionPrice" javaType="Long"/>
                 </constructor>
                 <id property="optionId" column="optionId"/>
-                <result property="optionName" column="optionName"/>
-                <result property="optionPrice" column="optionPrice"/>
+                <result property="name" column="optionName"/>
+                <result property="price" column="optionPrice"/>
             </collection>
         </collection>
     </resultMap>
 
-    <select id="selectDetailOrder" resultMap="orderDetail">
+    <select id="selectOrderReceipt" resultMap="orderReceipt">
         select
             ord.id as orderId,
             ord.order_status as orderStatus,

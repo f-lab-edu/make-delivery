@@ -2,6 +2,8 @@ package com.flab.makedel.config;
 
 
 import com.flab.makedel.dto.CartItemDTO;
+import com.flab.makedel.dto.OrderDetailDTO;
+import com.flab.makedel.dto.OrderReceiptDTO;
 import com.flab.makedel.dto.RiderDTO;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -135,6 +137,22 @@ public class RedisConfig {
             new GenericJackson2JsonRedisSerializer();
 
         RedisTemplate<String, RiderDTO> redisTemplate = new RedisTemplate<>();
+
+        redisTemplate.setConnectionFactory(redisDeliveryConnectionFactory());
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
+        redisTemplate.setHashKeySerializer(new StringRedisSerializer());
+        redisTemplate.setValueSerializer(genericJackson2JsonRedisSerializer);
+        redisTemplate.setHashValueSerializer(genericJackson2JsonRedisSerializer);
+
+        return redisTemplate;
+    }
+
+    @Bean
+    public RedisTemplate<String, OrderReceiptDTO> standbyOrderRedisTemplate() {
+        GenericJackson2JsonRedisSerializer genericJackson2JsonRedisSerializer =
+            new GenericJackson2JsonRedisSerializer();
+
+        RedisTemplate<String, OrderReceiptDTO> redisTemplate = new RedisTemplate<>();
 
         redisTemplate.setConnectionFactory(redisDeliveryConnectionFactory());
         redisTemplate.setKeySerializer(new StringRedisSerializer());

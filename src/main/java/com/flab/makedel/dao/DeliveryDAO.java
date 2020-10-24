@@ -1,5 +1,7 @@
 package com.flab.makedel.dao;
 
+import com.flab.makedel.dto.OrderDetailDTO;
+import com.flab.makedel.dto.OrderReceiptDTO;
 import com.flab.makedel.dto.RiderDTO;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
@@ -11,9 +13,14 @@ import org.springframework.stereotype.Repository;
 public class DeliveryDAO {
 
     private final RedisTemplate<String, RiderDTO> redisTemplate;
+    private final RedisTemplate<String, OrderReceiptDTO> standbyOrderRedisTemplate;
     private static final String riderKey = "STANDBY_RIDERS";
     private static final String deliveryOrderKey = "STANDBY_ORDERS";
+    private static final String orderHashKey = ":ORDERS";
 
+    private static String generateHashKey(long orderId) {
+        return orderId + orderHashKey;
+    }
 
     public void insertStandbyRider(RiderDTO rider) {
         redisTemplate.opsForHash().put(riderKey, rider.getId(), rider);
@@ -31,7 +38,14 @@ public class DeliveryDAO {
         return redisTemplate.opsForHash().keys(riderKey);
     }
 
-    public void insertStandbyOrder(long orderId) {
-        //redisTemplate.opsForHash().put(deliveryOrderKey,orderId,);
+    public void insertStandbyOrder(long orderId, OrderReceiptDTO orderDetail) {
+        standbyOrderRedisTemplate.opsForHash()
+            .put(deliveryOrderKey, generateHashKey(orderId), orderDetail);
     }
+
+    public OrderReceiptDTO selectStandbyOrder(long orderId) {
+        return (OrderReceiptDTO) standbyOrderRedisTemplate.opsForHash()
+            .get(deliveryOrderKey, generateHashKey(orderId));
+    }
+
 }

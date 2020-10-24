@@ -5,27 +5,28 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 import javax.validation.constraints.NotNull;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
 public class CartItemDTO {
 
     @NotNull
-    private final String name;
+    private String name;
 
     @NotNull
-    private final Long price;
+    private Long price;
 
     @NotNull
-    private final Long menuId;
+    private Long menuId;
 
     @NotNull
-    private final Long storeId;
+    private Long storeId;
 
     @NotNull
-    private final Long count;
+    private Long count;
 
     @NotNull
-    private final List<CartOptionDTO> optionList;
+    private List<CartOptionDTO> optionList;
 
     @JsonCreator
     public CartItemDTO(@JsonProperty(value = "name") String name,
@@ -41,6 +42,13 @@ public class CartItemDTO {
         this.storeId = storeId;
         this.count = count;
         this.optionList = optionList;
+    }
+
+    public CartItemDTO(Long menuId, String name, Long price, Long count) {
+        this.menuId = menuId;
+        this.name = name;
+        this.price = price;
+        this.count = count;
     }
 
 

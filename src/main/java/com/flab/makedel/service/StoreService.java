@@ -1,11 +1,16 @@
 package com.flab.makedel.service;
 
+import com.flab.makedel.dto.OrderDTO.OrderStatus;
+import com.flab.makedel.dto.OrderDetailDTO;
+import com.flab.makedel.dto.OrderReceiptDTO;
 import com.flab.makedel.dto.StoreDTO;
+import com.flab.makedel.mapper.OrderMapper;
 import com.flab.makedel.mapper.StoreMapper;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.HttpClientErrorException;
 
 @Service
@@ -13,6 +18,8 @@ import org.springframework.web.client.HttpClientErrorException;
 public class StoreService {
 
     private final StoreMapper storeMapper;
+    private final OrderMapper orderMapper;
+    private final DeliveryService deliveryService;
 
     public void insertStore(StoreDTO store) {
         storeMapper.insertStore(store);
@@ -57,7 +64,11 @@ public class StoreService {
         }
     }
 
+    @Transactional
     public void approveOrder(long orderId) {
+        orderMapper.approveOrder(orderId, OrderStatus.APPROVED_ORDER);
+        OrderReceiptDTO orderReceipt = orderMapper.selectOrderReceipt(orderId);
+        deliveryService.registerStandbyOrder(orderId, orderReceipt);
     }
 
 }
