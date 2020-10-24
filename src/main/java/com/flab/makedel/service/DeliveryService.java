@@ -2,6 +2,7 @@ package com.flab.makedel.service;
 
 import com.flab.makedel.dao.DeliveryDAO;
 import com.flab.makedel.dto.OrderReceiptDTO;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,10 @@ public class DeliveryService {
 
     public OrderReceiptDTO loadStandbyOrder(long orderId) {
         return deliveryDAO.selectStandbyOrder(orderId);
+    }
+
+    public List<Object> loadStandbyOrderList() {
+        return deliveryDAO.selectStandbyOrderList();
     }
 
 }

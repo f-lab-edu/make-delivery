@@ -3,6 +3,7 @@ package com.flab.makedel.dao;
 import com.flab.makedel.dto.OrderDetailDTO;
 import com.flab.makedel.dto.OrderReceiptDTO;
 import com.flab.makedel.dto.RiderDTO;
+import java.util.List;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -46,6 +47,11 @@ public class DeliveryDAO {
     public OrderReceiptDTO selectStandbyOrder(long orderId) {
         return (OrderReceiptDTO) standbyOrderRedisTemplate.opsForHash()
             .get(deliveryOrderKey, generateHashKey(orderId));
+    }
+
+    public List<Object> selectStandbyOrderList() {
+        return standbyOrderRedisTemplate.opsForHash()
+            .values(deliveryOrderKey);
     }
 
 }
