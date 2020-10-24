@@ -132,7 +132,7 @@ public class RedisConfig {
     }
 
     @Bean
-    public RedisTemplate<String, RiderDTO> riderDTORedisTemplate() {
+    public RedisTemplate<String, RiderDTO> standbyRiderRedisTemplate() {
         GenericJackson2JsonRedisSerializer genericJackson2JsonRedisSerializer =
             new GenericJackson2JsonRedisSerializer();
 
