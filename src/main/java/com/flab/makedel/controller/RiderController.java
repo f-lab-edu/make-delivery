@@ -37,8 +37,8 @@ public class RiderController {
         return riderService.loadStandbyRiderInfo(riderId);
     }
 
-    @GetMapping
-    public Set<Object> temp() {
+    @GetMapping("/standby")
+    public Set<Object> loadStandbyRiderList() {
         return riderService.loadStandbyRiderList();
     }
 }
