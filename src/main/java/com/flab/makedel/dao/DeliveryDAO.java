@@ -1,8 +1,10 @@
 package com.flab.makedel.dao;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.flab.makedel.dto.OrderDetailDTO;
 import com.flab.makedel.dto.OrderReceiptDTO;
 import com.flab.makedel.dto.RiderDTO;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map.Entry;
@@ -25,6 +27,7 @@ public class DeliveryDAO {
     private static final String riderKey = "STANDBY_RIDERS";
     private static final String deliveryOrderKey = "STANDBY_ORDERS";
     private static final String orderHashKey = ":ORDERS";
+    private final ObjectMapper objectMapper;
 
     private static String generateHashKey(long orderId) {
         return orderId + orderHashKey;
@@ -48,7 +51,7 @@ public class DeliveryDAO {
         레디스는 싱글스레드로 동작하기 때문에 이처럼 어떤 명령어를 O(n)시간 동안 수행하면서 lock이
         걸린다면 그시간동안 keys 명령어를 수행하기 위해 멈춰버리기 때문입니다.
      */
-    
+
     public Set<String> selectStandbyRiderList() {
 
         Set<String> result = new HashSet<>();
@@ -64,8 +67,8 @@ public class DeliveryDAO {
 
                 while (entries.hasNext()) {
                     Entry<byte[], byte[]> entry = entries.next();
-                    byte[] actualValue = entry.getKey();
-                    result.add(new String(actualValue));
+                    byte[] actualKey = entry.getKey();
+                    result.add(new String(actualKey));
                 }
 
                 return result;
@@ -87,8 +90,30 @@ public class DeliveryDAO {
     }
 
     public List<Object> selectStandbyOrderList() {
-        return standbyOrderRedisTemplate.opsForHash()
-            .values(deliveryOrderKey);
+
+        List<Object> result = new ArrayList<>();
+
+        redisTemplate.execute(new RedisCallback<List<Object>>() {
+            @Override
+            public List<Object> doInRedis(RedisConnection redisConnection)
+                throws DataAccessException {
+
+                ScanOptions options = ScanOptions.scanOptions().match("*").build();
+                Cursor<Entry<byte[], byte[]>> entries = redisConnection
+                    .hScan(deliveryOrderKey.getBytes(), options);
+
+                while (entries.hasNext()) {
+                    Entry<byte[], byte[]> entry = entries.next();
+                    byte[] actualKey = entry.getKey();
+                    result.add(new String(actualKey));
+                }
+
+                return result;
+            }
+        });
+
+        return result;
+
     }
 
 }
