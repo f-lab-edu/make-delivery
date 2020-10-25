@@ -38,7 +38,7 @@ public class RiderController {
     }
 
     @GetMapping("/standby")
-    public Set<Object> loadStandbyRiderList() {
+    public Set<String> loadStandbyRiderList() {
         return riderService.loadStandbyRiderList();
     }
 }

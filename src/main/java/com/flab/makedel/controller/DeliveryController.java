@@ -18,7 +18,7 @@ public class DeliveryController {
 
     private final DeliveryService deliveryService;
 
-    @GetMapping("{orderId}")
+    @GetMapping("/{orderId}")
     @LoginCheck(userLevel = UserLevel.RIDER)
     public OrderReceiptDTO loadStandbyOrder(@PathVariable long orderId) {
         return deliveryService.loadStandbyOrder(orderId);

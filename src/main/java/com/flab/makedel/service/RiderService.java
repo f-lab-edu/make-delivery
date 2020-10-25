@@ -24,7 +24,7 @@ public class RiderService {
         return deliveryDAO.selectStandbyRider(riderId);
     }
 
-    public Set<Object> loadStandbyRiderList() {
+    public Set<String> loadStandbyRiderList() {
         return deliveryDAO.selectStandbyRiderList();
     }
 
