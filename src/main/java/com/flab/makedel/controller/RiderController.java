@@ -28,8 +28,8 @@ public class RiderController {
 
     @DeleteMapping("/{riderId}/standby")
     @LoginCheck(userLevel = UserLevel.RIDER)
-    public void deleteStandbyRider(RiderDTO rider) {
-        riderService.deleteStandbyRider(rider);
+    public void deleteStandbyRider(@PathVariable String riderId) {
+        riderService.deleteStandbyRider(riderId);
     }
 
     @GetMapping("/{riderId}/standby")
@@ -41,4 +41,11 @@ public class RiderController {
     public Set<String> loadStandbyRiderList() {
         return riderService.loadStandbyRiderList();
     }
+
+    @PostMapping("/{riderId}/orders/{orderId}/deliveries/accept")
+    @LoginCheck(userLevel = UserLevel.RIDER)
+    public void acceptStandbyOrder(@PathVariable long orderId, @PathVariable String riderId) {
+        riderService.acceptStandbyOrder(orderId, riderId);
+    }
+
 }

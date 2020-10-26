@@ -1,7 +1,6 @@
 package com.flab.makedel.dao;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.flab.makedel.dto.OrderDetailDTO;
 import com.flab.makedel.dto.OrderReceiptDTO;
 import com.flab.makedel.dto.RiderDTO;
 import java.util.ArrayList;
@@ -14,56 +13,56 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.core.Cursor;
 import org.springframework.data.redis.core.RedisCallback;
+import org.springframework.data.redis.core.RedisOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ScanOptions;
+import org.springframework.data.redis.core.SessionCallback;
 import org.springframework.stereotype.Repository;
 
 @Repository
 @RequiredArgsConstructor
 public class DeliveryDAO {
 
-    private final RedisTemplate<String, RiderDTO> redisTemplate;
-    private final RedisTemplate<String, OrderReceiptDTO> standbyOrderRedisTemplate;
-    private static final String riderKey = "STANDBY_RIDERS";
-    private static final String deliveryOrderKey = "STANDBY_ORDERS";
-    private static final String orderHashKey = ":ORDERS";
-    private final ObjectMapper objectMapper;
+    private final RedisTemplate<String, Object> redisTemplate;
+    private static final String standbyRiderKey = "STANDBY_RIDERS";
+    private static final String standbyOrderKey = "STANDBY_ORDERS";
+    private static final String deliveringRiderKey = "DELIVERING_RIDERS";
+    private static final String deliveringOrderKey = "DELIVERING_ORDERS";
 
-    private static String generateHashKey(long orderId) {
-        return orderId + orderHashKey;
+    private String generateHashKey(long orderId) {
+        return String.valueOf(orderId);
     }
 
     public void insertStandbyRider(RiderDTO rider) {
-        redisTemplate.opsForHash().put(riderKey, rider.getId(), rider);
+        redisTemplate.opsForHash().put(standbyRiderKey, rider.getId(), rider);
     }
 
-    public void deleteStandbyRider(RiderDTO rider) {
-        redisTemplate.opsForHash().delete(riderKey, rider.getId());
+    public void deleteStandbyRider(String riderId) {
+        redisTemplate.opsForHash().delete(standbyRiderKey, riderId);
     }
 
     public RiderDTO selectStandbyRider(String riderId) {
-        return (RiderDTO) redisTemplate.opsForHash().get(riderKey, riderId);
+        return (RiderDTO) redisTemplate.opsForHash().get(standbyRiderKey, riderId);
     }
 
     /*
         레디스의 명령어중 keys를 이용하면 모든 키값들을 가져올 수 있지만 이키값들을 가져오는동안
         lock이 걸립니다. 따라서 성능에 영향을 줄 수 있어 레디스에서는 scan,hscan을 권장합니다.
         레디스는 싱글스레드로 동작하기 때문에 이처럼 어떤 명령어를 O(n)시간 동안 수행하면서 lock이
-        걸린다면 그시간동안 keys 명령어를 수행하기 위해 멈춰버리기 때문입니다.
+        걸린다면 그시간동안 keys 명령어를 수행하기 위해 blocking이 되기 때문입니다.
      */
 
     public Set<String> selectStandbyRiderList() {
 
         Set<String> result = new HashSet<>();
-
         redisTemplate.execute(new RedisCallback<Set<String>>() {
             @Override
             public Set<String> doInRedis(RedisConnection redisConnection)
                 throws DataAccessException {
 
-                ScanOptions options = ScanOptions.scanOptions().match("*").build();
+                ScanOptions options = ScanOptions.scanOptions().match("*").count(200).build();
                 Cursor<Entry<byte[], byte[]>> entries = redisConnection
-                    .hScan(riderKey.getBytes(), options);
+                    .hScan(standbyRiderKey.getBytes(), options);
 
                 while (entries.hasNext()) {
                     Entry<byte[], byte[]> entry = entries.next();
@@ -74,33 +73,34 @@ public class DeliveryDAO {
                 return result;
             }
         });
-
         return result;
-
     }
 
     public void insertStandbyOrder(long orderId, OrderReceiptDTO orderReceipt) {
-        standbyOrderRedisTemplate.opsForHash()
-            .put(deliveryOrderKey, generateHashKey(orderId), orderReceipt);
+        redisTemplate.opsForHash()
+            .put(standbyOrderKey, generateHashKey(orderId), orderReceipt);
     }
 
     public OrderReceiptDTO selectStandbyOrder(long orderId) {
-        return (OrderReceiptDTO) standbyOrderRedisTemplate.opsForHash()
-            .get(deliveryOrderKey, generateHashKey(orderId));
+        return (OrderReceiptDTO) redisTemplate.opsForHash()
+            .get(standbyOrderKey, generateHashKey(orderId));
     }
 
-    public List<Object> selectStandbyOrderList() {
+    public void deleteStandbyOrder(long orderId) {
+        redisTemplate.opsForHash().delete(standbyOrderKey, generateHashKey(orderId));
+    }
 
-        List<Object> result = new ArrayList<>();
+    public List<String> selectStandbyOrderList() {
 
-        redisTemplate.execute(new RedisCallback<List<Object>>() {
+        List<String> result = new ArrayList<>();
+        redisTemplate.execute(new RedisCallback<List<String>>() {
             @Override
-            public List<Object> doInRedis(RedisConnection redisConnection)
+            public List<String> doInRedis(RedisConnection redisConnection)
                 throws DataAccessException {
 
-                ScanOptions options = ScanOptions.scanOptions().match("*").build();
+                ScanOptions options = ScanOptions.scanOptions().match("*").count(200).build();
                 Cursor<Entry<byte[], byte[]>> entries = redisConnection
-                    .hScan(deliveryOrderKey.getBytes(), options);
+                    .hScan(standbyOrderKey.getBytes(), options);
 
                 while (entries.hasNext()) {
                     Entry<byte[], byte[]> entry = entries.next();
@@ -111,9 +111,46 @@ public class DeliveryDAO {
                 return result;
             }
         });
-
         return result;
-
     }
+
+    public void updateStandbyOrderAndRiderToDelivering(long orderId, String riderId) {
+
+        redisTemplate.execute(
+            new SessionCallback<Object>() {
+                @Override
+                public Object execute(RedisOperations redisOperations)
+                    throws DataAccessException {
+                    try {
+                        redisOperations.watch(standbyRiderKey);
+                        redisOperations.watch(standbyOrderKey);
+                        redisOperations.watch(deliveringRiderKey);
+                        redisOperations.watch(deliveringOrderKey);
+
+                        RiderDTO riderDTO = (RiderDTO) redisOperations.opsForHash()
+                            .get(standbyRiderKey, riderId);
+                        OrderReceiptDTO orderReceiptDTO = (OrderReceiptDTO) redisOperations
+                            .opsForHash()
+                            .get(standbyOrderKey, generateHashKey(orderId));
+
+                        redisOperations.multi();
+
+                        redisOperations.opsForHash().put(deliveringRiderKey, riderId, riderDTO);
+                        redisOperations.opsForHash()
+                            .put(deliveringOrderKey, generateHashKey(orderId), orderReceiptDTO);
+
+                        redisOperations.opsForHash().delete(standbyRiderKey, riderId);
+                        redisOperations.opsForHash()
+                            .delete(standbyOrderKey, generateHashKey(orderId));
+                        return redisOperations.exec();
+                    } catch (Exception exception) {
+                        redisOperations.discard();
+                        throw exception;
+                    }
+                }
+            }
+        );
+    }
+
 
 }

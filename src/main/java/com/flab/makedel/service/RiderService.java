@@ -16,8 +16,8 @@ public class RiderService {
         deliveryDAO.insertStandbyRider(rider);
     }
 
-    public void deleteStandbyRider(RiderDTO rider) {
-        deliveryDAO.deleteStandbyRider(rider);
+    public void deleteStandbyRider(String riderId) {
+        deliveryDAO.deleteStandbyRider(riderId);
     }
 
     public RiderDTO loadStandbyRiderInfo(String riderId) {
@@ -26,6 +26,10 @@ public class RiderService {
 
     public Set<String> loadStandbyRiderList() {
         return deliveryDAO.selectStandbyRiderList();
+    }
+
+    public void acceptStandbyOrder(long orderId, String riderId) {
+        deliveryDAO.updateStandbyOrderAndRiderToDelivering(orderId, riderId);
     }
 
 }

@@ -20,8 +20,12 @@ public class DeliveryService {
         return deliveryDAO.selectStandbyOrder(orderId);
     }
 
-    public List<Object> loadStandbyOrderList() {
+    public List<String> loadStandbyOrderList() {
         return deliveryDAO.selectStandbyOrderList();
+    }
+
+    public void deleteStandbyOrder(long orderId) {
+        deliveryDAO.deleteStandbyOrder(orderId);
     }
 
 }
