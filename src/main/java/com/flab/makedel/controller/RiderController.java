@@ -42,7 +42,7 @@ public class RiderController {
         return riderService.loadStandbyRiderList();
     }
 
-    @PostMapping("/{riderId}/orders/{orderId}/deliveries/accept")
+    @PostMapping("/{riderId}/orders/{orderId}/accept")
     @LoginCheck(userLevel = UserLevel.RIDER)
     public void acceptStandbyOrder(@PathVariable long orderId, @PathVariable String riderId) {
         riderService.acceptStandbyOrder(orderId, riderId);

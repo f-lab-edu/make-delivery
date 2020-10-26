@@ -4,18 +4,16 @@ import com.flab.makedel.annotation.LoginCheck;
 import com.flab.makedel.annotation.LoginCheck.UserLevel;
 import com.flab.makedel.dto.OrderReceiptDTO;
 import com.flab.makedel.service.DeliveryService;
-import com.flab.makedel.service.RiderService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/standby/orders")
+@RequestMapping("/orders?status=standby")
 @RequiredArgsConstructor
 public class DeliveryController {
 

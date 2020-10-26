@@ -24,25 +24,25 @@ import org.springframework.stereotype.Repository;
 public class DeliveryDAO {
 
     private final RedisTemplate<String, Object> redisTemplate;
-    private static final String standbyRiderKey = "STANDBY_RIDERS";
-    private static final String standbyOrderKey = "STANDBY_ORDERS";
-    private static final String deliveringRiderKey = "DELIVERING_RIDERS";
-    private static final String deliveringOrderKey = "DELIVERING_ORDERS";
+    private static final String STANDBY_RIDERS_KEY = "STANDBY_RIDERS";
+    private static final String STANDBY_ORDERS_KEY = "STANDBY_ORDERS";
+    private static final String DELIVERING_RIDERS_KEY = "DELIVERING_RIDERS";
+    private static final String DELIVERING_ORDERS_KEY = "DELIVERING_ORDERS";
 
     private String generateHashKey(long orderId) {
         return String.valueOf(orderId);
     }
 
     public void insertStandbyRider(RiderDTO rider) {
-        redisTemplate.opsForHash().put(standbyRiderKey, rider.getId(), rider);
+        redisTemplate.opsForHash().put(STANDBY_RIDERS_KEY, rider.getId(), rider);
     }
 
     public void deleteStandbyRider(String riderId) {
-        redisTemplate.opsForHash().delete(standbyRiderKey, riderId);
+        redisTemplate.opsForHash().delete(STANDBY_RIDERS_KEY, riderId);
     }
 
     public RiderDTO selectStandbyRider(String riderId) {
-        return (RiderDTO) redisTemplate.opsForHash().get(standbyRiderKey, riderId);
+        return (RiderDTO) redisTemplate.opsForHash().get(STANDBY_RIDERS_KEY, riderId);
     }
 
     /*
@@ -62,7 +62,7 @@ public class DeliveryDAO {
 
                 ScanOptions options = ScanOptions.scanOptions().match("*").count(200).build();
                 Cursor<Entry<byte[], byte[]>> entries = redisConnection
-                    .hScan(standbyRiderKey.getBytes(), options);
+                    .hScan(STANDBY_RIDERS_KEY.getBytes(), options);
 
                 while (entries.hasNext()) {
                     Entry<byte[], byte[]> entry = entries.next();
@@ -78,16 +78,16 @@ public class DeliveryDAO {
 
     public void insertStandbyOrder(long orderId, OrderReceiptDTO orderReceipt) {
         redisTemplate.opsForHash()
-            .put(standbyOrderKey, generateHashKey(orderId), orderReceipt);
+            .put(STANDBY_ORDERS_KEY, generateHashKey(orderId), orderReceipt);
     }
 
     public OrderReceiptDTO selectStandbyOrder(long orderId) {
         return (OrderReceiptDTO) redisTemplate.opsForHash()
-            .get(standbyOrderKey, generateHashKey(orderId));
+            .get(STANDBY_ORDERS_KEY, generateHashKey(orderId));
     }
 
     public void deleteStandbyOrder(long orderId) {
-        redisTemplate.opsForHash().delete(standbyOrderKey, generateHashKey(orderId));
+        redisTemplate.opsForHash().delete(STANDBY_ORDERS_KEY, generateHashKey(orderId));
     }
 
     public List<String> selectStandbyOrderList() {
@@ -100,7 +100,7 @@ public class DeliveryDAO {
 
                 ScanOptions options = ScanOptions.scanOptions().match("*").count(200).build();
                 Cursor<Entry<byte[], byte[]>> entries = redisConnection
-                    .hScan(standbyOrderKey.getBytes(), options);
+                    .hScan(STANDBY_ORDERS_KEY.getBytes(), options);
 
                 while (entries.hasNext()) {
                     Entry<byte[], byte[]> entry = entries.next();
@@ -122,26 +122,26 @@ public class DeliveryDAO {
                 public Object execute(RedisOperations redisOperations)
                     throws DataAccessException {
                     try {
-                        redisOperations.watch(standbyRiderKey);
-                        redisOperations.watch(standbyOrderKey);
-                        redisOperations.watch(deliveringRiderKey);
-                        redisOperations.watch(deliveringOrderKey);
+                        redisOperations.watch(STANDBY_RIDERS_KEY);
+                        redisOperations.watch(STANDBY_ORDERS_KEY);
+                        redisOperations.watch(DELIVERING_RIDERS_KEY);
+                        redisOperations.watch(DELIVERING_ORDERS_KEY);
 
                         RiderDTO riderDTO = (RiderDTO) redisOperations.opsForHash()
-                            .get(standbyRiderKey, riderId);
+                            .get(STANDBY_RIDERS_KEY, riderId);
                         OrderReceiptDTO orderReceiptDTO = (OrderReceiptDTO) redisOperations
                             .opsForHash()
-                            .get(standbyOrderKey, generateHashKey(orderId));
+                            .get(STANDBY_ORDERS_KEY, generateHashKey(orderId));
 
                         redisOperations.multi();
 
-                        redisOperations.opsForHash().put(deliveringRiderKey, riderId, riderDTO);
+                        redisOperations.opsForHash().put(DELIVERING_RIDERS_KEY, riderId, riderDTO);
                         redisOperations.opsForHash()
-                            .put(deliveringOrderKey, generateHashKey(orderId), orderReceiptDTO);
+                            .put(DELIVERING_ORDERS_KEY, generateHashKey(orderId), orderReceiptDTO);
 
-                        redisOperations.opsForHash().delete(standbyRiderKey, riderId);
+                        redisOperations.opsForHash().delete(STANDBY_RIDERS_KEY, riderId);
                         redisOperations.opsForHash()
-                            .delete(standbyOrderKey, generateHashKey(orderId));
+                            .delete(STANDBY_ORDERS_KEY, generateHashKey(orderId));
                         return redisOperations.exec();
                     } catch (Exception exception) {
                         redisOperations.discard();
