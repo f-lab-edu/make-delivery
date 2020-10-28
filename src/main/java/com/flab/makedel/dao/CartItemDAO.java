@@ -17,9 +17,7 @@ import org.springframework.stereotype.Repository;
     exec 후에 오류가 나지 않은 부분은 실행된다.
     exec 이전에 command queue에 적재하는 도중 실패하는 경우 (command 문법오류,메모리 부족오류등,
     다른 클라이언트에서 command날려 atomic보장이 안되는 경우) 에는 exec하면 전부 discard된다.
-    (실험해보니 multi 후 트랜잭션중 다른 스레드에서 command를 날리면 discard된다.
-    오히려 다른스레드에서 그 키에 command 날린 것만 반영이 되고 원래트랜잭션은 discard된다. 아마도
-    원래 트랜잭션은 어차피 처리가 안되고 discard되니 다른 스레드에서 날린 command는 유효하게 처리하는거같다.)
+    (실험해보니 multi 후 트랜잭션중 다른 스레드에서 command를 날리면 discard된다.)
     (레디스 2.6.5이후로 트랜잭션시작 후 오류가 있으면 exec될 때 전부 discard된다.)
     트랜잭션 명령어들은 exec되기 위해 큐에서 기다리는데 discard를 이용해 실행을 하지 않을 수 있다.
     트랜잭션의 locking은 watch를 이용한 optimistic locking이다. watch로 어떠한 키를 감시하고

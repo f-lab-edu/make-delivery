@@ -5,15 +5,24 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import java.io.IOException;
 import javax.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.SessionCallback;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class PushService {
 
     @Value("${firebase.config.path}")
     private String FIREBASE_CONFIG_PATH;
+
+    @Value("${fcm.rider.expire.second}")
+    private long riderExpireSecond;
+
+    private final RedisTemplate<String, Object> redisTemplate;
 
     @PostConstruct
     public void init() throws IOException {
@@ -27,6 +36,10 @@ public class PushService {
     }
 
     public void addRiderFCMToken() {
+        redisTemplate.execute((SessionCallback<Object>) redisOperation -> {
+            redisOperation.watch();
+            redisOperation.multi();
+        })
     }
 
 }
