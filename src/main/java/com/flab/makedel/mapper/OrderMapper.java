@@ -19,4 +19,8 @@ public interface OrderMapper {
 
     void approveOrder(long orderId, OrderStatus orderStatus);
 
+    void updateStandbyOrderToDelivering(long orderId, String riderId, OrderStatus orderStatus);
+
+    void finishDeliveringOrder(long orderId, OrderStatus orderStatus);
+
 }

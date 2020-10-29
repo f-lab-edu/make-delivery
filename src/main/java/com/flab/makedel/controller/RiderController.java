@@ -8,6 +8,7 @@ import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,11 +33,17 @@ public class RiderController {
         riderService.deleteStandbyRiderWhenStopWork(rider);
     }
 
-    @PostMapping("/{riderId}/orders/{orderId}/accept")
+    @PatchMapping("/{riderId}/orders/{orderId}/accept")
     @LoginCheck(userLevel = UserLevel.RIDER)
     public void acceptStandbyOrder(@PathVariable long orderId,
         RiderDTO rider) {
         riderService.acceptStandbyOrder(orderId, rider);
+    }
+
+    @PatchMapping("/{riderId}/orders/{orderId}/finish")
+    @LoginCheck(userLevel = UserLevel.RIDER)
+    public void finishDeliveringOrder(@PathVariable long orderId, RiderDTO rider) {
+        riderService.finishDeliveringOrder(orderId, rider);
     }
 
 }

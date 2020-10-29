@@ -21,6 +21,17 @@
         where id = #{orderId}
     </update>
 
+    <update id="updateStandbyOrderToDelivering">
+        UPDATE `ORDER` SET order_status = #{orderStatus},
+        rider_id = #{riderId}
+        where id = #{orderId}
+    </update>
+
+    <update id="finishDeliveringOrder">
+        UPDATE `ORDER` SET order_status = #{orderStatus}
+        where id = #{orderId}
+    </update>
+
     <resultMap type="com.flab.makedel.dto.OrderReceiptDTO" id="orderReceipt">
         <constructor>
             <idArg column="orderId" javaType="Long"/>

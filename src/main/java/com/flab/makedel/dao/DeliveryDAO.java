@@ -97,6 +97,10 @@ public class DeliveryDAO {
             .get(generateStandbyOrderKey(riderAddress), generateOrderHashKey(orderId));
     }
 
+    /*
+    selectStandbyOrderList
+    라이더들이 자신의 지역에 배차요청을 기다리는 주문목록을 보는 메소드입니다.
+     */
 
     public List<String> selectStandbyOrderList(String riderAddress) {
 
@@ -122,32 +126,34 @@ public class DeliveryDAO {
         return result;
     }
 
+    /*
+    updateStandbyOrderToDelivering
+    라이더들이 배차를 요청하여 배달을 시작할 때 사용하는 메소드입니다.
+     */
+
     public void updateStandbyOrderToDelivering(long orderId, RiderDTO rider) {
         String standbyRidersKey = generateStandbyRiderKey(rider.getAddress());
         String standbyOrdersKey = generateStandbyOrderKey(rider.getAddress());
         String orderHashKey = generateOrderHashKey(orderId);
 
-        redisTemplate.execute(
-            new SessionCallback<Object>() {
-                @Override
-                public Object execute(RedisOperations redisOperations)
-                    throws DataAccessException {
+        redisTemplate.execute(new SessionCallback<Object>() {
+            @Override
+            public Object execute(RedisOperations redisOperations)
+                throws DataAccessException {
 
-                    redisOperations.watch(standbyOrdersKey);
-                    redisOperations.watch(standbyRidersKey);
+                redisOperations.watch(standbyOrdersKey);
+                redisOperations.watch(standbyRidersKey);
 
-                    redisOperations.multi();
+                redisOperations.multi();
 
-                    redisOperations.opsForHash()
-                        .delete(standbyOrdersKey, orderHashKey);
-                    redisOperations.opsForHash()
-                        .delete(standbyRidersKey, rider.getId());
+                redisOperations.opsForHash()
+                    .delete(standbyOrdersKey, orderHashKey);
+                redisOperations.opsForHash()
+                    .delete(standbyRidersKey, rider.getId());
 
-                    return redisOperations.exec();
-                }
+                return redisOperations.exec();
             }
-        );
+        });
     }
-
 
 }
