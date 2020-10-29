@@ -23,29 +23,20 @@ public class RiderController {
     @PostMapping("/{riderId}/standby")
     @LoginCheck(userLevel = UserLevel.RIDER)
     public void registerStandbyRider(RiderDTO rider) {
-        riderService.registerStandbyRider(rider);
+        riderService.registerStandbyRiderWhenStartWork(rider);
     }
 
     @DeleteMapping("/{riderId}/standby")
     @LoginCheck(userLevel = UserLevel.RIDER)
-    public void deleteStandbyRider(@PathVariable String riderId) {
-        riderService.deleteStandbyRider(riderId);
-    }
-
-    @GetMapping("/{riderId}/standby")
-    public RiderDTO loadStandbyRiderInfo(@PathVariable String riderId) {
-        return riderService.loadStandbyRiderInfo(riderId);
-    }
-
-    @GetMapping("/standby")
-    public Set<String> loadStandbyRiderList() {
-        return riderService.loadStandbyRiderList();
+    public void deleteStandbyRider(RiderDTO rider) {
+        riderService.deleteStandbyRiderWhenStopWork(rider);
     }
 
     @PostMapping("/{riderId}/orders/{orderId}/accept")
     @LoginCheck(userLevel = UserLevel.RIDER)
-    public void acceptStandbyOrder(@PathVariable long orderId, @PathVariable String riderId) {
-        riderService.acceptStandbyOrder(orderId, riderId);
+    public void acceptStandbyOrder(@PathVariable long orderId,
+        RiderDTO rider) {
+        riderService.acceptStandbyOrder(orderId, rider);
     }
 
 }

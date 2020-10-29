@@ -23,17 +23,22 @@ public class RiderDTO {
     @NotNull
     private final String updatedAt;
 
+    @NotNull
+    private final String fcmToken;
+
     @JsonCreator
     public RiderDTO(@JsonProperty(value = "id") String id,
         @JsonProperty(value = "name") String name,
         @JsonProperty(value = "phone") String phone,
         @JsonProperty(value = "address") String address,
-        @JsonProperty(value = "updatedAt") String updatedAt) {
+        @JsonProperty(value = "updatedAt") String updatedAt,
+        @JsonProperty(value = "fcmToken") String fcmToken) {
         this.id = id;
         this.name = name;
         this.phone = phone;
         this.address = address;
         this.updatedAt = updatedAt;
+        this.fcmToken = fcmToken;
     }
 
 }

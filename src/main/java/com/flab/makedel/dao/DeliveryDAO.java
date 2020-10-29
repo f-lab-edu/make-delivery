@@ -24,25 +24,29 @@ import org.springframework.stereotype.Repository;
 public class DeliveryDAO {
 
     private final RedisTemplate<String, Object> redisTemplate;
-    private static final String STANDBY_RIDERS_KEY = "STANDBY_RIDERS";
-    private static final String STANDBY_ORDERS_KEY = "STANDBY_ORDERS";
-    private static final String DELIVERING_RIDERS_KEY = "DELIVERING_RIDERS";
-    private static final String DELIVERING_ORDERS_KEY = "DELIVERING_ORDERS";
+    private static final String STANDBY_ORDERS_KEY = ":STANDBY_ORDERS";
+    private static final String STANDBY_RIDERS_KEY = ":STANDBY_RIDERS";
 
-    private String generateHashKey(long orderId) {
+    private static String generateOrderHashKey(long orderId) {
         return String.valueOf(orderId);
     }
 
-    public void insertStandbyRider(RiderDTO rider) {
-        redisTemplate.opsForHash().put(STANDBY_RIDERS_KEY, rider.getId(), rider);
+    private static String generateStandbyRiderKey(String address) {
+        return address + STANDBY_RIDERS_KEY;
     }
 
-    public void deleteStandbyRider(String riderId) {
-        redisTemplate.opsForHash().delete(STANDBY_RIDERS_KEY, riderId);
+    private static String generateStandbyOrderKey(String address) {
+        return address + STANDBY_ORDERS_KEY;
     }
 
-    public RiderDTO selectStandbyRider(String riderId) {
-        return (RiderDTO) redisTemplate.opsForHash().get(STANDBY_RIDERS_KEY, riderId);
+    public void insertStandbyRiderWhenStartWork(RiderDTO rider) {
+        redisTemplate.opsForHash()
+            .put(generateStandbyRiderKey(rider.getAddress()), rider.getId(), rider.getFcmToken());
+    }
+
+    public void deleteStandbyRiderWhenStopWork(RiderDTO rider) {
+        redisTemplate.opsForHash()
+            .delete(generateStandbyRiderKey(rider.getAddress()), rider.getId());
     }
 
     /*
@@ -50,11 +54,17 @@ public class DeliveryDAO {
         lock이 걸립니다. 따라서 성능에 영향을 줄 수 있어 레디스에서는 scan,hscan을 권장합니다.
         레디스는 싱글스레드로 동작하기 때문에 이처럼 어떤 명령어를 O(n)시간 동안 수행하면서 lock이
         걸린다면 그시간동안 keys 명령어를 수행하기 위해 blocking이 되기 때문입니다.
+
+        scan을 시작 한 후 데이터가 추가 된다면 전체 순회가 끝날때까지 추가된 값은 전체순회에
+        포함되지 않습니다.
+
+        selectStandbyRiderTokenList : 같은 지역의 출근한 라이더들에게 푸쉬메세지를 보내기
+        위해 같은 지역의 출근한 라이더들의 fcm 토큰 값을 전체 스캔하는 함수입니다.
      */
 
-    public Set<String> selectStandbyRiderList() {
-
+    public Set<String> selectStandbyRiderTokenList(String address) {
         Set<String> result = new HashSet<>();
+
         redisTemplate.execute(new RedisCallback<Set<String>>() {
             @Override
             public Set<String> doInRedis(RedisConnection redisConnection)
@@ -62,35 +72,33 @@ public class DeliveryDAO {
 
                 ScanOptions options = ScanOptions.scanOptions().match("*").count(200).build();
                 Cursor<Entry<byte[], byte[]>> entries = redisConnection
-                    .hScan(STANDBY_RIDERS_KEY.getBytes(), options);
+                    .hScan(generateStandbyRiderKey(address).getBytes(), options);
 
                 while (entries.hasNext()) {
                     Entry<byte[], byte[]> entry = entries.next();
-                    byte[] actualKey = entry.getKey();
-                    result.add(new String(actualKey));
+                    byte[] actualValue = entry.getValue();
+                    result.add(new String(actualValue));
                 }
-
                 return result;
             }
         });
+
         return result;
     }
 
-    public void insertStandbyOrder(long orderId, OrderReceiptDTO orderReceipt) {
+    public void insertStandbyOrderWhenOrderApprove(long orderId, OrderReceiptDTO orderReceipt) {
         redisTemplate.opsForHash()
-            .put(STANDBY_ORDERS_KEY, generateHashKey(orderId), orderReceipt);
+            .put(generateStandbyOrderKey(orderReceipt.getUserInfo().getAddress()),
+                generateOrderHashKey(orderId), orderReceipt);
     }
 
-    public OrderReceiptDTO selectStandbyOrder(long orderId) {
+    public OrderReceiptDTO selectStandbyOrder(long orderId, String riderAddress) {
         return (OrderReceiptDTO) redisTemplate.opsForHash()
-            .get(STANDBY_ORDERS_KEY, generateHashKey(orderId));
+            .get(generateStandbyOrderKey(riderAddress), generateOrderHashKey(orderId));
     }
 
-    public void deleteStandbyOrder(long orderId) {
-        redisTemplate.opsForHash().delete(STANDBY_ORDERS_KEY, generateHashKey(orderId));
-    }
 
-    public List<String> selectStandbyOrderList() {
+    public List<String> selectStandbyOrderList(String riderAddress) {
 
         List<String> result = new ArrayList<>();
         redisTemplate.execute(new RedisCallback<List<String>>() {
@@ -100,7 +108,7 @@ public class DeliveryDAO {
 
                 ScanOptions options = ScanOptions.scanOptions().match("*").count(200).build();
                 Cursor<Entry<byte[], byte[]>> entries = redisConnection
-                    .hScan(STANDBY_ORDERS_KEY.getBytes(), options);
+                    .hScan(generateStandbyOrderKey(riderAddress).getBytes(), options);
 
                 while (entries.hasNext()) {
                     Entry<byte[], byte[]> entry = entries.next();
@@ -114,39 +122,28 @@ public class DeliveryDAO {
         return result;
     }
 
-    public void updateStandbyOrderAndRiderToDelivering(long orderId, String riderId) {
+    public void updateStandbyOrderToDelivering(long orderId, RiderDTO rider) {
+        String standbyRidersKey = generateStandbyRiderKey(rider.getAddress());
+        String standbyOrdersKey = generateStandbyOrderKey(rider.getAddress());
+        String orderHashKey = generateOrderHashKey(orderId);
 
         redisTemplate.execute(
             new SessionCallback<Object>() {
                 @Override
                 public Object execute(RedisOperations redisOperations)
                     throws DataAccessException {
-                    try {
-                        redisOperations.watch(STANDBY_RIDERS_KEY);
-                        redisOperations.watch(STANDBY_ORDERS_KEY);
-                        redisOperations.watch(DELIVERING_RIDERS_KEY);
-                        redisOperations.watch(DELIVERING_ORDERS_KEY);
 
-                        RiderDTO riderDTO = (RiderDTO) redisOperations.opsForHash()
-                            .get(STANDBY_RIDERS_KEY, riderId);
-                        OrderReceiptDTO orderReceiptDTO = (OrderReceiptDTO) redisOperations
-                            .opsForHash()
-                            .get(STANDBY_ORDERS_KEY, generateHashKey(orderId));
+                    redisOperations.watch(standbyOrdersKey);
+                    redisOperations.watch(standbyRidersKey);
 
-                        redisOperations.multi();
+                    redisOperations.multi();
 
-                        redisOperations.opsForHash().put(DELIVERING_RIDERS_KEY, riderId, riderDTO);
-                        redisOperations.opsForHash()
-                            .put(DELIVERING_ORDERS_KEY, generateHashKey(orderId), orderReceiptDTO);
+                    redisOperations.opsForHash()
+                        .delete(standbyOrdersKey, orderHashKey);
+                    redisOperations.opsForHash()
+                        .delete(standbyRidersKey, rider.getId());
 
-                        redisOperations.opsForHash().delete(STANDBY_RIDERS_KEY, riderId);
-                        redisOperations.opsForHash()
-                            .delete(STANDBY_ORDERS_KEY, generateHashKey(orderId));
-                        return redisOperations.exec();
-                    } catch (Exception exception) {
-                        redisOperations.discard();
-                        throw exception;
-                    }
+                    return redisOperations.exec();
                 }
             }
         );

@@ -68,7 +68,7 @@ public class StoreService {
     public void approveOrder(long orderId) {
         orderMapper.approveOrder(orderId, OrderStatus.APPROVED_ORDER);
         OrderReceiptDTO orderReceipt = orderMapper.selectOrderReceipt(orderId);
-        deliveryService.registerStandbyOrder(orderId, orderReceipt);
+        deliveryService.registerStandbyOrderWhenOrderApprove(orderId, orderReceipt);
     }
 
 }

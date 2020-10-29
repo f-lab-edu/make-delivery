@@ -12,24 +12,16 @@ public class RiderService {
 
     private final DeliveryDAO deliveryDAO;
 
-    public void registerStandbyRider(RiderDTO rider) {
-        deliveryDAO.insertStandbyRider(rider);
+    public void registerStandbyRiderWhenStartWork(RiderDTO rider) {
+        deliveryDAO.insertStandbyRiderWhenStartWork(rider);
     }
 
-    public void deleteStandbyRider(String riderId) {
-        deliveryDAO.deleteStandbyRider(riderId);
+    public void deleteStandbyRiderWhenStopWork(RiderDTO rider) {
+        deliveryDAO.deleteStandbyRiderWhenStopWork(rider);
     }
 
-    public RiderDTO loadStandbyRiderInfo(String riderId) {
-        return deliveryDAO.selectStandbyRider(riderId);
-    }
-
-    public Set<String> loadStandbyRiderList() {
-        return deliveryDAO.selectStandbyRiderList();
-    }
-
-    public void acceptStandbyOrder(long orderId, String riderId) {
-        deliveryDAO.updateStandbyOrderAndRiderToDelivering(orderId, riderId);
+    public void acceptStandbyOrder(long orderId, RiderDTO rider) {
+        deliveryDAO.updateStandbyOrderToDelivering(orderId, rider);
     }
 
 }

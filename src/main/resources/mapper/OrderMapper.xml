@@ -73,7 +73,7 @@
             ord.user_id as userId,
             user.name as userName,
             user.phone as userPhone,
-            user.address as userPhone,
+            user.address as userAddress,
             ord.total_price as totalPrice,
             ord.store_id as storeId,
             store.name as storeName,
