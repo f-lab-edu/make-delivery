@@ -9,6 +9,9 @@
 ## 기술적 issue 해결 과정
 https://tjdrnr05571.tistory.com/
 
+## 라이더 배차 과정 구조도
+https://github.com/f-lab-edu/make-delivery/wiki/%EB%9D%BC%EC%9D%B4%EB%8D%94-%EC%84%9C%EB%B9%84%EC%8A%A4-%EA%B5%AC%EC%A1%B0%EB%8F%84
+
 ## Use Case
 https://github.com/f-lab-edu/make-delivery/wiki/Use-Case
 
