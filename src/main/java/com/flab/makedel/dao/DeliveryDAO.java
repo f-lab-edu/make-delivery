@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.core.Cursor;
@@ -23,6 +24,7 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor
 public class DeliveryDAO {
 
+    @Qualifier("deliveryRedisTemplate")
     private final RedisTemplate<String, Object> redisTemplate;
     private static final String STANDBY_ORDERS_KEY = ":STANDBY_ORDERS";
     private static final String STANDBY_RIDERS_KEY = ":STANDBY_RIDERS";

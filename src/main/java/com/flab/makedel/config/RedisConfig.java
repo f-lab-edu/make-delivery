@@ -132,6 +132,7 @@ public class RedisConfig {
     }
 
     @Bean
+    @Qualifier("deliveryRedisTemplate")
     public RedisTemplate<String, Object> deliveryRedisTemplate() {
         GenericJackson2JsonRedisSerializer genericJackson2JsonRedisSerializer =
             new GenericJackson2JsonRedisSerializer();

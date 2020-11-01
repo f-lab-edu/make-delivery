@@ -24,7 +24,7 @@ public class DeliveryController {
 
     @GetMapping(params = "orderId")
     @LoginCheck(userLevel = UserLevel.RIDER)
-    public OrderReceiptDTO loadStandbyOrder(@RequestParam long orderId, String riderAddress) {
+    public OrderReceiptDTO loadStandbyOrder(long orderId, String riderAddress) {
         return deliveryService.loadStandbyOrder(orderId, riderAddress);
     }
 

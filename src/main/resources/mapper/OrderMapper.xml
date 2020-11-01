@@ -13,23 +13,23 @@
     <update id="completeOrder">
         UPDATE `ORDER` SET total_price = #{totalPrice},
         order_status = #{orderStatus}
-        where id = #{orderId}
+        WHERE id = #{orderId}
     </update>
 
     <update id="approveOrder">
         UPDATE `ORDER` SET order_status = #{orderStatus}
-        where id = #{orderId}
+        WHERE id = #{orderId}
     </update>
 
     <update id="updateStandbyOrderToDelivering">
         UPDATE `ORDER` SET order_status = #{orderStatus},
         rider_id = #{riderId}
-        where id = #{orderId}
+        WHERE id = #{orderId}
     </update>
 
     <update id="finishDeliveringOrder">
         UPDATE `ORDER` SET order_status = #{orderStatus}
-        where id = #{orderId}
+        WHERE id = #{orderId}
     </update>
 
     <resultMap type="com.flab.makedel.dto.OrderReceiptDTO" id="orderReceipt">
