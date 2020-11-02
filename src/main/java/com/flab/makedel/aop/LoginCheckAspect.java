@@ -32,16 +32,18 @@ public class LoginCheckAspect {
 
     @Before("@annotation(com.flab.makedel.annotation.LoginCheck) && @annotation(target)")
     public void loginCheck(LoginCheck target) throws HttpClientErrorException {
-        
+
         if (target.userLevel() == UserLevel.USER) {
             userLoginCheck();
         } else if (target.userLevel() == UserLevel.OWNER) {
             ownerLoginCheck();
+        } else if (target.userLevel() == UserLevel.RIDER) {
+            riderLoginCheck();
         }
 
     }
 
-    public String getCurrentUser() throws HttpClientErrorException {
+    private String getCurrentUser() throws HttpClientErrorException {
 
         String userId = loginService.getCurrentUser();
         if (userId == null) {
@@ -52,7 +54,7 @@ public class LoginCheckAspect {
 
     }
 
-    public void userLoginCheck() {
+    private void userLoginCheck() {
 
         String userId = getCurrentUser();
 
@@ -64,7 +66,7 @@ public class LoginCheckAspect {
 
     }
 
-    public void ownerLoginCheck() {
+    private void ownerLoginCheck() {
 
         String userId = getCurrentUser();
 
@@ -74,6 +76,17 @@ public class LoginCheckAspect {
             throw new HttpClientErrorException(HttpStatus.UNAUTHORIZED);
         }
 
+    }
+
+    private void riderLoginCheck() {
+
+        String userId = getCurrentUser();
+
+        UserLevel level = userService.findUserById(userId).getLevel();
+
+        if (!(level == UserLevel.RIDER)) {
+            throw new HttpClientErrorException(HttpStatus.UNAUTHORIZED);
+        }
     }
 
 }

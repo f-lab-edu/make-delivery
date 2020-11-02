@@ -21,7 +21,7 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 /*
     굳이 OrderTransactionService를 새로 만들은 이유 :
     우선 @Transactional은 AOP로 구현되어있어 RTW방식으로 프록시를 생성합니다.
-    따라서 같은 서비스 내에 있는 메소드를 호출할때는 Transactional은 애노테이션이 적용되지 않습니다.
+    따라서 같은 서비스 내에 있는 메소드를 호출할때는 Transactional은 새롭게 애노테이션이 적용되지 않습니다.
     지금 현재는 주문과 결제가 같은 트랜잭션에서 처리되야 하므로
     굳이 OrderTransactionService를 만들어서 트랜잭션을 분리할 필요는 없지만
     추후에 주문과 결제가 같은 트랜잭션에서 처리되지 않게 변경하게 될 수도 있으므로

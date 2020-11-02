@@ -13,27 +13,47 @@
     <update id="completeOrder">
         UPDATE `ORDER` SET total_price = #{totalPrice},
         order_status = #{orderStatus}
-        where id = #{orderId}
+        WHERE id = #{orderId}
     </update>
 
-    <resultMap type="com.flab.makedel.dto.OrderDetailDTO" id="orderDetail">
+    <update id="approveOrder">
+        UPDATE `ORDER` SET order_status = #{orderStatus}
+        WHERE id = #{orderId}
+    </update>
+
+    <update id="updateStandbyOrderToDelivering">
+        UPDATE `ORDER` SET order_status = #{orderStatus},
+        rider_id = #{riderId}
+        WHERE id = #{orderId}
+    </update>
+
+    <update id="finishDeliveringOrder">
+        UPDATE `ORDER` SET order_status = #{orderStatus}
+        WHERE id = #{orderId}
+    </update>
+
+    <resultMap type="com.flab.makedel.dto.OrderReceiptDTO" id="orderReceipt">
         <constructor>
             <idArg column="orderId" javaType="Long"/>
             <arg column="orderStatus" javaType="String"/>
-            <arg column="userId" javaType="String"/>
             <arg column="totalPrice" javaType="Long"/>
         </constructor>
         <id property="orderId" column="orderId"/>
         <result property="orderStatus" column="orderStatus"/>
-        <result property="userId" column="userId"/>
         <result property="totalPrice" column="totalPrice"/>
+        <collection property="userInfo" ofType="com.flab.makedel.dto.UserInfoDTO">
+            <id property="id" column="userId"/>
+            <result property="name" column="userName"/>
+            <result property="phone" column="userPhone"/>
+            <result property="address" column="userAddress"/>
+        </collection>
         <collection property="storeInfo" ofType="com.flab.makedel.dto.StoreInfoDTO">
             <id property="storeId" column="storeId"/>
             <result property="name" column="storeName"/>
             <result property="phone" column="storePhone"/>
             <result property="address" column="storeAddress"/>
         </collection>
-        <collection property="menuList" ofType="com.flab.makedel.dto.OrderDetailMenuDTO">
+        <collection property="cartList" ofType="com.flab.makedel.dto.CartItemDTO">
             <constructor>
                 <idArg column="menuId" javaType="Long"/>
                 <arg column="menuName" javaType="String"/>
@@ -41,27 +61,30 @@
                 <arg column="menuCount" javaType="Long"/>
             </constructor>
             <id property="menuId" column="menuId"/>
-            <result property="menuName" column="menuName"/>
-            <result property="menuPrice" column="menuPrice"/>
-            <result property="menuCount" column="menuCount"/>
-            <collection property="optionList" ofType="com.flab.makedel.dto.OrderDetailOptionDTO">
+            <result property="name" column="menuName"/>
+            <result property="price" column="menuPrice"/>
+            <result property="count" column="menuCount"/>
+            <collection property="optionList" ofType="com.flab.makedel.dto.CartOptionDTO">
                 <constructor>
                     <idArg column="optionId" javaType="Long"/>
                     <arg column="optionName" javaType="String"/>
                     <arg column="optionPrice" javaType="Long"/>
                 </constructor>
                 <id property="optionId" column="optionId"/>
-                <result property="optionName" column="optionName"/>
-                <result property="optionPrice" column="optionPrice"/>
+                <result property="name" column="optionName"/>
+                <result property="price" column="optionPrice"/>
             </collection>
         </collection>
     </resultMap>
 
-    <select id="selectDetailOrder" resultMap="orderDetail">
+    <select id="selectOrderReceipt" resultMap="orderReceipt">
         select
             ord.id as orderId,
             ord.order_status as orderStatus,
             ord.user_id as userId,
+            user.name as userName,
+            user.phone as userPhone,
+            user.address as userAddress,
             ord.total_price as totalPrice,
             ord.store_id as storeId,
             store.name as storeName,
@@ -81,6 +104,7 @@
             join order_menu_option ord_m_o on ord_m.order_id = ord_m_o.order_id
             join menu_option m_o on m_o.id = ord_m_o.option_id
             join store on ord.store_id = store.id
+            join user on ord.user_id=user.id
         where ord.id = #{orderId};
     </select>
 
