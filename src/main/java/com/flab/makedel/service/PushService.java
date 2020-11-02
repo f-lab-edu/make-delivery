@@ -23,20 +23,24 @@ import org.springframework.data.redis.core.SessionCallback;
 import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor
 @Log4j2
 public class PushService {
 
     @Value("${firebase.config.path}")
-    private String FIREBASE_CONFIG_PATH;
-
+    private final String firebaseConfigPath;
     private final DeliveryDAO deliveryDAO;
+
+    public PushService(@Value("${firebase.config.path}") String firebaseConfigPath,
+        DeliveryDAO deliveryDAO) {
+        this.firebaseConfigPath = firebaseConfigPath;
+        this.deliveryDAO = deliveryDAO;
+    }
 
     @PostConstruct
     public void init() throws IOException {
         FirebaseOptions options = new FirebaseOptions.Builder()
             .setCredentials(GoogleCredentials
-                .fromStream(new ClassPathResource(FIREBASE_CONFIG_PATH).getInputStream()))
+                .fromStream(new ClassPathResource(firebaseConfigPath).getInputStream()))
             .build();
         if (FirebaseApp.getApps().isEmpty()) {
             FirebaseApp.initializeApp(options);
@@ -55,7 +59,7 @@ public class PushService {
             .build())
             .collect(Collectors.toList());
 
-        BatchResponse response = FirebaseMessaging.getInstance().sendAll(messages);
+        FirebaseMessaging.getInstance().sendAll(messages);
     }
 
 }

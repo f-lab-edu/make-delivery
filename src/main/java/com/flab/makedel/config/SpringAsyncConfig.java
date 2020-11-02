@@ -33,7 +33,7 @@ public class SpringAsyncConfig {
         taskExecutor.setMaxPoolSize(MAX_POOL_SIZE);
         taskExecutor.setQueueCapacity(QUEUE_CAPACITY);
         taskExecutor.setThreadNamePrefix(NAME_PREFIX);
-        taskExecutor.setWaitForTasksToCompleteOnShutdown(true);
+        taskExecutor.setWaitForTasksToCompleteOnShutdown(false);
         taskExecutor.setRejectedExecutionHandler(new AbortPolicy());
         return taskExecutor;
     }
