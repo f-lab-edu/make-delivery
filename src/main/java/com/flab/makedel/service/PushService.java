@@ -1,5 +1,6 @@
 package com.flab.makedel.service;
 
+import com.flab.makedel.dao.DeliveryDAO;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
@@ -22,7 +23,7 @@ public class PushService {
     @Value("${fcm.rider.expire.second}")
     private long riderExpireSecond;
 
-    private final RedisTemplate<String, Object> redisTemplate;
+    private final DeliveryDAO deliveryDAO;
 
     @PostConstruct
     public void init() throws IOException {
@@ -35,11 +36,7 @@ public class PushService {
         }
     }
 
-    public void addRiderFCMToken() {
-        redisTemplate.execute((SessionCallback<Object>) redisOperation -> {
-            redisOperation.watch();
-            redisOperation.multi();
-        })
+    public void sendMessageToStandbyRidersInSameArea(String address) {
     }
 
 }
