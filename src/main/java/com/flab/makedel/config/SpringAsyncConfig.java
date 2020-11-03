@@ -21,10 +21,10 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 @EnableAsync
 public class SpringAsyncConfig {
 
-    private static final int CORE_POOL_SIZE = 3;
-    private static final int MAX_POOL_SIZE = 100;
-    private static final int QUEUE_CAPACITY = 3;
-    private static final int KEEP_ALIVE_SECONDS = 30;
+    private static final int CORE_POOL_SIZE = 5;
+    private static final int MAX_POOL_SIZE = 500;
+    private static final int QUEUE_CAPACITY = 0;
+    private static final int KEEP_ALIVE_SECONDS = 60;
     private static final String NAME_PREFIX = "springAsyncTask-";
 
     @Bean(name = "springAsyncTask")
