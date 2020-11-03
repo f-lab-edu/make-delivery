@@ -8,6 +8,7 @@ import com.flab.makedel.annotation.LoginCheck.UserLevel;
 import com.flab.makedel.dto.StoreDTO;
 import com.flab.makedel.service.StoreService;
 import com.google.firebase.messaging.FirebaseMessagingException;
+import java.io.IOException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -83,7 +84,7 @@ public class StoreController {
     @PostMapping("/{storeId}/orders/{orderId}/approve")
     @LoginCheck(userLevel = UserLevel.OWNER)
     public void approveOrder(@PathVariable long orderId, @PathVariable long storeId,
-        @CurrentUserId String ownerId) throws FirebaseMessagingException {
+        @CurrentUserId String ownerId) throws IOException {
         storeService.validateMyStore(storeId, ownerId);
         storeService.approveOrder(orderId);
     }

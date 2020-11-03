@@ -8,6 +8,7 @@ import com.flab.makedel.dto.StoreDTO;
 import com.flab.makedel.mapper.OrderMapper;
 import com.flab.makedel.mapper.StoreMapper;
 import com.google.firebase.messaging.FirebaseMessagingException;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -69,7 +70,7 @@ public class StoreService {
     }
 
     @Transactional
-    public void approveOrder(long orderId) throws FirebaseMessagingException {
+    public void approveOrder(long orderId) throws IOException {
         orderMapper.approveOrder(orderId, OrderStatus.APPROVED_ORDER);
         OrderReceiptDTO orderReceipt = orderMapper.selectOrderReceipt(orderId);
         deliveryService.registerStandbyOrderWhenOrderApprove(orderId, orderReceipt);

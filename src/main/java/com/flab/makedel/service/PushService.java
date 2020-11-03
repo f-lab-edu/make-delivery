@@ -47,7 +47,7 @@ public class PushService {
     }
 
     public void sendMessageToStandbyRidersInSameArea(String address, PushMessageDTO pushMessage)
-        throws FirebaseMessagingException {
+        throws IOException {
         Set<String> tokenSet = deliveryDAO.selectStandbyRiderTokenList(address);
         List<Message> messages = tokenSet.stream().map(token -> Message.builder()
             .putData("title", pushMessage.getTitle())
@@ -57,8 +57,11 @@ public class PushService {
             .setToken(token)
             .build())
             .collect(Collectors.toList());
-
-        FirebaseMessaging.getInstance().sendAll(messages);
+        try {
+            FirebaseMessaging.getInstance().sendAll(messages);
+        } catch (FirebaseMessagingException e) {
+            throw new IOException(e);
+        }
     }
 
 }
