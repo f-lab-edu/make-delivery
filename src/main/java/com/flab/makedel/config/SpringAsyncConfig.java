@@ -24,6 +24,7 @@ public class SpringAsyncConfig {
     private static final int CORE_POOL_SIZE = 3;
     private static final int MAX_POOL_SIZE = 100;
     private static final int QUEUE_CAPACITY = 3;
+    private static final int KEEP_ALIVE_SECONDS = 30;
     private static final String NAME_PREFIX = "springAsyncTask-";
 
     @Bean(name = "springAsyncTask")
@@ -34,6 +35,8 @@ public class SpringAsyncConfig {
         taskExecutor.setQueueCapacity(QUEUE_CAPACITY);
         taskExecutor.setThreadNamePrefix(NAME_PREFIX);
         taskExecutor.setWaitForTasksToCompleteOnShutdown(false);
+        taskExecutor.setKeepAliveSeconds(KEEP_ALIVE_SECONDS);
+        taskExecutor.setAllowCoreThreadTimeOut(true);
         taskExecutor.setRejectedExecutionHandler(new AbortPolicy());
         return taskExecutor;
     }

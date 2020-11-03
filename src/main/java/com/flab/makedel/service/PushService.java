@@ -26,7 +26,6 @@ import org.springframework.stereotype.Service;
 @Log4j2
 public class PushService {
 
-    @Value("${firebase.config.path}")
     private final String firebaseConfigPath;
     private final DeliveryDAO deliveryDAO;
 
