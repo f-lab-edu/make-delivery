@@ -70,7 +70,7 @@ public class StoreService {
     }
 
     @Transactional
-    public void approveOrder(long orderId) throws IOException {
+    public void approveOrder(long orderId) {
         orderMapper.approveOrder(orderId, OrderStatus.APPROVED_ORDER);
         OrderReceiptDTO orderReceipt = orderMapper.selectOrderReceipt(orderId);
         deliveryService.registerStandbyOrderWhenOrderApprove(orderId, orderReceipt);

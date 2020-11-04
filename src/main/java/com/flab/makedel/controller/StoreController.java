@@ -84,7 +84,7 @@ public class StoreController {
     @PostMapping("/{storeId}/orders/{orderId}/approve")
     @LoginCheck(userLevel = UserLevel.OWNER)
     public void approveOrder(@PathVariable long orderId, @PathVariable long storeId,
-        @CurrentUserId String ownerId) throws IOException {
+        @CurrentUserId String ownerId) {
         storeService.validateMyStore(storeId, ownerId);
         storeService.approveOrder(orderId);
     }
