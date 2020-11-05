@@ -24,7 +24,7 @@ public class StoreService {
     private final StoreMapper storeMapper;
     private final OrderMapper orderMapper;
     private final DeliveryService deliveryService;
-    private final PushService pushService;
+    private final RiderService riderService;
 
     public void insertStore(StoreDTO store) {
         storeMapper.insertStore(store);
@@ -74,7 +74,7 @@ public class StoreService {
         orderMapper.approveOrder(orderId, OrderStatus.APPROVED_ORDER);
         OrderReceiptDTO orderReceipt = orderMapper.selectOrderReceipt(orderId);
         deliveryService.registerStandbyOrderWhenOrderApprove(orderId, orderReceipt);
-        pushService.sendMessageToStandbyRidersInSameArea(orderReceipt.getStoreInfo().getAddress(),
+        riderService.sendMessageToStandbyRidersInSameArea(orderReceipt.getStoreInfo().getAddress(),
             getPushMessage(orderReceipt));
     }
 
