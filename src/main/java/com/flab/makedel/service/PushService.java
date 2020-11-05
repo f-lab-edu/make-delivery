@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.SessionCallback;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -56,6 +57,7 @@ public class PushService {
             .setToken(token)
             .build())
             .collect(Collectors.toList());
+
         FirebaseMessaging.getInstance().sendAllAsync(messages);
     }
 
