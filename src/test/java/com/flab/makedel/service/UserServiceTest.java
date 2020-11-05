@@ -91,5 +91,15 @@ class UserServiceTest {
         verify(userMapper).selectUserById(user.getId());
     }
 
+    @Test
+    public void findUserByIdAndPasswordTestWhenFail() {
+        when(userMapper.selectUserById(user.getId())).thenReturn(null);
+
+        assertEquals(userService.findUserByIdAndPassword(user.getId(), user.getPassword()),
+            Optional.empty());
+
+        verify(userMapper).selectUserById(any(String.class));
+    }
+
 
 }
