@@ -47,6 +47,7 @@ public class PushService {
         }
     }
 
+    @Async("springAsyncTask")
     public void sendMessages(List<Message> messages) {
         FirebaseMessaging.getInstance().sendAllAsync(messages);
     }
