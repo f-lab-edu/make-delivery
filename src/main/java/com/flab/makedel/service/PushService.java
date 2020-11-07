@@ -17,12 +17,10 @@ import org.springframework.stereotype.Service;
 public class PushService {
 
     private final String firebaseConfigPath;
-    private final DeliveryDAO deliveryDAO;
 
     public PushService(@Value("${firebase.config.path}") String firebaseConfigPath,
         DeliveryDAO deliveryDAO) {
         this.firebaseConfigPath = firebaseConfigPath;
-        this.deliveryDAO = deliveryDAO;
     }
 
     @PostConstruct
