@@ -19,7 +19,7 @@ public class PushService {
     private final String firebaseConfigPath;
 
     public PushService(@Value("${firebase.config.path}") String firebaseConfigPath,
-        DeliveryDAO deliveryDAO) {
+        ) {
         this.firebaseConfigPath = firebaseConfigPath;
     }
 
