@@ -31,6 +31,7 @@ public class PushService {
         if (FirebaseApp.getApps().isEmpty()) {
             FirebaseApp.initializeApp(options);
         }
+
     }
 
     public void sendMessages(List<Message> messages) {
