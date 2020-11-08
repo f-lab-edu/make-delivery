@@ -25,6 +25,7 @@ public class PushService {
     @PostConstruct
     public void init() throws IOException {
 
+
         FirebaseOptions options = new FirebaseOptions.Builder()
             .setCredentials(GoogleCredentials
                 .fromStream(new ClassPathResource(firebaseConfigPath).getInputStream()))
