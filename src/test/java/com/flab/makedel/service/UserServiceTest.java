@@ -92,6 +92,7 @@ class UserServiceTest {
         verify(userMapper).selectUserById(user.getId());
     }
 
+
     @Test
     public void findUserByIdAndPasswordTestWhenFail() {
         when(userMapper.selectUserById(user.getId())).thenReturn(null);
