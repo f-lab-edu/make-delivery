@@ -1,5 +1,7 @@
 package com.flab.makedel.service;
 
+import com.flab.makedel.Exception.DuplicatedIdException;
+import com.flab.makedel.Exception.NotExistIdException;
 import com.flab.makedel.annotation.LoginCheck.UserLevel;
 import com.flab.makedel.dto.UserDTO;
 import com.flab.makedel.mapper.UserMapper;
@@ -20,6 +22,9 @@ public class UserService {
     private final UserMapper userMapper;
 
     public void signUp(UserDTO user) {
+        if (isExistsId(user.getId())) {
+            throw new DuplicatedIdException("Same id exists");
+        }
         UserDTO encryptedUser = encryptUser(user);
         userMapper.insertUser(encryptedUser);
     }
@@ -47,6 +52,9 @@ public class UserService {
     }
 
     public void deleteUser(String id) {
+        if (!isExistsId(id)) {
+            throw new NotExistIdException("Not exists id");
+        }
         userMapper.deleteUser(id);
     }
 

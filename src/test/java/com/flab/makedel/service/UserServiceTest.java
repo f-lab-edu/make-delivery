@@ -50,6 +50,15 @@ class UserServiceTest {
     }
 
     @Test
+    public void signUpTestWhenFailBecauseDuplicatedId() {
+        when(userMapper.isExistsId(user.getId())).thenReturn(true);
+
+        assertThrows(RuntimeException.class, () -> userService.signUp(user));
+
+        verify(userMapper).isExistsId(user.getId());
+    }
+
+    @Test
     public void isExistsIdTestWhenDuplicatedId() {
         when(userMapper.isExistsId(user.getId())).thenReturn(true);
 
@@ -72,6 +81,15 @@ class UserServiceTest {
         userService.deleteUser(user.getId());
 
         verify(userMapper).deleteUser(user.getId());
+    }
+
+    @Test
+    public void deleteUserTestWhenFailBecauseNotExistId() {
+        when(userMapper.isExistsId(user.getId())).thenReturn(false);
+
+        assertThrows(RuntimeException.class, () -> userService.deleteUser(user.getId()));
+
+        verify(userMapper).isExistsId(user.getId());
     }
 
     @Test
