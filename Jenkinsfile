@@ -8,18 +8,18 @@ pipeline {
 
     stages {
 
+        stage('Git Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
         stage('Build') {
             steps {
-                // Get some code from a GitHub repository
-//checkout([$class: 'GitSCM', branches: [[name: '+refs/pull/*:refs/remotes/origin/pr/*']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: '3a35554a-1806-4def-bbd9-919202cd3a37', url: 'https://github.com/f-lab-edu/make-delivery']]])
-                checkout scm
+
                 // Run Maven on a Unix agent.
                 sh "mvn -Dmaven.test.failure.ignore=true clean package"
 
-
-
-                // To run Maven on a Windows agent, use
-                // bat "mvn -Dmaven.test.failure.ignore=true clean package"
             }
 
             // post {
