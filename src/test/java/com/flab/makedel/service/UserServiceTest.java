@@ -30,10 +30,6 @@ class UserServiceTest {
     UserDTO user;
 
 
-
-
-
-
     @BeforeEach
     public void makeUser() {
         user = UserDTO.builder()
