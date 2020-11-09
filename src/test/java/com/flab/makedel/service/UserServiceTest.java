@@ -110,7 +110,7 @@ class UserServiceTest {
     }
 
     @Test
-    public void findUserByIdAndPasswordTestWhenFail() {
+    public void findUserByIdAndPasswordTestWhenFailBecauseNotExistId() {
         when(userMapper.selectUserById(user.getId())).thenReturn(null);
 
         assertEquals(userService.findUserByIdAndPassword(user.getId(), user.getPassword()),
@@ -119,5 +119,14 @@ class UserServiceTest {
         verify(userMapper).selectUserById(any(String.class));
     }
 
+    @Test
+    public void findUserByIdAndPasswordTestWhenFailBecauseWrongPassword() {
+        when(userMapper.selectUserById(user.getId())).thenReturn(user);
+
+        assertEquals(userService.findUserByIdAndPassword(user.getId(), "not same password"),
+            Optional.empty());
+
+        verify(userMapper).selectUserById(any(String.class));
+    }
 
 }
