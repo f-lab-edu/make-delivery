@@ -22,22 +22,8 @@ pipeline {
                 checkout scm
 
                 script {
-                      // Checkout the repository and save the resulting metadata
-
                       GIT_COMMIT_REV = sh(returnStdout: true, script: "git log -n 1 --pretty=format:'%h'").trim()
-//                       def scmVars = checkout([
-//                         $class: 'GitSCM',
-//                         ...
-//                       ])
-//
-//                       // Display the variable using scmVars
-//                       echo "scmVars.GIT_COMMIT"
                        echo "${GIT_COMMIT_REV}"
-//
-//                       // Displaying the variables saving it as environment variable
-//                       env.GIT_COMMIT = scmVars.GIT_COMMIT
-//                       echo "env.GIT_COMMIT"
-//                       echo "${env.GIT_COMMIT}"
                     }
             }
         }
@@ -46,8 +32,7 @@ pipeline {
             steps {
                 echo "${BUILD_NUMBER}"
                 echo "here #@@@@@@@@@@####"
-
-                echo "${commit_id}"
+                echo "${bre_bre}"
                 //sh "mvn -Dmaven.test.failure.ignore=true clean package"
             }
 
