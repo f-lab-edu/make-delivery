@@ -11,6 +11,7 @@ pipeline {
         stage('Git Checkout') {
             steps {
                 checkout scm
+                echo "${scm}";
             }
         }
 
