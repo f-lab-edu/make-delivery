@@ -23,7 +23,9 @@ pipeline {
             steps {
                 echo "${BUILD_NUMBER}"
                 echo "here #@@@@@@@@@@####"
-                echo "${GIT_COMMIT}"
+                sh "git rev-parse --short HEAD > .git/commit-id"
+                commit_id = readFile('.git/commit-id')
+                echo "${commit_id}"
                 //sh "mvn -Dmaven.test.failure.ignore=true clean package"
             }
 
