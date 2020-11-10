@@ -16,10 +16,8 @@ pipeline {
 
         stage('Build') {
             steps {
-
-                // Run Maven on a Unix agent.
+                echo $PROJECT_NAME - Build # $BUILD_NUMBER - $BUILD_STATUS!
                 sh "mvn -Dmaven.test.failure.ignore=true clean package"
-
             }
 
             // post {
