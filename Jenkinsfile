@@ -17,10 +17,10 @@ pipeline {
         stage('Build') {
             steps {
                 echo "hi"
-                echo "${workspace}"
-                echo "${PROJECT_NAME} ${BUILD_NUMBER}  ${BUILD_STATUS}"
+                echo "${PROJECT_NAME}"
+                echo "${BUILD_NUMBER}"
+                echo "${BUILD_STATUS}"
                 sh "mvn -Dmaven.test.failure.ignore=true clean package"
-                echo "${PROJECT_NAME} ${BUILD_NUMBER}  ${BUILD_STATUS}"
             }
 
             // post {
