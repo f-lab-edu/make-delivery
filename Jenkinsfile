@@ -6,12 +6,16 @@ pipeline {
         maven "Maven 3.6.3"
     }
 
+    options
+        {
+            skipDefaultCheckout()
+        }
+
     stages {
 
         stage('Git Checkout') {
             steps {
                 checkout scm
-                echo "${scm}";
             }
         }
 
