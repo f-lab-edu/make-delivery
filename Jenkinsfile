@@ -16,9 +16,7 @@ pipeline {
 
         stage('Build') {
             steps {
-                echo "hi"
                 echo "${BUILD_NUMBER}"
-                echo "${BUILD_STATUS}"
                 sh "mvn -Dmaven.test.failure.ignore=true clean package"
             }
 
