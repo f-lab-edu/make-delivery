@@ -22,7 +22,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo "${BUILD_NUMBER}"
-                echo "here"
+                echo "here #@@@@@@@@@@####"
                 echo "${GIT_COMMIT}"
                 //sh "mvn -Dmaven.test.failure.ignore=true clean package"
             }
