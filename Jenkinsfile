@@ -34,7 +34,7 @@ pipeline {
 
                 sh "mvn -Dmaven.test.failure.ignore=true clean package"
                 echo "@@@@@@"
-                echo "See ${BUILD_URLddd}   Jenkins: ${JOB_NAME}: Build status is ${currentBuild.currentResult}"
+                echo "See ${BUILD_URL}   Jenkins: ${JOB_NAME}: Build status is ${currentBuild.currentResult}"
             }
 
 
@@ -43,10 +43,10 @@ pipeline {
                 // If Maven was able to run the tests, even if some of the test
                 // failed, record the test results and archive the jar file.
                 success {
-                  curl -X POST -H 'Content-Type: application/json'
-                  --data '{"state": "success", "target_url": "https://101.101.208.234:8082/build/status",
-                  "description": "성공 했다 @@", "context": "continuous-integration/jenkins"}'
-                  https://ca38d57b3d2aa32bea67c9828dd3c6cf899b7812@api.github.com/repos/f-lab-edu/make-delivery/statuses/5647228abe17a51e7d98c2e8e6567eb550722f93
+                  curl -X POST -H 'Content-Type: application/json' \
+                  --data '{"state": "success", "target_url": "https://101.101.208.234:8082/build/status", \
+                  "description": "성공 했다 @@", "context": "continuous-integration/jenkins"}' \
+                  https://ca38d57b3d2aa32bea67c9828dd3c6cf899b7812@api.github.com/repos/f-lab-edu/make-delivery/statuses/${GIT_COMMIT_REV}
 
                     //junit '**/target/surefire-reports/TEST-*.xml'
                     //archiveArtifacts 'target/*.jar'
