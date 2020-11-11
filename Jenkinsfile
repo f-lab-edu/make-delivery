@@ -33,7 +33,6 @@ pipeline {
             steps {
                 echo "${BUILD_STATUS}"
                 echo "here #@@@@@@@@@@####"
-                echo "${bre_bre}"
                 //sh "mvn -Dmaven.test.failure.ignore=true clean package"
             }
 
