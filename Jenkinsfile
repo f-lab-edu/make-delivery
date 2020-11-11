@@ -31,10 +31,10 @@ pipeline {
 
         stage('Build') {
             steps {
-                echo "${BUILD_STATUS}"
-                echo "here #@@@@@@@@@@####"
-                //sh "mvn -Dmaven.test.failure.ignore=true clean package"
+
+                sh "mvn -Dmaven.test.failure.ignore=true clean package"
             }
+
 
    post {
      always {
