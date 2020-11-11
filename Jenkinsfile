@@ -6,10 +6,7 @@ pipeline {
         maven "Maven 3.6.3"
     }
 
-    options
-        {
-            skipDefaultCheckout()
-        }
+
 
         environment {
             GIT_COMMIT_REV=''
