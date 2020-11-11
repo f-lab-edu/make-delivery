@@ -33,14 +33,12 @@ pipeline {
             steps {
 
                 sh "mvn -Dmaven.test.failure.ignore=true clean package"
+                echo "@@@@@@"
+                echo "See ${BUILD_URL}   Jenkins: ${JOB_NAME}: Build status is ${currentBuild.currentResult}"
+
             }
 
 
-   post {
-     always {
-       emailext body: "See ${BUILD_URL}", recipientProviders: [requestor()], subject: "Jenkins: ${JOB_NAME}: Build status is ${currentBuild.currentResult}"
-     }
-   }
 
 
             // post {
