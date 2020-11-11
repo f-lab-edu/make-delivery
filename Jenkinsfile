@@ -36,25 +36,25 @@ pipeline {
                 echo "@@@@@@"
                 echo "See ${BUILD_URL}   Jenkins: ${JOB_NAME}: Build status is ${currentBuild.currentResult}"
 
-                script {
-                  if [ "$BUILD_URL" == "SUCCESS" ];
-                     then echo "if here";
-                  fi
-                }
+
 
             }
 
 
 
 
-            // post {
-            //     // If Maven was able to run the tests, even if some of the test
-            //     // failed, record the test results and archive the jar file.
-            //     success {
-            //         junit '**/target/surefire-reports/TEST-*.xml'
-            //         archiveArtifacts 'target/*.jar'
-            //     }
-            // }
+            post {
+                // If Maven was able to run the tests, even if some of the test
+                // failed, record the test results and archive the jar file.
+                success {
+                  echo "success success@@@@"
+                    //junit '**/target/surefire-reports/TEST-*.xml'
+                    //archiveArtifacts 'target/*.jar'
+                }
+                failure {
+                  echo "failure failure@@@@"
+                }
+            }
         }
     }
 }
