@@ -36,6 +36,10 @@ pipeline {
                 echo "@@@@@@"
                 echo "See ${BUILD_URL}   Jenkins: ${JOB_NAME}: Build status is ${currentBuild.currentResult}"
 
+                if [ "${BUILD_URL}" eq "SUCCESS" ]
+                then echo "if here"
+                fi
+
             }
 
 
