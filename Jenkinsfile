@@ -24,6 +24,7 @@ pipeline {
                 script {
                       GIT_COMMIT_REV = sh(returnStdout: true, script: "git log -n 1 --pretty=format:'%h'").trim()
                        echo "${GIT_COMMIT_REV}"
+                       echo "${GITHUB_TOKEN}"
                     }
             }
         }
@@ -39,22 +40,22 @@ pipeline {
 
 
 
-            post {
-                // If Maven was able to run the tests, even if some of the test
-                // failed, record the test results and archive the jar file.
-                success {
-                  curl -X POST -H 'Content-Type: application/json' \
-                  --data '{"state": "success", "target_url": "https://101.101.208.234:8082/build/status", \
-                  "description": "성공 했다 @@", "context": "continuous-integration/jenkins"}' \
-                  https://ca38d57b3d2aa32bea67c9828dd3c6cf899b7812@api.github.com/repos/f-lab-edu/make-delivery/statuses/${GIT_COMMIT_REV}
-
-                    //junit '**/target/surefire-reports/TEST-*.xml'
-                    //archiveArtifacts 'target/*.jar'
-                }
-                failure {
-                  echo "failure failure@@@@"
-                }
-            }
+//             post {
+//                 // If Maven was able to run the tests, even if some of the test
+//                 // failed, record the test results and archive the jar file.
+//                 success {
+//                   curl -X POST -H 'Content-Type: application/json' \
+//                   --data '{"state": "success", "target_url": "https://101.101.208.234:8082/build/status", \
+//                   "description": "성공 했다 @@", "context": "continuous-integration/jenkins"}' \
+//                   https://ca38d57b3d2aa32bea67c9828dd3c6cf899b7812@api.github.com/repos/f-lab-edu/make-delivery/statuses/${GIT_COMMIT_REV}
+//
+//                     //junit '**/target/surefire-reports/TEST-*.xml'
+//                     //archiveArtifacts 'target/*.jar'
+//                 }
+//                 failure {
+//                   echo "failure failure@@@@"
+//                 }
+//             }
         }
     }
 }
