@@ -34,12 +34,8 @@ pipeline {
 
                 sh "mvn -Dmaven.test.failure.ignore=true clean package"
                 echo "@@@@@@"
-                echo "See ${BUILD_URL}   Jenkins: ${JOB_NAME}: Build status is ${currentBuild.currentResult}"
-
-
-
+                echo "See ${BUILD_URLddd}   Jenkins: ${JOB_NAME}: Build status is ${currentBuild.currentResult}"
             }
-
 
 
 
