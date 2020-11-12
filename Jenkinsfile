@@ -15,7 +15,7 @@ pipeline {
 
         stage('Git Checkout') {
             steps {
-                checkout scm
+                //checkout scm
                 script {
                       GIT_COMMIT_REV = sh(returnStdout: true, script: 'git rev-parse HEAD').trim()
                       GIT_COMMIT_SHA = sh(returnStdout: true, script: "git log -n 1 --pretty=format:'%H'").trim()
