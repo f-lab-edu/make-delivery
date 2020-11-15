@@ -2,6 +2,7 @@ package com.flab.makedel.service;
 
 import static org.mockito.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -44,6 +45,9 @@ class UserServiceTest {
 
     @Test
     public void signUpTestWhenSuccess() {
+        when(userMapper.isExistsId(user.getId())).thenReturn(false);
+        doNothing().when(userMapper).insertUser(any(UserDTO.class));
+
         userService.signUp(user);
 
         verify(userMapper).insertUser(any(UserDTO.class));
@@ -78,6 +82,9 @@ class UserServiceTest {
 
     @Test
     public void deleteUserTestWhenSuccess() {
+        when(userMapper.isExistsId(user.getId())).thenReturn(true);
+        doNothing().when(userMapper).deleteUser(user.getId());
+
         userService.deleteUser(user.getId());
 
         verify(userMapper).deleteUser(user.getId());
@@ -94,6 +101,8 @@ class UserServiceTest {
 
     @Test
     public void changeUserPasswordTestWhenSuccess() {
+        doNothing().when(userMapper).updateUserPassword(any(String.class), any(String.class));
+
         userService.changeUserPassword(user.getId(), "123");
 
         verify(userMapper).updateUserPassword(any(String.class), any(String.class));
