@@ -23,7 +23,7 @@ public class UserService {
 
     public void signUp(UserDTO user) {
         if (isExistsId(user.getId())) {
-            throw new DuplicatedIdException("Same id exists");
+            throw new DuplicatedIdException("Same id exists id: " + user.getId());
         }
         UserDTO encryptedUser = encryptUser(user);
         userMapper.insertUser(encryptedUser);

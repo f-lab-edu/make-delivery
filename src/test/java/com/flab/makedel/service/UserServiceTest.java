@@ -50,7 +50,7 @@ class UserServiceTest {
     }
 
     @Test
-    public void signUpTestWhenFailBecauseDuplicatedId() {
+    public void signUpTestWhenFail_유저_아이디_중복() {
         when(userMapper.isExistsId(user.getId())).thenReturn(true);
 
         assertThrows(RuntimeException.class, () -> userService.signUp(user));
@@ -59,7 +59,7 @@ class UserServiceTest {
     }
 
     @Test
-    public void isExistsIdTestWhenDuplicatedId() {
+    public void isExistsIdTestWhenFail_유저_아이디_중복() {
         when(userMapper.isExistsId(user.getId())).thenReturn(true);
 
         assertEquals(userService.isExistsId(user.getId()), true);
@@ -68,7 +68,7 @@ class UserServiceTest {
     }
 
     @Test
-    public void isExistsIdTestWhenNotDuplicatedId() {
+    public void isExistsIdTestWhenSuccess() {
         when(userMapper.isExistsId(user.getId())).thenReturn(false);
 
         assertEquals(userService.isExistsId(user.getId()), false);
@@ -84,7 +84,7 @@ class UserServiceTest {
     }
 
     @Test
-    public void deleteUserTestWhenFailBecauseNotExistId() {
+    public void deleteUserTestWhenFail_유저_아이디_없음() {
         when(userMapper.isExistsId(user.getId())).thenReturn(false);
 
         assertThrows(RuntimeException.class, () -> userService.deleteUser(user.getId()));
@@ -110,7 +110,7 @@ class UserServiceTest {
     }
 
     @Test
-    public void findUserByIdAndPasswordTestWhenFailBecauseNotExistId() {
+    public void findUserByIdAndPasswordTestWhenFail_유저_아이디_없음() {
         when(userMapper.selectUserById(user.getId())).thenReturn(null);
 
         assertEquals(userService.findUserByIdAndPassword(user.getId(), user.getPassword()),
@@ -120,7 +120,7 @@ class UserServiceTest {
     }
 
     @Test
-    public void findUserByIdAndPasswordTestWhenFailBecauseWrongPassword() {
+    public void findUserByIdAndPasswordTestWhenFail_유저_비밀번호_오류() {
         when(userMapper.selectUserById(user.getId())).thenReturn(user);
 
         assertEquals(userService.findUserByIdAndPassword(user.getId(), "not same password"),
