@@ -19,10 +19,8 @@ pipeline {
                     cleanWs()
                     GIT_CHANGE_BRANCH_NAME = sh(returnStdout: true, script: 'echo ${payload} | python3 -c \"import sys,json;print(json.load(sys.stdin,strict=False)[\'ref\'][11:])\"').trim()
                     GIT_COMMIT_SHA = sh(returnStdout: true, script: 'echo ${payload} | python3 -c \"import sys,json;print(json.load(sys.stdin,strict=False)[\'head_commit\'][\'id\'])\"').trim()
-                    echo "arrive   ${GIT_CHANGE_BRANCH_NAME}"
+                    echo "arrive ${GIT_CHANGE_BRANCH_NAME}"
                     sh "git clone -b ${GIT_CHANGE_BRANCH_NAME} --single-branch \"https://github.com/f-lab-edu/make-delivery.git\""
-                    //sh 'echo ${payload} | python3 -c \"import sys, json; print(json.load(sys.stdin)[\'ref\'])\"  '
-
                     }
                 }
             }
