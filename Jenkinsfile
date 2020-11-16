@@ -28,26 +28,19 @@ pipeline {
         stage('Build') {
             steps {
                 sh "mvn -f make-delivery/pom.xml -Dmaven.test.failure.ignore=true clean package"
-                //echo "See ${BUILD_URL}   Jenkins: ${JOB_NAME}: Build status is ${currentBuild.currentResult}"
             }
         }
 
     }//stages
 
                 post {
-                    // If Maven was able to run the tests, even if some of the test
-                    // failed, record the test results and archive the jar file.
-
                     success {
                         echo "${GIT_COMMIT_SHA}"
                       sh ("curl -X POST -H \"Content-Type: application/json\" \
                       --data '{\"state\": \"success\", \"context\": \"@@pass ci test & build\", \"target_url\": \"http://115.85.180.192:8080/job/make-delivery\"}' \
                       \"https://${GITHUB_TOKEN}@api.github.com/repos/f-lab-edu/make-delivery/statuses/${GIT_COMMIT_SHA}\"")
-
-
                         //junit '**/target/surefire-reports/TEST-*.xml'
                         //archiveArtifacts 'target/*.jar'
-
                     }
                     failure {
                       sh ("curl -X POST -H \"Content-Type: application/json\" \
