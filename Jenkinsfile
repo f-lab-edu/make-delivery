@@ -28,8 +28,7 @@ pipeline {
         stage('Build') {
             steps {
                 sh "mvn -f make-delivery/pom.xml -Dmaven.test.failure.ignore=true clean package"
-                echo "@@@@@@"
-                echo "See ${BUILD_URL}   Jenkins: ${JOB_NAME}: Build status is ${currentBuild.currentResult}"
+                //echo "See ${BUILD_URL}   Jenkins: ${JOB_NAME}: Build status is ${currentBuild.currentResult}"
             }
         }
 
