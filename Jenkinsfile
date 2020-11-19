@@ -58,7 +58,7 @@ pipeline {
             }
         }
 
-        stage('Connect Deploy Server') {
+        stage('Deploy') {
             steps {
                 script {
                     sh "ssh -p 1039 -T root@106.10.53.113 sh < /var/lib/jenkins/ab.sh"
