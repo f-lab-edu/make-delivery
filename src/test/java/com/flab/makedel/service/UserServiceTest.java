@@ -12,6 +12,7 @@ import com.flab.makedel.mapper.UserMapper;
 import com.flab.makedel.utils.PasswordEncrypter;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -43,6 +44,7 @@ class UserServiceTest {
     }
 
     @Test
+    @DisplayName("회원가입 성공")
     public void signUpTestWhenSuccess() {
         when(userMapper.isExistsId(user.getId())).thenReturn(false);
         doNothing().when(userMapper).insertUser(any(UserDTO.class));
@@ -53,7 +55,8 @@ class UserServiceTest {
     }
 
     @Test
-    public void signUpTestWhenFail_유저_아이디_중복() {
+    @DisplayName("회원가입 실패 : 유저 아이디 중복")
+    public void signUpTestWhenFail() {
         when(userMapper.isExistsId(user.getId())).thenReturn(true);
 
         assertThrows(RuntimeException.class, () -> userService.signUp(user));
@@ -62,7 +65,8 @@ class UserServiceTest {
     }
 
     @Test
-    public void isExistsIdTestWhenFail_유저_아이디_중복() {
+    @DisplayName("아이디 중복 확인 true 리턴")
+    public void isExistsIdTestWhenReturnTrue() {
         when(userMapper.isExistsId(user.getId())).thenReturn(true);
 
         assertEquals(userService.isExistsId(user.getId()), true);
@@ -71,7 +75,8 @@ class UserServiceTest {
     }
 
     @Test
-    public void isExistsIdTestWhenSuccess() {
+    @DisplayName("아이디 중복 확인 false 리턴")
+    public void isExistsIdTestWhenReturnFalse() {
         when(userMapper.isExistsId(user.getId())).thenReturn(false);
 
         assertEquals(userService.isExistsId(user.getId()), false);
@@ -80,6 +85,7 @@ class UserServiceTest {
     }
 
     @Test
+    @DisplayName("유저 삭제 성공")
     public void deleteUserTestWhenSuccess() {
         when(userMapper.isExistsId(user.getId())).thenReturn(true);
         doNothing().when(userMapper).deleteUser(user.getId());
@@ -90,7 +96,8 @@ class UserServiceTest {
     }
 
     @Test
-    public void deleteUserTestWhenFail_유저_아이디_없음() {
+    @DisplayName("유저 삭제 실패 : 삭제할 아이디 존재하지 않음")
+    public void deleteUserTestWhenFail() {
         when(userMapper.isExistsId(user.getId())).thenReturn(false);
 
         assertThrows(RuntimeException.class, () -> userService.deleteUser(user.getId()));
@@ -99,6 +106,7 @@ class UserServiceTest {
     }
 
     @Test
+    @DisplayName("유저 비밀번호 변경 성공")
     public void changeUserPasswordTestWhenSuccess() {
         doNothing().when(userMapper).updateUserPassword(any(String.class), any(String.class));
 
@@ -108,6 +116,7 @@ class UserServiceTest {
     }
 
     @Test
+    @DisplayName("아이디와 비밀번호로 유저 찾기 성공")
     public void findUserByIdAndPasswordTestWhenSuccess() {
         when(userMapper.selectUserById(user.getId())).thenReturn(user);
 
@@ -118,7 +127,8 @@ class UserServiceTest {
     }
 
     @Test
-    public void findUserByIdAndPasswordTestWhenFail_유저_아이디_없음() {
+    @DisplayName("아이디와 비밀번호로 유저 찾기 실패 : 주어진 유저 아이디 존재하지 않음")
+    public void findUserByIdAndPasswordTestWhenFailBecauseNotExistId() {
         when(userMapper.selectUserById(user.getId())).thenReturn(null);
 
         assertEquals(userService.findUserByIdAndPassword(user.getId(), user.getPassword()),
@@ -128,7 +138,8 @@ class UserServiceTest {
     }
 
     @Test
-    public void findUserByIdAndPasswordTestWhenFail_유저_비밀번호_오류() {
+    @DisplayName("아이디와 비밀번호로 유저 찾기 실패 : 주어진 유저 비밀번호 오류")
+    public void findUserByIdAndPasswordTestWhenFailBecausePasswordError() {
         when(userMapper.selectUserById(user.getId())).thenReturn(user);
 
         assertEquals(userService.findUserByIdAndPassword(user.getId(), "not same password"),
