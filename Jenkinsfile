@@ -1,0 +1,75 @@
+pipeline {
+    agent any
+
+    tools {
+        maven "Maven 3.6.3"
+    }
+
+    environment {
+        GIT_COMMIT_REV=''
+        GIT_CHANGE_BRANCH_NAME=''
+        GIT_COMMIT_SHA=''
+    }
+
+    options {
+        skipDefaultCheckout()
+    }
+
+    stages {
+
+        stage('git checkout & clone') {
+            steps {
+                script {
+                    cleanWs()
+                    GIT_CHANGE_BRANCH_NAME = sh(returnStdout: true, script: 'echo ${payload} | python3 -c \"import sys,json;print(json.load(sys.stdin,strict=False)[\'ref\'][11:])\"').trim()
+                    GIT_COMMIT_SHA = sh(returnStdout: true, script: 'echo ${payload} | python3 -c \"import sys,json;print(json.load(sys.stdin,strict=False)[\'head_commit\'][\'id\'])\"').trim()
+                    echo "arrive ${GIT_CHANGE_BRANCH_NAME}"
+                    sh "git clone -b ${GIT_CHANGE_BRANCH_NAME} --single-branch \"https://github.com/f-lab-edu/make-delivery.git\""
+                    }
+                }
+            }
+
+        stage('Build') {
+            steps {
+                sh "mvn -f make-delivery/pom.xml -DskipTests clean package"
+                archiveArtifacts 'make-delivery/target/*.jar'
+            }
+
+            post {
+                 success {
+                      sh ("curl -X POST -H \"Content-Type: application/json\" \
+                      --data '{\"state\": \"success\", \"context\": \"@@pass ci test & build\", \"target_url\": \"http://115.85.180.192:8080/job/make-delivery\"}' \
+                      \"https://${GITHUB_TOKEN}@api.github.com/repos/f-lab-edu/make-delivery/statuses/${GIT_COMMIT_SHA}\"")
+                        //junit '**/target/surefire-reports/TEST-*.xml'
+                    }
+
+                    failure {
+                      sh ("curl -X POST -H \"Content-Type: application/json\" \
+                      --data '{\"state\": \"failure\", \"context\": \"@@failure ci test & build\", \"target_url\": \"http://115.85.180.192:8080/job/make-delivery\"}' \
+                      \"https://${GITHUB_TOKEN}@api.github.com/repos/f-lab-edu/make-delivery/statuses/${GIT_COMMIT_SHA}\"")
+                    }
+            }
+        }
+
+        stage('Dockerfile Build & Push To Docker Hub & Delete Docker Image') {
+            steps {
+                script {
+                    sh "docker build -t tjdrnr05571/make-delivery make-delivery/."
+                    sh "docker push tjdrnr05571/make-delivery"
+                    sh "docker rmi tjdrnr05571/make-delivery"
+                }
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                script {
+                    sh "ssh -p 1039 root@106.10.53.113 -T sh < /var/lib/jenkins/docker-deploy.sh"
+                }
+            }
+        }
+
+    }
+
+
+}
