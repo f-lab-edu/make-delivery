@@ -65,21 +65,11 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("아이디 중복 확인 true 리턴")
+    @DisplayName("아이디 중복 확인 성공")
     public void isExistsIdTestWhenReturnTrue() {
         when(userMapper.isExistsId(user.getId())).thenReturn(true);
 
         assertEquals(userService.isExistsId(user.getId()), true);
-
-        verify(userMapper).isExistsId(user.getId());
-    }
-
-    @Test
-    @DisplayName("아이디 중복 확인 false 리턴")
-    public void isExistsIdTestWhenReturnFalse() {
-        when(userMapper.isExistsId(user.getId())).thenReturn(false);
-
-        assertEquals(userService.isExistsId(user.getId()), false);
 
         verify(userMapper).isExistsId(user.getId());
     }

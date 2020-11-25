@@ -31,7 +31,3 @@ build/
 
 ### VS Code ###
 .vscode/
-
-application.properties
-firebase
-firebase/make-delivery-firebase-adminsdk-8jura-1d0b64450e.json
