@@ -44,7 +44,7 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("회원가입 성공")
+    @DisplayName("회원가입에 성공합니다")
     public void signUpTestWhenSuccess() {
         when(userMapper.isExistsId(user.getId())).thenReturn(false);
         doNothing().when(userMapper).insertUser(any(UserDTO.class));
@@ -55,7 +55,7 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("회원가입 실패 : 유저 아이디 중복")
+    @DisplayName("회원가입에 실패합니다 : 중복된 아이디")
     public void signUpTestWhenFail() {
         when(userMapper.isExistsId(user.getId())).thenReturn(true);
 
@@ -65,7 +65,7 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("아이디 중복 확인 성공")
+    @DisplayName("아이디 중복 확인을 합니다")
     public void isExistsIdTestWhenReturnTrue() {
         when(userMapper.isExistsId(user.getId())).thenReturn(true);
 
@@ -75,7 +75,7 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("유저 삭제 성공")
+    @DisplayName("유저 삭제합니다")
     public void deleteUserTestWhenSuccess() {
         when(userMapper.isExistsId(user.getId())).thenReturn(true);
         doNothing().when(userMapper).deleteUser(user.getId());
@@ -86,7 +86,7 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("유저 삭제 실패 : 삭제할 아이디 존재하지 않음")
+    @DisplayName("유저 삭제에 실패합니다 : 삭제할 아이디 존재하지 않음")
     public void deleteUserTestWhenFail() {
         when(userMapper.isExistsId(user.getId())).thenReturn(false);
 
@@ -96,7 +96,7 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("유저 비밀번호 변경 성공")
+    @DisplayName("유저 비밀번호를 변경합니")
     public void changeUserPasswordTestWhenSuccess() {
         doNothing().when(userMapper).updateUserPassword(any(String.class), any(String.class));
 
@@ -106,7 +106,7 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("아이디와 비밀번호로 유저 찾기 성공")
+    @DisplayName("아이디와 비밀번호로 유저를 찾습니다")
     public void findUserByIdAndPasswordTestWhenSuccess() {
         when(userMapper.selectUserById(user.getId())).thenReturn(user);
 
@@ -117,7 +117,7 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("아이디와 비밀번호로 유저 찾기 실패 : 주어진 유저 아이디 존재하지 않음")
+    @DisplayName("아이디와 비밀번호로 유저 찾기에 실패합니다 : 주어진 유저 아이디 존재하지 않음")
     public void findUserByIdAndPasswordTestWhenFailBecauseNotExistId() {
         when(userMapper.selectUserById(user.getId())).thenReturn(null);
 
@@ -128,7 +128,7 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("아이디와 비밀번호로 유저 찾기 실패 : 주어진 유저 비밀번호 오류")
+    @DisplayName("아이디와 비밀번호로 유저 찾기에 실패합니다 : 주어진 유저 비밀번호 오류")
     public void findUserByIdAndPasswordTestWhenFailBecausePasswordError() {
         when(userMapper.selectUserById(user.getId())).thenReturn(user);
 
