@@ -65,11 +65,21 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("아이디 중복 확인을 합니다")
+    @DisplayName("중복된 아이디일 경우 참을 Return합니다")
     public void isExistsIdTestWhenReturnTrue() {
         when(userMapper.isExistsId(user.getId())).thenReturn(true);
 
         assertEquals(userService.isExistsId(user.getId()), true);
+
+        verify(userMapper).isExistsId(user.getId());
+    }
+
+    @Test
+    @DisplayName("중복된 아이디일 경우 거짓을 Return합니다")
+    public void isExistsIdTestWhenReturnFalse() {
+        when(userMapper.isExistsId(user.getId())).thenReturn(false);
+
+        assertEquals(userService.isExistsId(user.getId()), false);
 
         verify(userMapper).isExistsId(user.getId());
     }
@@ -96,7 +106,7 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("유저 비밀번호를 변경합니")
+    @DisplayName("유저 비밀번호를 변경합니다")
     public void changeUserPasswordTestWhenSuccess() {
         doNothing().when(userMapper).updateUserPassword(any(String.class), any(String.class));
 
