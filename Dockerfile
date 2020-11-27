@@ -2,7 +2,7 @@ FROM openjdk:8-jre-alpine
 VOLUME /tmp
 RUN apk --no-cache add curl
 
-RUN curl -H "X-Vault-Toekn: s.Dsm16mhBp82Kw92FQLrxf4Rd" http://118.67.130.216:8200/v1/kv/sdk > ccc.json
+RUN curl -H "X-Vault-Token: s.Dsm16mhBp82Kw92FQLrxf4Rd" http://118.67.130.216:8200/v1/kv/sdk > ccc.json
 
 ENV SPRING_REDIS_PASSWORD=
 ENV SPRING_DATASOURCE_PASSWORD=
