@@ -9,7 +9,9 @@ import com.google.firebase.messaging.BatchResponse;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -38,9 +40,10 @@ public class PushService {
 
     @PostConstruct
     public void init() throws IOException {
+        InputStream fileStream = new FileInputStream("ccc.json");
         FirebaseOptions options = new FirebaseOptions.Builder()
             .setCredentials(GoogleCredentials
-                .fromStream(new ClassPathResource(firebaseConfigPath).getInputStream()))
+                .fromStream(fileStream))
             .build();
         if (FirebaseApp.getApps().isEmpty()) {
             FirebaseApp.initializeApp(options);
