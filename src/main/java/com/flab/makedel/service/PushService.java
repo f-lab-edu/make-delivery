@@ -40,7 +40,7 @@ public class PushService {
 
     @PostConstruct
     public void init() throws IOException {
-        InputStream fileStream = new FileInputStream("ccc.json");
+        InputStream fileStream = new FileInputStream("/ccc.json");
         FirebaseOptions options = new FirebaseOptions.Builder()
             .setCredentials(GoogleCredentials
                 .fromStream(fileStream))
