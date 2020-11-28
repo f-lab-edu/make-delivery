@@ -1,10 +1,10 @@
 FROM openjdk:8-jre-alpine
 VOLUME /tmp
-RUN apk --no-cache add curl
-RUN apk --no-cache add jq
+RUN apk --no-cache add curl \
+ && apk --no-cache add jq
 
 
-RUN curl -H "X-Vault-Token: s.Dsm16mhBp82Kw92FQLrxf4Rd" http://118.67.130.216:8200/v1/kv/sdk | jq -r .data > ccc.json
+RUN curl -H "X-Vault-Token: s.Dsm16mhBp82Kw92FQLrxf4Rd" http://118.67.130.216:8200/v1/kv/sdk | jq -r .data > firebaseSDK.json
 
 ENV SPRING_REDIS_PASSWORD=
 ENV SPRING_DATASOURCE_PASSWORD=
