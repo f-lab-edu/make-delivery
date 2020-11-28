@@ -9,9 +9,8 @@ ENV SPRING_DATASOURCE_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
 ENV SPRING_DATASOURCE_URL=${SPRING_DATASOURCE_URL}
 ENV VAULT_TOKEN=${VAULT_TOKEN}
 
-RUN curl -H "X-Vault-Token: $VAULT_TOKEN" \
+RUN curl -H "X-Vault-Token: s.Dsm16mhBp82Kw92FQLrxf4Rd" \
 http://118.67.130.216:8200/v1/kv/sdk | jq -r .data > firebaseSDK.json
-
 
 ARG JAR_FILE=target/*.jar
 COPY ${JAR_FILE} app.jar
