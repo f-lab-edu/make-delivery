@@ -14,12 +14,14 @@ import org.springframework.stereotype.Component;
 public class SetDataSourceAspect {
 
     @Before("@annotation(com.flab.makedel.annotation.SetDataSource) && @annotation(target)")
-    public void setDataSource(SetDataSource target) throws SQLException {
+    public void setDataSource(SetDataSource target) throws WrongDataSourceException {
+
         if (target.dataSourceType() == DataSourceType.MASTER
             || target.dataSourceType() == DataSourceType.SLAVE) {
             RoutingDataSourceManager.setCurrentDataSourceName(target.dataSourceType());
         } else {
             throw new WrongDataSourceException("Wrong DataSource Type : Should Check Exception");
         }
+
     }
 }
