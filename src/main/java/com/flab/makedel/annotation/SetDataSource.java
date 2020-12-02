@@ -13,10 +13,6 @@ public @interface SetDataSource {
 
     enum DataSourceType {
         MASTER, SLAVE;
-
-        public static String getDataSourceTypeToString(DataSourceType dataSourceType) {
-            return dataSourceType.name();
-        }
     }
 
 }
