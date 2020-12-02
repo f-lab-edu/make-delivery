@@ -1,4 +1,4 @@
-package com.flab.makedel.Exception;
+package com.flab.makedel.exception;
 
 public class DuplicatedIdException extends RuntimeException {
 
