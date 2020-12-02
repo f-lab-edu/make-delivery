@@ -37,7 +37,6 @@ public class DatabaseConfig {
     public SqlSessionFactory sqlSessionFactory(
         @Qualifier(value = "routingDataSource") DataSource routingDataSource) throws Exception {
         SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
-        System.out.println("routing datasource ?? : " + routingDataSource);
         sqlSessionFactoryBean.setDataSource(routingDataSource);
         sqlSessionFactoryBean.setMapperLocations(
             applicationContext.getResources("classpath:/mapper/**/*.xml"));
