@@ -16,13 +16,16 @@ public interface UserMapper {
     @SetDataSource(dataSourceType = DataSourceType.SLAVE)
     UserInfoDTO selectUserInfo(String id);
 
+    @SetDataSource(dataSourceType = DataSourceType.MASTER)
     void insertUser(UserDTO user);
 
     @SetDataSource(dataSourceType = DataSourceType.SLAVE)
     UserDTO selectUserById(String id);
 
+    @SetDataSource(dataSourceType = DataSourceType.MASTER)
     void deleteUser(String id);
 
+    @SetDataSource(dataSourceType = DataSourceType.MASTER)
     void updateUserPassword(String id, String newPassword);
 
 }

@@ -8,6 +8,7 @@ import java.util.List;
 
 public interface StoreMapper {
 
+    @SetDataSource(dataSourceType = DataSourceType.MASTER)
     void insertStore(StoreDTO store);
 
     @SetDataSource(dataSourceType = DataSourceType.SLAVE)
@@ -19,8 +20,10 @@ public interface StoreMapper {
     @SetDataSource(dataSourceType = DataSourceType.SLAVE)
     StoreDTO selectStore(long storeId, String ownerId);
 
+    @SetDataSource(dataSourceType = DataSourceType.MASTER)
     void closeMyStore(long storeId);
 
+    @SetDataSource(dataSourceType = DataSourceType.MASTER)
     void openMyStore(long storeId);
 
     @SetDataSource(dataSourceType = DataSourceType.SLAVE)
