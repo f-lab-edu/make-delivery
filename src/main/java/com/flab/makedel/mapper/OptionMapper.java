@@ -1,5 +1,7 @@
 package com.flab.makedel.mapper;
 
+import com.flab.makedel.annotation.SetDataSource;
+import com.flab.makedel.annotation.SetDataSource.DataSourceType;
 import com.flab.makedel.dto.OptionDTO;
 import java.util.List;
 
@@ -15,10 +17,13 @@ import java.util.List;
 
 public interface OptionMapper {
 
+    @SetDataSource(dataSourceType = DataSourceType.MASTER)
     void insertOptionList(List<OptionDTO> optionList);
 
+    @SetDataSource(dataSourceType = DataSourceType.MASTER)
     void deleteOptionList(List<OptionDTO> optionList);
 
+    @SetDataSource(dataSourceType = DataSourceType.SLAVE)
     List<OptionDTO> selectOptionList(long menuId);
 
 }

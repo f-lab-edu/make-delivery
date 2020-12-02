@@ -10,13 +10,15 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface UserMapper {
 
-    @SetDataSource(dataSourceType = DataSourceType.MASTER)
+    @SetDataSource(dataSourceType = DataSourceType.SLAVE)
     boolean isExistsId(String id);
 
+    @SetDataSource(dataSourceType = DataSourceType.SLAVE)
     UserInfoDTO selectUserInfo(String id);
 
     void insertUser(UserDTO user);
 
+    @SetDataSource(dataSourceType = DataSourceType.SLAVE)
     UserDTO selectUserById(String id);
 
     void deleteUser(String id);
