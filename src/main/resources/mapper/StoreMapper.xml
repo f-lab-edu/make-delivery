@@ -10,7 +10,7 @@
     </insert>
 
     <select id="selectStoreList" parameterType="String" resultType="com.flab.makedel.dto.StoreDTO">
-        SELECT id, name, phone, address, owner_id , open_status, introduction, categoryId, created_at, updated_at
+        SELECT id, name, phone, address, owner_id , open_status, introduction, category_id, created_at, updated_at
         FROM STORE WHERE owner_id = #{ownerId}
     </select>
 
@@ -20,7 +20,7 @@
     </select>
 
     <select id="selectStore" resultType="com.flab.makedel.dto.StoreDTO">
-        SELECT id, name, phone, address, owner_id , open_status, introduction, categoryId, created_at, updated_at
+        SELECT id, name, phone, address, owner_id , open_status, introduction, category_id, created_at, updated_at
         FROM STORE WHERE id = #{storeId} AND owner_id = #{ownerId}
     </select>
 
