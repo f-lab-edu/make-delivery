@@ -7,7 +7,10 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.mockito.Matchers.*;
 
+import com.flab.makedel.dto.OrderDTO.OrderStatus;
+import com.flab.makedel.dto.OrderReceiptDTO;
 import com.flab.makedel.dto.StoreDTO;
+import com.flab.makedel.mapper.OrderMapper;
 import com.flab.makedel.mapper.StoreMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -23,6 +26,9 @@ public class StoreServiceTest {
 
     @Mock
     StoreMapper storeMapper;
+
+    @Mock
+    OrderMapper orderMapper;
 
     @InjectMocks
     StoreService storeService;
@@ -97,11 +103,18 @@ public class StoreServiceTest {
     @DisplayName("자신의 가게가 맞는지 확인하는데 실패합니다 : 본인 소유의 가게가 아님")
     public void validateMyStoreTestFail() {
         when(storeMapper.isMyStore(anyLong(), any(String.class))).thenReturn(false);
-        
+
         assertThrows(HttpClientErrorException.class,
             () -> storeService.validateMyStore(3, "owner1"));
 
         verify(storeMapper).isMyStore(anyLong(), any(String.class));
+    }
+
+    @Test
+    @DisplayName("사장이 주문을 승인하는데 성공합니다")
+    public void approveOrderTestSuccess() {
+        doNothing().when(orderMapper).approveOrder(anyLong(), any(OrderStatus.class));
+        when(orderMapper.selectOrderReceipt(anyLong())).thenReturn(any(OrderReceiptDTO.class));
     }
 
 }

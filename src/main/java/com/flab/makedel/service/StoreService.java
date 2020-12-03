@@ -1,6 +1,7 @@
 package com.flab.makedel.service;
 
 import com.flab.makedel.Exception.DuplicatedIdException;
+import com.flab.makedel.Exception.DuplicatedStoreNameException;
 import com.flab.makedel.dto.OrderDTO.OrderStatus;
 import com.flab.makedel.dto.OrderDetailDTO;
 import com.flab.makedel.dto.OrderReceiptDTO;
@@ -35,7 +36,7 @@ public class StoreService {
             StoreDTO newStore = setOwnerID(store, ownerId);
             storeMapper.insertStore(newStore);
         } catch (DuplicateKeyException e) {
-            throw new DuplicateKeyException("Same Store Name" + store.getName());
+            throw new DuplicatedStoreNameException("Same Store Name" + store.getName());
         }
     }
 
