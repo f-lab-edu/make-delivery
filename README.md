@@ -1,7 +1,4 @@
-# Make-Delivery
->구매자에게 음식 배달을 제공하는 서비스입니다.
-
-## 프로젝트 서버 구조도
+# make-delivery 서버 구조도
 ![Untitled Diagram](https://user-images.githubusercontent.com/34911552/100977906-ff4b1d00-3584-11eb-9d6a-3362229a3c81.png)
 
 
