@@ -36,6 +36,8 @@ public class OrderService {
     @Transactional
     public OrderReceiptDTO registerOrder(String userId, long storeId, PayType payType) {
 
+        System.out.println(
+            "haha @@ ## : " + TransactionSynchronizationManager.isActualTransactionActive());
         UserInfoDTO user = userMapper.selectUserInfo(userId);
         OrderDTO orderDTO = getOrderDTO(user, storeId);
         List<CartItemDTO> cartList;
