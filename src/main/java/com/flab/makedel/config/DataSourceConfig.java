@@ -11,8 +11,11 @@ import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy;
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 @Configuration
 @PropertySource("classpath:/application-dev.properties")
@@ -39,8 +42,19 @@ public class DataSourceConfig {
             @Override
             protected Object determineCurrentLookupKey() {
                 DataSourceType dataSourceType = RoutingDataSourceManager.getCurrentDataSourceName();
+
+                if (TransactionSynchronizationManager
+                    .isActualTransactionActive()) {
+                    boolean readOnly = TransactionSynchronizationManager
+                        .isCurrentTransactionReadOnly();
+                    if (readOnly) {
+                        dataSourceType = DataSourceType.SLAVE;
+                    } else {
+                        dataSourceType = DataSourceType.MASTER;
+                    }
+                }
+
                 RoutingDataSourceManager.removeCurrentDataSourceName();
-                System.out.println("d@@@ " + dataSourceType);
                 return dataSourceType;
             }
         };
@@ -59,7 +73,14 @@ public class DataSourceConfig {
     @Bean
     public DataSource lazyRoutingDataSource(
         @Qualifier(value = "routingDataSource") DataSource routingDataSource) {
-        System.out.println("comer here lazy??");
         return new LazyConnectionDataSourceProxy(routingDataSource);
+    }
+
+    @Bean
+    public PlatformTransactionManager transactionManager(
+        @Qualifier(value = "lazyRoutingDataSource") DataSource lazyRoutingDataSource) {
+        DataSourceTransactionManager transactionManager = new DataSourceTransactionManager();
+        transactionManager.setDataSource(lazyRoutingDataSource);
+        return transactionManager;
     }
 }
