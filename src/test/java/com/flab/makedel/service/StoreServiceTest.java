@@ -12,6 +12,8 @@ import com.flab.makedel.dto.OrderReceiptDTO;
 import com.flab.makedel.dto.StoreDTO;
 import com.flab.makedel.mapper.OrderMapper;
 import com.flab.makedel.mapper.StoreMapper;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -79,6 +81,18 @@ public class StoreServiceTest {
     }
 
     @Test
+    @DisplayName("가게를 소유하지 않은 사장이 자신의 가게 목록을 조회하면 빈 List를 리턴합니다")
+    public void getMyAllStoreTestReturnEmptyArray() {
+        List<StoreDTO> tempList = new ArrayList<>();
+        when(storeMapper.selectStoreList(any(String.class)))
+            .thenReturn(tempList);
+
+        storeService.getMyAllStore("owner");
+
+        verify(storeMapper).selectStoreList(any(String.class));
+    }
+
+    @Test
     @DisplayName("사장이 내 특정 가게 목록을 조회하는데 성공합니다")
     public void getMyStoreTestSuccess() {
         when(storeMapper.selectStore(anyLong(), any(String.class)))
@@ -88,6 +102,7 @@ public class StoreServiceTest {
 
         verify(storeMapper).selectStore(anyLong(), any(String.class));
     }
+
 
     @Test
     @DisplayName("자신의 가게가 맞는지 확인하는데 성공합니다.")

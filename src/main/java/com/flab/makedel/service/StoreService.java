@@ -1,18 +1,12 @@
 package com.flab.makedel.service;
 
-import com.flab.makedel.Exception.DuplicatedIdException;
-import com.flab.makedel.Exception.DuplicatedStoreNameException;
+import com.flab.makedel.Exception.StoreNameAlreadyExistException;
 import com.flab.makedel.dto.OrderDTO.OrderStatus;
-import com.flab.makedel.dto.OrderDetailDTO;
 import com.flab.makedel.dto.OrderReceiptDTO;
 import com.flab.makedel.dto.PushMessageDTO;
 import com.flab.makedel.dto.StoreDTO;
 import com.flab.makedel.mapper.OrderMapper;
 import com.flab.makedel.mapper.StoreMapper;
-import com.google.firebase.messaging.FirebaseMessagingException;
-import java.io.IOException;
-import java.sql.SQLException;
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +30,7 @@ public class StoreService {
             StoreDTO newStore = setOwnerID(store, ownerId);
             storeMapper.insertStore(newStore);
         } catch (DuplicateKeyException e) {
-            throw new DuplicatedStoreNameException("Same Store Name" + store.getName());
+            throw new StoreNameAlreadyExistException("Same Store Name" + store.getName());
         }
     }
 
