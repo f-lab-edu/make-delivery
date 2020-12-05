@@ -11,7 +11,7 @@ ENV VAULT_TOKEN=${VAULT_TOKEN}
 
 
 RUN curl -H "X-Vault-Token: s.Dsm16mhBp82Kw92FQLrxf4Rd" \
-http://118.67.130.216:8200/v1/kv/sdk > firebaseSDK.json
+http://118.67.130.216:8200/v1/kv/sdk | jq .data > firebaseSDK.json
 
 ARG JAR_FILE=target/*.jar
 COPY ${JAR_FILE} app.jar
