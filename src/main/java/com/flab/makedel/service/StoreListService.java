@@ -19,14 +19,17 @@ public class StoreListService {
         return storeListMapper.selectCategoryList();
     }
 
+    @Cacheable(value = "stores", key = "#categoryId")
     public List<StoreDTO> getStoreListByCategory(long categoryId) {
         return storeListMapper.selectStoreListByCategory(categoryId);
     }
 
+    @Cacheable(value = "stores", key = "#address+#categoryId")
     public List<StoreDTO> getStoreListByCategoryAndAddress(long categoryId, String address) {
         return storeListMapper.selectStoreListByCategoryAndAddress(categoryId, address);
     }
 
+    @Cacheable(value = "stores", key = "#address")
     public List<StoreDTO> getAllStoreListByAddress(String address) {
         return storeListMapper.selectAllStoreListByAddress(address);
     }

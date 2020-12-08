@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +28,11 @@ public class StoreService {
     private final DeliveryService deliveryService;
     private final RiderService riderService;
 
+    @Caching(evict = {
+        @CacheEvict(value = "stores", key = "#store.categoryId"),
+        @CacheEvict(value = "stores", key = "#store.address"),
+        @CacheEvict(value = "stores", key = "#store.address+#store.categoryId")
+    })
     public void insertStore(StoreDTO store) {
         storeMapper.insertStore(store);
     }
