@@ -1,4 +1,4 @@
-FROM openjdk:8-jdk-alpine
+FROM openjdk:8-jdk
 VOLUME /tmp
 RUN apk --no-cache add curl \
  && apk --no-cache add jq
