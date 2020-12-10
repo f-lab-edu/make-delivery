@@ -1,5 +1,4 @@
 FROM openjdk:8-jdk-alpine
-VOLUME /tmp
 RUN apk --no-cache add curl \
  && apk --no-cache add jq
 
@@ -8,7 +7,6 @@ ENV SPRING_REDIS_HOST=${SPRING_REDIS_HOST}
 ENV SPRING_DATASOURCE_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
 ENV SPRING_DATASOURCE_URL=${SPRING_DATASOURCE_URL}
 ENV VAULT_TOKEN=${VAULT_TOKEN}
-ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64
 
 
 RUN curl -H "X-Vault-Token: s.Dsm16mhBp82Kw92FQLrxf4Rd" \
