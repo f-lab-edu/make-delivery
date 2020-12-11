@@ -1,5 +1,5 @@
 FROM openjdk:8-jdk-alpine
-VOLUME /tmp
+VOLUME ["/tmp","/usr/lib/jvm"]
 RUN apk --no-cache add curl \
  && apk --no-cache add jq
 
