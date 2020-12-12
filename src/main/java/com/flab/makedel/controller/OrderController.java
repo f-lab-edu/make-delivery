@@ -27,11 +27,10 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping
-    @LoginCheck(userLevel = UserLevel.USER)
-    public OrderReceiptDTO registerOrder(@CurrentUserId String userId, @PathVariable long storeId,
+    public OrderReceiptDTO registerOrder(@PathVariable long storeId,
         @RequestBody CartItemDTO cartdto) {
         OrderReceiptDTO orderReceipt = orderService
-            .registerOrder(userId, storeId, PayType.NAVER_PAY,cartdto);
+            .registerOrder("ccc", storeId, PayType.NAVER_PAY,cartdto);
         return orderReceipt;
     }
 
