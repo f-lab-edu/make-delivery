@@ -3,6 +3,7 @@ package com.flab.makedel.controller;
 import com.flab.makedel.annotation.CurrentUserId;
 import com.flab.makedel.annotation.LoginCheck;
 import com.flab.makedel.annotation.LoginCheck.UserLevel;
+import com.flab.makedel.dto.CartItemDTO;
 import com.flab.makedel.dto.OrderDetailDTO;
 import com.flab.makedel.dto.OrderReceiptDTO;
 import com.flab.makedel.dto.OrderStoreDetailDTO;
@@ -28,8 +29,9 @@ public class OrderController {
     @PostMapping
     @LoginCheck(userLevel = UserLevel.USER)
     public OrderReceiptDTO registerOrder(@CurrentUserId String userId, @PathVariable long storeId,
-        PayType payType) {
-        OrderReceiptDTO orderReceipt = orderService.registerOrder(userId, storeId, payType);
+        @RequestBody CartItemDTO cartdto) {
+        OrderReceiptDTO orderReceipt = orderService
+            .registerOrder(userId, storeId, PayType.NAVER_PAY,cartdto);
         return orderReceipt;
     }
 

@@ -34,18 +34,19 @@ public class OrderService {
     private final StoreMapper storeMapper;
 
     @Transactional
-    public OrderReceiptDTO registerOrder(String userId, long storeId, PayType payType) {
+    public OrderReceiptDTO registerOrder(String userId, long storeId, PayType payType,
+        CartItemDTO cartdto) {
 
         UserInfoDTO user = userMapper.selectUserInfo(userId);
         OrderDTO orderDTO = getOrderDTO(user, storeId);
-        List<CartItemDTO> cartList;
+        List<CartItemDTO> cartList=new ArrayList<>();
         List<OrderMenuDTO> orderMenuList = new ArrayList<>();
         List<OrderMenuOptionDTO> orderMenuOptionList = new ArrayList<>();
         OrderReceiptDTO orderReceipt;
+        cartList.add(cartdto);
+        //cartList = cartItemDAO.getCartAndDelete(userId);
 
-        cartList = cartItemDAO.getCartAndDelete(userId);
-
-        restoreCartListOnOrderRollback(userId, cartList);
+        //restoreCartListOnOrderRollback(userId, cartList);
 
         long totalPrice = orderTransactionService
             .order(orderDTO, cartList, orderMenuList, orderMenuOptionList);
