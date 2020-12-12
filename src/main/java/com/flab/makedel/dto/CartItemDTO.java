@@ -25,7 +25,6 @@ public class CartItemDTO {
     @NotNull
     private Long count;
 
-    @NotNull
     private List<CartOptionDTO> optionList;
 
     @JsonCreator
@@ -47,6 +46,14 @@ public class CartItemDTO {
     public CartItemDTO(Long menuId, String name, Long price, Long count) {
         this.menuId = menuId;
         this.name = name;
+        this.price = price;
+        this.count = count;
+    }
+
+    public CartItemDTO(Long menuId, String name, Long storeId, Long price, Long count) {
+        this.menuId = menuId;
+        this.name = name;
+        this.storeId = storeId;
         this.price = price;
         this.count = count;
     }

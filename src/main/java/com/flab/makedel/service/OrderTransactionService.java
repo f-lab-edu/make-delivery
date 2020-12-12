@@ -45,7 +45,6 @@ public class OrderTransactionService {
     @Transactional
     public long order(OrderDTO orderDTO, List<CartItemDTO> cartList,
         List<OrderMenuDTO> orderMenuList, List<OrderMenuOptionDTO> orderMenuOptionList) {
-
         orderMapper.insertOrder(orderDTO);
         long totalPrice = registerOrderMenu(cartList, orderDTO.getId(), orderMenuList,
             orderMenuOptionList);
@@ -77,21 +76,25 @@ public class OrderTransactionService {
                 .build();
             orderMenuList.add(orderMenuDTO);
 
-            for (int j = 0; j < cart.getOptionList().size(); j++) {
-                CartOptionDTO option = cart.getOptionList().get(j);
-                totalPrice += option.getPrice();
+            if (cart.getOptionList() != null) {
+                for (int j = 0; j < cart.getOptionList().size(); j++) {
+                    CartOptionDTO option = cart.getOptionList().get(j);
+                    totalPrice += option.getPrice();
 
-                OrderMenuOptionDTO orderMenuOptionDTO = OrderMenuOptionDTO.builder()
-                    .optionId(option.getOptionId())
-                    .menuId(cart.getMenuId())
-                    .orderId(orderId)
-                    .build();
-                orderMenuOptionList.add(orderMenuOptionDTO);
+                    OrderMenuOptionDTO orderMenuOptionDTO = OrderMenuOptionDTO.builder()
+                        .optionId(option.getOptionId())
+                        .menuId(cart.getMenuId())
+                        .orderId(orderId)
+                        .build();
+                    orderMenuOptionList.add(orderMenuOptionDTO);
+                }
             }
         }
 
         orderMenuMapper.insertOrderMenu(orderMenuList);
-        orderMenuOptionMapper.insertOrderMenuOption(orderMenuOptionList);
+        if (!orderMenuOptionList.isEmpty()) {
+            orderMenuOptionMapper.insertOrderMenuOption(orderMenuOptionList);
+        }
 
         return totalPrice;
 
