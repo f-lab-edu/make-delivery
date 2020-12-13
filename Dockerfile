@@ -21,11 +21,6 @@ ENTRYPOINT ["java", \
 "-Dspring.redis.password=${SPRING_REDIS_PASSWORD}", \
 "-Dspring.datasource.url=${SPRING_DATASOURCE_URL}", \
 "-Dspring.redis.host=${SPRING_REDIS_HOST}", \
-"-Dcom.sun.management.jmxremote", \
-"-Dcom.sun.management.jmxremote.port=9090", \
-"-Dcom.sun.management.jmxremote.authenticate=false", \
-"-Dcom.sun.management.jmxremote.ssl=false", \
-"-Dcom.sun.management.jmxremote.rmi.port=9090", \
-"-Djava.rmi.server.hostname=101.101.218.78", \
+
 "-jar", \
 "/app.jar"]
