@@ -30,6 +30,6 @@ ENTRYPOINT ["java", \
 "-javaagent:pinpoint-agent-2.1.0/pinpoint-bootstrap-2.1.0.jar", \
 "-Dpinpoint.agentId=tjdrnr0557", \
 "-Dpinpoint.applicationName=make-delivery", \
-"", \
+"-Dprofiler.transport.grpc.collector.ip=115.85.180.249", \
 "-jar", \
 "/app.jar"]
