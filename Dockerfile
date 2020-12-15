@@ -27,7 +27,7 @@ ENTRYPOINT ["java", \
 "-Dcom.sun.management.jmxremote.ssl=false", \
 "-Dcom.sun.management.jmxremote.rmi.port=9090", \
 "-Djava.rmi.server.hostname=118.67.129.143", \
-"-javaagent:pinpoint-agent-2.1.0/pinpoint-bootstrap-2.1.0.jar", \
+"-javaagent:pinpoint-agent-1.7.3/pinpoint-bootstrap-1.7.3.jar", \
 "-Dpinpoint.agentId=tjdrnr0557", \
 "-Dpinpoint.applicationName=make-delivery", \
 "-Dprofiler.collector.ip=115.85.180.249", \
