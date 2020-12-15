@@ -8,6 +8,7 @@ ENV SPRING_REDIS_HOST=${SPRING_REDIS_HOST}
 ENV SPRING_DATASOURCE_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
 ENV SPRING_DATASOURCE_URL=${SPRING_DATASOURCE_URL}
 ENV SERVER_HOST=${SERVER_HOST}
+ADD . ${SERVER_HOST}
 
 
 RUN curl -H "X-Vault-Token: s.Dsm16mhBp82Kw92FQLrxf4Rd" \
@@ -26,6 +27,6 @@ ENTRYPOINT ["java", \
 "-Dcom.sun.management.jmxremote.authenticate=false", \
 "-Dcom.sun.management.jmxremote.ssl=false", \
 "-Dcom.sun.management.jmxremote.rmi.port=9090", \
-"-Djava.rmi.server.hostname=118.67.129.143", \
+"-Djava.rmi.server.hostname=${SERVER_HOST}", \
 "-jar", \
 "/app.jar"]
