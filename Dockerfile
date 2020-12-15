@@ -14,6 +14,7 @@ http://118.67.130.216:8200/v1/kv/sdk | jq .data > firebaseSDK.json
 
 ARG JAR_FILE=target/*.jar
 COPY ${JAR_FILE} app.jar
+ADD pinpoint-agent-2.1.0 pinpoint-agent-2.1.0
 
 ENTRYPOINT ["java", \
 "-Dspring.datasource.password=${SPRING_DATASOURCE_PASSWORD}", \
