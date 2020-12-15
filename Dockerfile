@@ -14,7 +14,6 @@ http://118.67.130.216:8200/v1/kv/sdk | jq .data > firebaseSDK.json
 
 ARG JAR_FILE=target/*.jar
 COPY ${JAR_FILE} app.jar
-ADD pinpoint-bootstrap-2.1.0.jar pinpoint-bootstrap-2.1.0.jar
 
 ENTRYPOINT ["java", \
 "-Dspring.datasource.password=${SPRING_DATASOURCE_PASSWORD}", \
@@ -27,7 +26,7 @@ ENTRYPOINT ["java", \
 "-Dcom.sun.management.jmxremote.ssl=false", \
 "-Dcom.sun.management.jmxremote.rmi.port=9090", \
 "-Djava.rmi.server.hostname=118.67.129.143", \
-"-javaagent:pinpoint-bootstrap-2.1.0.jar", \
+"-javaagent:/pinpoint-agent-2.1.0/pinpoint-bootstrap-2.1.0.jar", \
 "-Dpinpoint.agentId=tjdrnr0557", \
 "-Dpinpoint.applicationName=make-delivery", \
 "", \
