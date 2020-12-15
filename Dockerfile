@@ -9,13 +9,12 @@ ENV SPRING_DATASOURCE_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
 ENV SPRING_DATASOURCE_URL=${SPRING_DATASOURCE_URL}
 ENV SERVER_HOST=${SERVER_HOST}
 
-
-
 RUN curl -H "X-Vault-Token: s.Dsm16mhBp82Kw92FQLrxf4Rd" \
 http://118.67.130.216:8200/v1/kv/sdk | jq .data > firebaseSDK.json
 
 ARG JAR_FILE=target/*.jar
 COPY ${JAR_FILE} app.jar
+ADD pinpoint-bootstrap-2.1.0.jar pinpoint-bootstrap-2.1.0.jar
 
 ENTRYPOINT ["java", \
 "-Dspring.datasource.password=${SPRING_DATASOURCE_PASSWORD}", \
