@@ -26,6 +26,6 @@ ENTRYPOINT ["java", \
 "-Dcom.sun.management.jmxremote.authenticate=false", \
 "-Dcom.sun.management.jmxremote.ssl=false", \
 "-Dcom.sun.management.jmxremote.rmi.port=9090", \
-"-Djava.rmi.server.hostname=${SERVER_HOST}", \
+"-Djava.rmi.server.hostname=101.101.218.78", \
 "-jar", \
 "/app.jar"]
