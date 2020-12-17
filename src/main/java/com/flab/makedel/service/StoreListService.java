@@ -29,9 +29,4 @@ public class StoreListService {
         return storeListMapper.selectStoreListByCategoryAndAddress(categoryId, address);
     }
 
-    @Cacheable(value = "stores", key = "#address")
-    public List<StoreDTO> getAllStoreListByAddress(String address) {
-        return storeListMapper.selectAllStoreListByAddress(address);
-    }
-
 }

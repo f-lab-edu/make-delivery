@@ -18,6 +18,4 @@ public interface StoreListMapper {
 
     List<StoreDTO> selectStoreListByCategoryAndAddress(long categoryId,String address);
 
-    List<StoreDTO> selectAllStoreListByAddress(String address);
-
 }

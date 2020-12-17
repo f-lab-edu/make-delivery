@@ -37,10 +37,5 @@ public class StoreListController {
             .getStoreListByCategoryAndAddress(categoryId, address);
         return ResponseEntity.ok().body(storeList);
     }
-
-    @GetMapping(params = "address")
-    public ResponseEntity<List<StoreDTO>> loadAllStoreListByAddress(String address) {
-        List<StoreDTO> storeList = storeListService.getAllStoreListByAddress(address);
-        return ResponseEntity.ok().body(storeList);
-    }
+    
 }
