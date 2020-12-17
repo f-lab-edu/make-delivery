@@ -1,5 +1,5 @@
 # make-delivery 서버 구조도
-![Untitled Diagram](https://user-images.githubusercontent.com/34911552/100977906-ff4b1d00-3584-11eb-9d6a-3362229a3c81.png)
+![real](https://user-images.githubusercontent.com/34911552/102442304-772a4480-4067-11eb-839f-2d986933cde6.png)
 
 
 ## 프로젝트 목표
