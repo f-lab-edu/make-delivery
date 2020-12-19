@@ -1,6 +1,6 @@
 # make-delivery 서버 구조도
 ![real](https://user-images.githubusercontent.com/34911552/102442304-772a4480-4067-11eb-839f-2d986933cde6.png)
-성능 테스트 결과에 따라 비용을 고려하여 적절한 서버 사양 선택하기  
+성능 테스트 결과에 따라 비용을 고려하여 적절한 서버 구조 설계하기  
 https://tjdrnr05571.tistory.com/16
 
 
