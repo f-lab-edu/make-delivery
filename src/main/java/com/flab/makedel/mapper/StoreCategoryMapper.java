@@ -1,5 +1,7 @@
 package com.flab.makedel.mapper;
 
+import com.flab.makedel.annotation.SetDataSource;
+import com.flab.makedel.annotation.SetDataSource.DataSourceType;
 import com.flab.makedel.dto.StoreCategoryDTO;
 import java.util.List;
 
@@ -11,6 +13,7 @@ import java.util.List;
 
 public interface StoreCategoryMapper {
 
+    @SetDataSource(dataSourceType = DataSourceType.SLAVE)
     List<StoreCategoryDTO> selectCategoryList();
 
 }
