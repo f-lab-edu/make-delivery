@@ -32,9 +32,7 @@ public class StoreController {
     @LoginCheck(userLevel = UserLevel.OWNER)
     public ResponseEntity<Void> insertStore(StoreDTO store, @CurrentUserId String ownerId) {
 
-        StoreDTO newStore = storeService.setOwnerID(store, ownerId);
-        storeService.insertStore(newStore);
-
+        storeService.insertStore(store, ownerId);
         return RESPONSE_OK;
 
     }

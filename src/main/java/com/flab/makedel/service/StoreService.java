@@ -1,17 +1,16 @@
 package com.flab.makedel.service;
 
+import com.flab.makedel.Exception.StoreNameAlreadyExistException;
 import com.flab.makedel.dto.OrderDTO.OrderStatus;
-import com.flab.makedel.dto.OrderDetailDTO;
 import com.flab.makedel.dto.OrderReceiptDTO;
 import com.flab.makedel.dto.PushMessageDTO;
 import com.flab.makedel.dto.StoreDTO;
 import com.flab.makedel.mapper.OrderMapper;
 import com.flab.makedel.mapper.StoreMapper;
-import com.google.firebase.messaging.FirebaseMessagingException;
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,11 +25,16 @@ public class StoreService {
     private final DeliveryService deliveryService;
     private final RiderService riderService;
 
-    public void insertStore(StoreDTO store) {
-        storeMapper.insertStore(store);
+    public void insertStore(StoreDTO store, String ownerId) {
+        try {
+            StoreDTO newStore = setOwnerID(store, ownerId);
+            storeMapper.insertStore(newStore);
+        } catch (DuplicateKeyException e) {
+            throw new StoreNameAlreadyExistException("Same Store Name" + store.getName());
+        }
     }
 
-    public StoreDTO setOwnerID(StoreDTO store, String ownerId) {
+    private StoreDTO setOwnerID(StoreDTO store, String ownerId) {
         StoreDTO newStore = StoreDTO.builder()
             .name(store.getName())
             .phone(store.getPhone())
@@ -50,7 +54,7 @@ public class StoreService {
         return storeMapper.selectStore(storeId, ownerId);
     }
 
-    public boolean isMyStore(long storeId, String ownerId) {
+    private boolean isMyStore(long storeId, String ownerId) {
         return storeMapper.isMyStore(storeId, ownerId);
     }
 
