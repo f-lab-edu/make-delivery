@@ -10,6 +10,8 @@ import com.flab.makedel.mapper.StoreMapper;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -25,6 +27,12 @@ public class StoreService {
     private final DeliveryService deliveryService;
     private final RiderService riderService;
 
+
+    @Caching(evict = {
+        @CacheEvict(value = "stores", key = "#store.categoryId"),
+        @CacheEvict(value = "stores", key = "#store.address"),
+        @CacheEvict(value = "stores", key = "#store.address+#store.categoryId")
+    })
     public void insertStore(StoreDTO store, String ownerId) {
         try {
             StoreDTO newStore = setOwnerID(store, ownerId);
