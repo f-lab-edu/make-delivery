@@ -9,6 +9,8 @@ import java.util.List;
 
 public interface OrderMapper {
 
+    boolean isExistsId(long orderId);
+
     void insertOrder(OrderDTO orderDTO);
 
     void completeOrder(long totalPrice, long orderId, OrderStatus orderStatus);

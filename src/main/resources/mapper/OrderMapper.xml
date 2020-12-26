@@ -4,6 +4,11 @@
 
 <mapper namespace="com.flab.makedel.mapper.OrderMapper">
 
+    <select id="isExistsId" resultType="boolean">
+        SELECT EXISTS
+        (SELECT id FROM ORDER WHERE id = #{orderId})
+    </select>
+
     <insert id="insertOrder" parameterType="com.flab.makedel.dto.OrderDTO" useGeneratedKeys="true"
         keyProperty="id">
         INSERT INTO `ORDER`(order_status, address, user_id, store_id)
