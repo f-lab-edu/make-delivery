@@ -9,6 +9,7 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.flab.makedel.Exception.NotExistIdException;
 import com.flab.makedel.dto.MenuDTO;
 import com.flab.makedel.mapper.MenuMapper;
 import java.util.ArrayList;
@@ -61,6 +62,16 @@ public class MenuServiceTest {
         menuService.deleteMenu(12L);
 
         verify(menuMapper).deleteMenu(anyLong());
+    }
+
+    @Test
+    @DisplayName("사장님이 가게 메뉴를 삭제할 때 잘못된 아이디로 요청하면 NotExistIdException을 던진다")
+    public void deleteMenuTestThrowNotExistIdException() {
+        when(menuMapper.isExistsId(anyLong())).thenReturn(false);
+
+        assertThrows(NotExistIdException.class, () -> menuService.deleteMenu(12L));
+
+        verify(menuMapper).isExistsId(anyLong());
     }
 
     @Test

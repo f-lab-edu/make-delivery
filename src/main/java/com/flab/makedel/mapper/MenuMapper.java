@@ -5,6 +5,8 @@ import java.util.List;
 
 public interface MenuMapper {
 
+    boolean isExistsId(long menuId);
+
     void insertMenu(MenuDTO menu);
 
     void deleteMenu(long menuId);
