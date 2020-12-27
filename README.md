@@ -35,7 +35,7 @@ https://tjdrnr05571.tistory.com/11
 * [#4] Spring에서 중복되는 로그인 체크 기능을 AOP로 분리하기  
 https://tjdrnr05571.tistory.com/10
 
-* [#3] 정확히 트랜잭션이 롤백 되었을 때 장바구니를 복원하기 - TransactionSynchronization (Rollback hook)
+* [#3] 정확히 트랜잭션이 롤백 되었을 때 장바구니를 복원하기 - TransactionSynchronization (Rollback hook)  
 https://tjdrnr05571.tistory.com/9
 
 * [#2] Redis에 한번에 많은 데이터 추가 시 네트워크 병목 개선하기 - Redis Pipeline 이용하기  
