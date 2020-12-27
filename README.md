@@ -14,34 +14,34 @@
 * [#11] 성능 테스트 결과에 따라 비용을 고려하여 적절한 서버 구조 설계 과정  
 https://tjdrnr05571.tistory.com/16
 
-[#10] Ngrinder를 이용해 성능테스트 : WAS, DB, Nginx등 서버에 병목이 있는지 확인해본 과정  
+* [#10] Ngrinder를 이용해 성능테스트 : WAS, DB, Nginx등 서버에 병목이 있는지 확인해본 과정  
 https://tjdrnr05571.tistory.com/17
 
-[#9] 같은 주문에 2명의 라이더가 동시에 배달하는 문제 해결 - Redis Transaction을 이용하여 데이터 atomic 보장  
+* [#9] 같은 주문에 2명의 라이더가 동시에 배달하는 문제 해결 - Redis Transaction을 이용하여 데이터 atomic 보장  
 https://tjdrnr05571.tistory.com/18
 
-[#8] Mysql Replication - Spring에서 AOP를 이용해 Master/Slave 이중화해본 과정  
+* [#8] Mysql Replication - Spring에서 AOP를 이용해 Master/Slave 이중화해본 과정  
 https://tjdrnr05571.tistory.com/14
 
-[#7] TransactionManager가 DataSource정하는 로직을 늦추기 - LazyConnectionDataSourceProxy  
+* [#7] TransactionManager가 DataSource정하는 로직을 늦추기 - LazyConnectionDataSourceProxy  
 https://tjdrnr05571.tistory.com/15
 
-[#6] Jenkins를 이용하여 CI/CD 환경 구축해보기  
+* [#6] Jenkins를 이용하여 CI/CD 환경 구축해보기  
 https://tjdrnr05571.tistory.com/13
 
-[#5] 성능을 위해 Redis keys 대신 scan 이용하기  
+* [#5] 성능을 위해 Redis keys 대신 scan 이용하기  
 https://tjdrnr05571.tistory.com/11
 
-[#4] Spring에서 중복되는 로그인 체크 기능을 AOP로 분리하기  
+* [#4] Spring에서 중복되는 로그인 체크 기능을 AOP로 분리하기  
 https://tjdrnr05571.tistory.com/10
 
-[#3] 정확히 트랜잭션이 롤백 되었을 때 장바구니를 복원하기 - TransactionSynchronization afterCompletion (Rollback hook)
+* [#3] 정확히 트랜잭션이 롤백 되었을 때 장바구니를 복원하기 - TransactionSynchronization afterCompletion (Rollback hook)
 https://tjdrnr05571.tistory.com/9
 
-[#2] Redis에 한번에 많은 데이터 추가 시 네트워크 병목 개선하기 - Redis Pipeline 이용하기  
+* [#2] Redis에 한번에 많은 데이터 추가 시 네트워크 병목 개선하기 - Redis Pipeline 이용하기  
 https://tjdrnr05571.tistory.com/7
 
-[#1] 서버가 여러대면 로그인 정보는 어디에 저장할까? - Sticky Session, Session Clustering, Redis Session Storage  
+* [#1] 서버가 여러대면 로그인 정보는 어디에 저장할까? - Sticky Session, Session Clustering, Redis Session Storage  
 https://tjdrnr05571.tistory.com/3
 
 
