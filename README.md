@@ -1,7 +1,6 @@
 # make-delivery 서버 구조도
 ![real](https://user-images.githubusercontent.com/34911552/102442304-772a4480-4067-11eb-839f-2d986933cde6.png)
-성능 테스트 결과에 따라 비용을 고려하여 적절한 서버 구조 설계하기  
-https://tjdrnr05571.tistory.com/16
+
 
 
 ## 프로젝트 목표
@@ -10,7 +9,41 @@ https://tjdrnr05571.tistory.com/16
 * 객체지향 원리와 여러 이론적 토대위에서 올바른 코드를 작성하는 것이 목표입니다.
 
 ## 기술적 issue 해결 과정
-https://tjdrnr05571.tistory.com/
+
+성능 테스트 결과에 따라 비용을 고려하여 적절한 서버 구조 설계 과정  
+https://tjdrnr05571.tistory.com/16
+
+Ngrinder를 이용해 성능테스트 : WAS, DB, Nginx등 서버에 병목이 있는지 확인해본 과정  
+https://tjdrnr05571.tistory.com/17
+
+같은 주문에 2명의 라이더가 동시에 배달하는 문제 해결 - Redis Transaction을 이용하여 데이터 atomic 보장  
+https://tjdrnr05571.tistory.com/18
+
+Mysql Replication - Spring에서 AOP를 이용해 Master/Slave 이중화해본 과정  
+https://tjdrnr05571.tistory.com/14
+
+TransactionManager가 DataSource정하는 로직을 늦추기 - LazyConnectionDataSourceProxy  
+https://tjdrnr05571.tistory.com/15
+
+Jenkins를 이용하여 CI/CD 환경 구축해보기  
+https://tjdrnr05571.tistory.com/13
+
+성능을 위해 Redis keys 대신 scan 이용하기  
+https://tjdrnr05571.tistory.com/11
+
+Spring에서 중복되는 로그인 체크 기능을 AOP로 분리하기  
+https://tjdrnr05571.tistory.com/10
+
+정확히 트랜잭션이 롤백 되었을 때 장바구니를 복원하기 - TransactionSynchronization afterCompletion (Rollback hook)
+https://tjdrnr05571.tistory.com/9
+
+Redis에 한번에 많은 데이터 추가 시 네트워크 병목 개선하기 - Redis Pipeline 이용하기
+https://tjdrnr05571.tistory.com/7
+
+서버가 여러대면 로그인 정보는 어디에 저장할까? - Sticky Session, Session Clustering, Redis Session Storage  
+https://tjdrnr05571.tistory.com/3
+
+
 
 ## 라이더 배차 과정 구조도
 ![rider](https://user-images.githubusercontent.com/34911552/102442827-a55c5400-4068-11eb-93ab-705ae21e927e.png)
