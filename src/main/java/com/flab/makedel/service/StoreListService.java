@@ -19,7 +19,7 @@ public class StoreListService {
         return storeListMapper.selectCategoryList();
     }
 
-    @Cacheable(value = "stores", key = "#categoryId")
+    //@Cacheable(value = "stores", key = "#categoryId")
     public List<StoreDTO> getStoreListByCategory(long categoryId) {
         return storeListMapper.selectStoreListByCategory(categoryId);
     }
