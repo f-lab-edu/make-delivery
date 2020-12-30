@@ -58,7 +58,7 @@ public class StoreServiceTest {
             .phone("031-921-0101")
             .address("경기도 고양시 일산동")
             .introduction("고추 치킨이 맛있습니다")
-            .categoryId("1")
+            .categoryId(1L)
             .build();
     }
 
