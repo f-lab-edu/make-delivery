@@ -40,7 +40,6 @@ pipeline {
                       sh ("curl -X POST -H \"Content-Type: application/json\" \
                       --data '{\"state\": \"success\", \"context\": \"@@pass ci test & build\", \"target_url\": \"http://115.85.180.192:8080/job/make-delivery\"}' \
                       \"https://${GITHUB_TOKEN}@api.github.com/repos/f-lab-edu/make-delivery/statuses/${GIT_COMMIT_SHA}\"")
-                        //junit '**/target/surefire-reports/TEST-*.xml'
                     }
 
                     failure {
@@ -50,6 +49,7 @@ pipeline {
                     }
             }
         }
+
 
         stage('Dockerfile Build & Push To Docker Hub & Delete Docker Image') {
             steps {
@@ -70,6 +70,5 @@ pipeline {
         }
 
     }
-
 
 }

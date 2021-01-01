@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.flab.makedel.mapper.StoreListMapper">
+
+    <select id="selectCategoryList" resultType="com.flab.makedel.dto.StoreCategoryDTO">
+        SELECT id, name
+        FROM STORE_CATEGORY
+    </select>
+
+    <select id="selectStoreListByCategory" resultType="com.flab.makedel.dto.StoreDTO">
+        SELECT id, name, phone, address, owner_id, open_status, introduction, category_id, created_at, updated_at
+        FROM STORE WHERE category_id = #{categoryId}
+    </select>
+
+    <select id="selectStoreListByCategoryAndAddress" resultType="com.flab.makedel.dto.StoreDTO">
+        SELECT id, name, phone, address, owner_id, open_status, introduction, category_id, created_at, updated_at
+        FROM STORE WHERE category_id = #{categoryId} AND address = #{address}
+    </select>
+
+
+</mapper>

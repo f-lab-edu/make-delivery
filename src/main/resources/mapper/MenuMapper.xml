@@ -4,6 +4,11 @@
 
 <mapper namespace="com.flab.makedel.mapper.MenuMapper">
 
+    <select id="isExistsId" resultType="boolean">
+        SELECT EXISTS
+        (SELECT id FROM MENU WHERE id = #{menuId})
+    </select>
+
     <insert id="insertMenu" parameterType="com.flab.makedel.dto.MenuDTO">
         INSERT INTO
         MENU

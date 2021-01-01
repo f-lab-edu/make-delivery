@@ -5,6 +5,9 @@ import com.flab.makedel.dto.CartItemDTO;
 import com.flab.makedel.dto.OrderDetailDTO;
 import com.flab.makedel.dto.OrderReceiptDTO;
 import com.flab.makedel.dto.RiderDTO;
+import java.time.Duration;
+import java.util.HashMap;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -160,10 +163,12 @@ public class RedisConfig {
             .serializeValuesWith(
                 RedisSerializationContext.SerializationPair
                     .fromSerializer(new GenericJackson2JsonRedisSerializer())
-            );
+            )
+            .entryTtl(Duration.ofDays(1L));
 
         return RedisCacheManager.RedisCacheManagerBuilder
             .fromConnectionFactory(redisCacheConnectionFactory())
-            .cacheDefaults(redisCacheConfiguration).build();
+            .cacheDefaults(redisCacheConfiguration)
+            .build();
     }
 }

@@ -1,6 +1,7 @@
 package com.flab.makedel.mapper;
 
 import com.flab.makedel.dto.StoreCategoryDTO;
+import com.flab.makedel.dto.StoreDTO;
 import java.util.List;
 
 /*
@@ -9,8 +10,12 @@ import java.util.List;
     또한 서비스에서 이 mapper를 호출하기전 캐시를 사용하기 때문에 호출이 잦지 않습니다.
  */
 
-public interface StoreCategoryMapper {
+public interface StoreListMapper {
 
     List<StoreCategoryDTO> selectCategoryList();
+
+    List<StoreDTO> selectStoreListByCategory(long categoryId);
+
+    List<StoreDTO> selectStoreListByCategoryAndAddress(long categoryId,String address);
 
 }
