@@ -65,6 +65,7 @@ https://tjdrnr05571.tistory.com/3
 * Vault 서버를 띄워 암호, 설정값 관리
 * Mysql Replication – AOP를 이용하여 Master/Slave로 데이터베이스 이중화
 * Nginx의 Reversed-Proxy를 이용하여 로드밸런싱
+* Nginx의 Micro caching을 이용해 요청 처리
 * Ngrinder를 이용하여 성능 테스트
 * VisualVM을 이용해 WAS서버 CPU사용량과 스레드, 힙 모니터링
 
