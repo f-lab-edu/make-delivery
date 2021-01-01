@@ -64,7 +64,7 @@ class StoreListServiceTest {
 
     @Test
     @DisplayName("음식 카테고리 전체 목록을 조회한다")
-    public void getAllStoreCategory() {
+    public void getAllStoreCategoryTest() {
         when(storeListMapper.selectCategoryList()).thenReturn(new ArrayList<StoreCategoryDTO>());
 
         storeListService.getAllStoreCategory();
