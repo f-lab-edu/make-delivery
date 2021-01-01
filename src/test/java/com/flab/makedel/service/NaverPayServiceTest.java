@@ -24,6 +24,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.omg.SendingContext.RunTime;
 
 @ExtendWith(MockitoExtension.class)
 public class NaverPayServiceTest {
@@ -63,11 +64,11 @@ public class NaverPayServiceTest {
     @Test
     @DisplayName("존재하지 않는 주문 아이디로 결제 시도를 하면 NotExistIdException을 던진다")
     public void payTestFailBecauseNotExistIdException() {
-        when(orderMapper.isExistsId(anyLong())).thenReturn(false);
+        doThrow(new RuntimeException()).when(payMapper).insertPay(any(PayDTO.class));
 
-        assertThrows(NotExistIdException.class, () -> naverPayService.pay(12300L, 12L));
+        assertThrows(RuntimeException.class, () -> naverPayService.pay(12300L, 12L));
 
-        verify(orderMapper).isExistsId(anyLong());
+        verify(payMapper).insertPay(any(PayDTO.class));
     }
 
 

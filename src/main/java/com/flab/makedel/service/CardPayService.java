@@ -19,9 +19,6 @@ public class CardPayService implements PayService {
 
     @Override
     public void pay(long price, long orderId) {
-        if (!orderMapper.isExistsId(orderId)) {
-            throw new NotExistIdException("존재하지 않는 주문 아이디입니다" + orderId);
-        }
 
         PayDTO payDTO = PayDTO.builder()
             .payType(PayType.CARD)
@@ -29,7 +26,12 @@ public class CardPayService implements PayService {
             .orderId(orderId)
             .status(PayStatus.COMPLETE_PAY)
             .build();
-        payMapper.insertPay(payDTO);
+
+        try {
+            payMapper.insertPay(payDTO);
+        } catch (RuntimeException e) {
+            throw new NotExistIdException("존재하지 않는 주문 아이디입니다");
+        }
     }
 }
 
