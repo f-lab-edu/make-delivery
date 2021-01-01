@@ -57,6 +57,7 @@ public class MenuServiceTest {
     @Test
     @DisplayName("사장님이 가게 메뉴를 삭제한다")
     public void deleteMenuTest() {
+        when(menuMapper.isExistsId(anyLong())).thenReturn(true);
         doNothing().when(menuMapper).deleteMenu(anyLong());
 
         menuService.deleteMenu(12L);

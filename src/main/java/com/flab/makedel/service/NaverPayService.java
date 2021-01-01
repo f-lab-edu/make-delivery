@@ -1,5 +1,6 @@
 package com.flab.makedel.service;
 
+import com.flab.makedel.Exception.NotEnoughBalanceException;
 import com.flab.makedel.Exception.NotExistIdException;
 import com.flab.makedel.dto.PayDTO;
 import com.flab.makedel.dto.PayDTO.PayStatus;
@@ -27,6 +28,8 @@ public class NaverPayService implements PayService {
 
         try {
             payMapper.insertPay(payDTO);
+        } catch (NotEnoughBalanceException e) {
+            throw new NotEnoughBalanceException("네이버 페이의 잔액이 부족합니다");
         } catch (RuntimeException e) {
             throw new NotExistIdException("존재하지 않는 주문 아이디입니다");
         }

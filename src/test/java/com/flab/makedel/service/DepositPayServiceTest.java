@@ -31,9 +31,6 @@ public class DepositPayServiceTest {
     @Mock
     PayMapper payMapper;
 
-    @Mock
-    OrderMapper orderMapper;
-
     @InjectMocks
     DepositPayService depositPayService;
 
@@ -50,9 +47,8 @@ public class DepositPayServiceTest {
     }
 
     @Test
-    @DisplayName("결제하는데 성공한다")
+    @DisplayName("주문 시 무통장입금으로 결제하는데 성공한다")
     public void payTest() {
-        when(orderMapper.isExistsId(anyLong())).thenReturn(true);
         doNothing().when(payMapper).insertPay(any(PayDTO.class));
 
         depositPayService.pay(payDTO.getPrice(), payDTO.getOrderId());
@@ -61,13 +57,13 @@ public class DepositPayServiceTest {
     }
 
     @Test
-    @DisplayName("존재하지 않는 주문 아이디로 결제 시도를 하면 NotExistIdException을 던진다")
+    @DisplayName("존재하지 않는 주문 아이디로 결제 시도를 하면 NotExistIdException 던진다")
     public void payTestFailBecauseNotExistIdException() {
-        when(orderMapper.isExistsId(anyLong())).thenReturn(false);
+        doThrow(RuntimeException.class).when(payMapper).insertPay(any(PayDTO.class));
 
         assertThrows(NotExistIdException.class, () -> depositPayService.pay(12300L, 12L));
 
-        verify(orderMapper).isExistsId(anyLong());
+        verify(payMapper).insertPay(any(PayDTO.class));
     }
 
 
