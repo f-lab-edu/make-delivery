@@ -50,7 +50,7 @@ public class NaverPayServiceTest {
 
     @Test
     @DisplayName("주문 시 네이버페이로 결제하는데 성공한다")
-    void payTest() {
+    public void payTest() {
         doNothing().when(payMapper).insertPay(any(PayDTO.class));
 
         naverPayService.pay(payDTO.getPrice(), payDTO.getOrderId());
@@ -60,7 +60,7 @@ public class NaverPayServiceTest {
 
     @Test
     @DisplayName("존재하지 않는 주문 아이디로 결제 시도를 하면 NotExistIdException을 던진다")
-    void payTestFailBecauseNotExistIdException() {
+    public void payTestFailBecauseNotExistIdException() {
         doThrow(RuntimeException.class).when(payMapper).insertPay(any(PayDTO.class));
 
         assertThrows(NotExistIdException.class, () -> naverPayService.pay(12300L, 12L));
@@ -70,7 +70,7 @@ public class NaverPayServiceTest {
 
     @Test
     @DisplayName("네이버 페이의 잔액이 부족하여 결제 시도를 하면 NotEnoughBalanceException을 던진다")
-    void payTestFailBecauseNotEnoughBalanceException() {
+    public void payTestFailBecauseNotEnoughBalanceException() {
         doThrow(NotEnoughBalanceException.class).when(payMapper).insertPay(any(PayDTO.class));
 
         assertThrows(NotEnoughBalanceException.class, () -> naverPayService.pay(12300L, 1L));
