@@ -44,6 +44,29 @@ https://tjdrnr05571.tistory.com/7
 * [#1] 서버가 여러대면 로그인 정보는 어디에 저장할까? - Sticky Session, Session Clustering, Redis Session Storage  
 https://tjdrnr05571.tistory.com/3
 
+## 프로젝트 중점사항
+* 버전관리
+* 문서화
+* Service Layer를 고립시켜 의존적이지 않은 단위테스트 작성
+* 서버의 확장성
+* 로그인을 했는지 확인하는 부가기능이 반복되어 AOP로 분리
+* 로그인 서비스 추상화
+* Redis Cache를 이용해 음식점 조회 기능 구현
+* 스프링의 @Transactional 이용하여 주문과 결제 로직 구현
+* Redis Transaction을 이용하여 장바구니 데이터의 atomic을 보장하도록 관리
+* Rollback Hook을 사용하여 주문,결제 오류 시 장바구니 복원
+* Redis Pipeline을 이용하여 한번에 많은 데이터 추가 시 네트워크 병목 개선
+* Mysql에서 인덱스 설정과 실행계획 분석 후 쿼리 튜닝
+* 같은 주문에 2명이상의 라이더가 동시에 배달하는 문제를 Redis Transaction을 이용하여 해결
+* Redis Scan을 이용해 라이더가 주문 목록을 조회하는 기능 구현 
+* 새로운 스레드풀을 만들고 @Async를 이용하여 비동기 푸쉬 알람 서비스 구현
+* Jenkins를 사용하여 CI/CD 환경 구축
+* Docker를 이용하여 CD 구현
+* Vault 서버를 띄워 암호, 설정값 관리
+* Mysql Replication – AOP를 이용하여 Master/Slave로 데이터베이스 이중화
+* Nginx의 Reversed-Proxy를 이용하여 로드밸런싱
+* Ngrinder를 이용하여 성능 테스트
+* VisualVM을 이용해 WAS서버 CPU사용량과 스레드, 힙 모니터링
 
 
 ## 라이더 배차 과정 구조도
