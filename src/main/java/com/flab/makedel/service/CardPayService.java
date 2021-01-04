@@ -16,10 +16,19 @@ import org.springframework.stereotype.Service;
 public class CardPayService implements PayService {
 
     private final PayMapper payMapper;
+    private final OrderMapper orderMapper;
     private static final long maxCardPayLimit = 2000000L;
 
     @Override
     public void pay(long price, long orderId) {
+
+        if (!orderMapper.isExistsId(orderId)) {
+            throw new NotExistIdException("존재하지 않는 주문 아이디입니다" + orderId);
+        }
+
+        if (price > maxCardPayLimit) {
+            throw new MaxPayLimitException("카드 결제에 상한 금액을 초과했습니다");
+        }
 
         PayDTO payDTO = PayDTO.builder()
             .payType(PayType.CARD)
@@ -28,15 +37,8 @@ public class CardPayService implements PayService {
             .status(PayStatus.COMPLETE_PAY)
             .build();
 
-        if (price > maxCardPayLimit) {
-            throw new MaxPayLimitException("카드 결제에 상한 금액을 초과했습니다");
-        }
+        payMapper.insertPay(payDTO);
 
-        try {
-            payMapper.insertPay(payDTO);
-        } catch (RuntimeException e) {
-            throw new NotExistIdException("존재하지 않는 주문 아이디입니다");
-        }
     }
 }
 

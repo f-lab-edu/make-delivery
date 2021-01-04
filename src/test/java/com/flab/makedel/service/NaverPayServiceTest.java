@@ -33,6 +33,9 @@ public class NaverPayServiceTest {
     @Mock
     PayMapper payMapper;
 
+    @Mock
+    OrderMapper orderMapper;
+
     @InjectMocks
     NaverPayService naverPayService;
 
@@ -51,32 +54,23 @@ public class NaverPayServiceTest {
     @Test
     @DisplayName("주문 시 네이버페이로 결제하는데 성공한다")
     public void payTest() {
+        when(orderMapper.isExistsId(anyLong())).thenReturn(true);
         doNothing().when(payMapper).insertPay(any(PayDTO.class));
 
         naverPayService.pay(payDTO.getPrice(), payDTO.getOrderId());
 
+        verify(orderMapper).isExistsId(anyLong());
         verify(payMapper).insertPay(any(PayDTO.class));
     }
 
     @Test
     @DisplayName("존재하지 않는 주문 아이디로 결제 시도를 하면 NotExistIdException을 던진다")
     public void payTestFailBecauseNotExistIdException() {
-        doThrow(RuntimeException.class).when(payMapper).insertPay(any(PayDTO.class));
+        when(orderMapper.isExistsId(anyLong())).thenReturn(false);
 
         assertThrows(NotExistIdException.class, () -> naverPayService.pay(12300L, 12L));
 
-        verify(payMapper).insertPay(any(PayDTO.class));
+        verify(orderMapper).isExistsId(anyLong());
     }
-
-    @Test
-    @DisplayName("네이버 페이의 잔액이 부족하여 결제 시도를 하면 NotEnoughBalanceException을 던진다")
-    public void payTestFailBecauseNotEnoughBalanceException() {
-        doThrow(NotEnoughBalanceException.class).when(payMapper).insertPay(any(PayDTO.class));
-
-        assertThrows(NotEnoughBalanceException.class, () -> naverPayService.pay(12300L, 1L));
-
-        verify(payMapper).insertPay(any(PayDTO.class));
-    }
-
-
+    
 }

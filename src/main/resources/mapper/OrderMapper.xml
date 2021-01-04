@@ -6,7 +6,7 @@
 
     <select id="isExistsId" resultType="boolean">
         SELECT EXISTS
-        (SELECT id FROM ORDER WHERE id = #{orderId})
+        (SELECT id FROM `ORDER` WHERE id = #{orderId})
     </select>
 
     <insert id="insertOrder" parameterType="com.flab.makedel.dto.OrderDTO" useGeneratedKeys="true"

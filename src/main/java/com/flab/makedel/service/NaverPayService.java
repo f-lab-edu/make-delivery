@@ -15,9 +15,14 @@ import org.springframework.stereotype.Service;
 public class NaverPayService implements PayService {
 
     private final PayMapper payMapper;
+    private final OrderMapper orderMapper;
 
     @Override
     public void pay(long price, long orderId) {
+
+        if (!orderMapper.isExistsId(orderId)) {
+            throw new NotExistIdException("존재하지 않는 주문 아이디입니다" + orderId);
+        }
 
         PayDTO payDTO = PayDTO.builder()
             .payType(PayType.NAVER_PAY)
@@ -26,12 +31,6 @@ public class NaverPayService implements PayService {
             .status(PayStatus.COMPLETE_PAY)
             .build();
 
-        try {
-            payMapper.insertPay(payDTO);
-        } catch (NotEnoughBalanceException e) {
-            throw new NotEnoughBalanceException("네이버 페이의 잔액이 부족합니다");
-        } catch (RuntimeException e) {
-            throw new NotExistIdException("존재하지 않는 주문 아이디입니다");
-        }
+        payMapper.insertPay(payDTO);
     }
 }
