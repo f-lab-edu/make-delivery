@@ -1,21 +1,20 @@
 package com.flab.makedel.service;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.flab.makedel.annotation.LoginCheck.UserLevel;
 import com.flab.makedel.config.RedisConfig;
 import com.flab.makedel.controller.UserController;
 import com.flab.makedel.dto.UserDTO;
-import com.flab.makedel.mapper.UserMapper;
 import com.flab.makedel.utils.PasswordEncrypter;
 import java.util.Optional;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,8 +23,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockHttpSession;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.util.LinkedMultiValueMap;
@@ -39,19 +36,11 @@ class UserControllerTest {
     @Autowired
     MockMvc mockMvc;
 
-    MockHttpSession mockHttpSession;
-
     @MockBean
     UserService userService;
 
     @MockBean
     LoginService loginService;
-
-    @BeforeEach
-    void init() {
-        mockHttpSession = new MockHttpSession();
-    }
-
 
     @Test
     @DisplayName("/users로 POST메소드를 보내 회원가입을 요청하는데 성공한다")
@@ -98,7 +87,6 @@ class UserControllerTest {
             .andExpect(status().is4xxClientError());
 
         verify(userService).isExistsId(any(String.class));
-
     }
 
     @Test
@@ -121,6 +109,7 @@ class UserControllerTest {
         Optional<UserDTO> user = Optional.ofNullable(userDTO);
         when(userService.findUserByIdAndPassword(userDTO.getId(), "pass"))
             .thenReturn(user);
+        doNothing().when(loginService).loginUser("id");
 
         mockMvc.perform(post("/users/login")
             .contentType(MediaType.APPLICATION_JSON)
@@ -128,10 +117,11 @@ class UserControllerTest {
             .andExpect(status().isOk());
 
         verify(userService).findUserByIdAndPassword(any(String.class), any(String.class));
+        verify(loginService).loginUser(any(String.class));
     }
 
     @Test
-    @DisplayName("/login에 Post 메소드로 잘못된 비밀번호로 로그인을 하는데 실패한다")
+    @DisplayName("/login에 Post 메소드로 잘못된 비밀번호로 로그인을 하는데 실패하고 404에러를 보낸다")
     void loginTest_실패() throws Exception {
 
         MultiValueMap<String, String> paramMap = new LinkedMultiValueMap<>();
@@ -140,6 +130,7 @@ class UserControllerTest {
 
         when(userService.findUserByIdAndPassword("sameid", "wrong"))
             .thenReturn(Optional.empty());
+        doNothing().when(loginService).loginUser("id");
 
         mockMvc.perform(post("/users/login")
             .contentType(MediaType.APPLICATION_JSON)
@@ -147,6 +138,19 @@ class UserControllerTest {
             .andExpect(status().is4xxClientError());
 
         verify(userService).findUserByIdAndPassword(any(String.class), any(String.class));
+        verify(loginService, times(0)).loginUser(any(String.class));
+    }
+
+    @Test
+    @DisplayName("/logout에 GET 메소드로 로그아웃을 하는데 성공한다")
+    void logoutTest() throws Exception {
+
+        doNothing().when(loginService).logoutUser();
+
+        mockMvc.perform(get("/users/logout"))
+            .andExpect(status().isOk());
+
+        verify(loginService).logoutUser();
     }
 
 }
